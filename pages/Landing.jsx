@@ -1,0 +1,77 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { Card } from "@/components/ui/card";
+import { Spotlight } from "@/components/ui/spotlight";
+import ModelViewer from "../src/components/ui/components/ModeViewer";
+
+const Landing = () => {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+
+  return (
+    <Card className="w-full min-h-screen lg:h-[700px] bg-black/[0.96] relative overflow-hidden">
+      <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" size={300} />
+
+      <div className="flex flex-col lg:flex-row h-full min-h-screen lg:min-h-0">
+        {/* Left content */}
+        <div className="flex-1 p-6 sm:p-8 md:p-10 lg:p-8 relative z-10 flex flex-col justify-center pb-4 lg:pb-8">
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white via-neutral-100 to-neutral-400 mb-4 sm:mb-2 tracking-tight leading-tight"
+          >
+            Dome7ai
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-sm sm:text-base md:text-lg text-neutral-300 max-w-lg leading-relaxed"
+          >
+            Transform spaces with innovative interior design solutions. Create
+            stunning environments that reflect your vision and elevate every
+            room.
+          </motion.p>
+        </div>
+
+        {/* Right content - 3D Model */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="flex-1 relative flex items-center justify-center p-6 pt-0 sm:p-8 lg:p-0"
+        >
+          <div className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:w-[80%] lg:h-[80%]">
+            <ModelViewer
+              url="/src/assets/google_daydream.glb"
+              width="100%"
+              height="100%"
+              defaultRotationX={0}
+              defaultRotationY={0}
+              defaultZoom={2}
+              minZoomDistance={1}
+              maxZoomDistance={5}
+              enableMouseParallax={false}
+              enableManualRotation={false}
+              enableHoverRotation={true}
+              enableManualZoom={true}
+              ambientIntensity={0.5}
+              keyLightIntensity={1.2}
+              fillLightIntensity={0.6}
+              rimLightIntensity={0.8}
+              environmentPreset="sunset"
+              autoFrame={true}
+              showScreenshotButton={false}
+              fadeIn={true}
+              autoRotate={isMobile}
+              autoRotateSpeed={0.5}
+            />
+          </div>
+        </motion.div>
+      </div>
+    </Card>
+  );
+};
+
+export default Landing;
