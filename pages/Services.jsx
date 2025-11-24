@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import VrImage from "@/assets/Vr-1.avif";
-import VrImages from "@/assets/VR-2.avif";
 import ScrollFloat from "../src/components/ui/components/ScrollFloat";
+
+const VrImage = "/assets/Vr-1.avif";
+const VrImages = "/assets/VR-2.avif";
 
 const Services = () => {
   const [currentIndex, setCurrentIndex] = useState(0);

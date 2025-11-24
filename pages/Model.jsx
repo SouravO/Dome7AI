@@ -20,7 +20,7 @@ const Model = () => {
         </p>
         <div className="w-full max-w-4xl">
           <ModelViewer
-            url="/src/assets/google_daydream.glb"
+            url="/assets/google_daydream.glb"
             width="100%"
             height={600}
             defaultRotationX={-20}

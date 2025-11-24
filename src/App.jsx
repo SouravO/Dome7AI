@@ -39,7 +39,7 @@ const App = () => {
         openMenuButtonColor="#000"
         changeMenuColorOnOpen={true}
         colors={["#1a1a1a", "#2a2a2a"]}
-        logoUrl="/path-to-your-logo.svg"
+        logoUrl="/logo.svg"
         accentColor="#ffffff"
         isFixed={true}
         onMenuOpen={() => console.log("Menu opened")}

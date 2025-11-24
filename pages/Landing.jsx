@@ -14,12 +14,12 @@ const Landing = () => {
 
       <div className="flex flex-col lg:flex-row h-full min-h-screen lg:min-h-0">
         {/* Left content */}
-        <div className="flex-1 p-6 sm:p-8 md:p-10 lg:p-8 relative z-10 flex flex-col justify-center pb-4 lg:pb-8">
+        <div className="flex-1 p-6 pt-30 sm:p-18 md:p-10 lg:p-8 relative z-10 flex flex-col justify-center pb-4 lg:pb-8">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white via-neutral-100 to-neutral-400 mb-4 sm:mb-2 tracking-tight leading-tight"
+            className="text-6xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-9xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white via-neutral-100 to-neutral-400 mb-4 sm:mb-2 tracking-tight leading-tight"
           >
             Dome7ai
           </motion.h1>
@@ -44,7 +44,7 @@ const Landing = () => {
         >
           <div className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:w-[80%] lg:h-[80%]">
             <ModelViewer
-              url="/src/assets/google_daydream.glb"
+              url="/assets/google_daydream.glb"
               width="100%"
               height="100%"
               defaultRotationX={0}

@@ -69,7 +69,7 @@ const ContactUs = () => {
   };
 
   return (
-    <section className="w-full min-h-screen bg-black py-12 sm:py-16 md:py-20 lg:py-24">
+    <section className="w-full min-h-screen bg-red-500 py-12 sm:py-16 md:py-20 lg:py-24">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -80,7 +80,7 @@ const ContactUs = () => {
           viewport={{ once: true, amount: 0.3 }}
         >
           <p className="text-xs sm:text-sm uppercase tracking-widest text-gray-400 font-medium mb-4">
-            Get In Touch
+            Get In Touchaaa
           </p>
           <h2
             className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight"

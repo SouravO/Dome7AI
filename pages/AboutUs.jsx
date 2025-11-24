@@ -2,8 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import aboutImage from "@/assets/premium_photo-1676968002767-1f6a09891350.avif";
-import aboutsImage from "@/assets/kam-idris-_HqHX3LBN18-unsplash.jpg";
+
+const aboutImage = "/assets/premium_photo-1676968002767-1f6a09891350.avif";
+const aboutsImage = "/assets/kam-idris-_HqHX3LBN18-unsplash.jpg";
+
 const AboutUs = () => {
   const containerVariants = {
     hidden: { opacity: 0 },
