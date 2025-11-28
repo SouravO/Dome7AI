@@ -29,7 +29,7 @@ const WhatWeOffer = () => {
     {
       title: "Accurate 3D Spatial Alignment",
       description:
-        "Import and align detailed 3D capture data with precision to reflect real-world dimensions, ensuring consistency between digital models and physical spaces.",
+        "Import and align detailed 3D capture data with precision to reflect real-world dimensions, ensuring consistency between digital models and physical spaces",
     },
   ];
 
