@@ -36,13 +36,13 @@ const WhatWeDo = () => {
             rotationEnd="center center"
             wordAnimationEnd="center top+=30%"
           >
-            We transform interior design education through immersive VR
-            technology. Our comprehensive training programs empower aspiring
-            designers to master spatial planning, material selection, and design
-            principles in hands-on virtual environments. From fundamentals to
-            industry-ready certification, we guide students on their journey to
-            becoming professional interior designers equipped with cutting-edge
-            VR skills and real-world project experience.
+            Dome7AI is an online design and information platform for businesses
+            in the home décor and furnishing industry. It supports 3D model
+            creation, material and texture customization, and advanced floor
+            planning, with visualization through 360° views, augmented formats,
+            photo-realistic rendering, and virtual reality. The platform is
+            built on a modern, mobile-optimized web architecture for reliable
+            cross-device performance. 
           </ScrollReveal>
         </div>
       </div>

@@ -75,10 +75,13 @@ const AboutUs = () => {
               className="text-sm sm:text-base md:text-lg text-gray-300 mb-6 sm:mb-8 leading-relaxed max-w-lg"
               variants={itemVariants}
             >
-              At Dome7ai, we believe that interior design is not just about how
-              a space looks – it's about how it makes you feel. We approach each
-              project as a layered composition of light, form, and purpose,
-              where clarity meets quiet beauty.
+              Dome7AI is a high-performance 3D design and visualization
+              platform** designed to increase productivity and reduce production
+              costs for interior and exterior design workflows. From a single
+              base model, the platform enables the creation of multiple unique
+              design variations with minimal effort, while delivering
+              ultra-high-resolution renders from 4K to 32K in under 60 seconds
+              for rapid, professional visualization.
             </motion.p>
 
             <motion.a

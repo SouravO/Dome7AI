@@ -2,6 +2,7 @@ import React from "react";
 import Landing from "../pages/Landing";
 import AboutUs from "../pages/AboutUs";
 import WhatWeDo from "../pages/WhatWeDo";
+import WhatWeOffer from "../pages/WhatWeOffer";
 import ContactUs from "../pages/ContactUs";
 import Footer from "../pages/Footer";
 import Contact from "../pages/Contact";
@@ -14,6 +15,7 @@ const menuItems = [
   { label: "Home", ariaLabel: "Go to home page", link: "#home" },
   { label: "About", ariaLabel: "Learn about us", link: "#about" },
   { label: "What We Do", ariaLabel: "What we do", link: "#whatwedo" },
+  { label: "What We Offer", ariaLabel: "What we offer", link: "#whatweoffer" },
   { label: "Services", ariaLabel: "View our services", link: "#services" },
   { label: "3D Model", ariaLabel: "View 3D model", link: "#model" },
   { label: "Contact", ariaLabel: "Get in touch", link: "#contact" },
@@ -55,6 +57,9 @@ const App = () => {
       </div>
       <div id="whatwedo">
         <WhatWeDo />
+      </div>
+      <div id="whatweoffer">
+        <WhatWeOffer />
       </div>
       <div id="services">
         <Services />

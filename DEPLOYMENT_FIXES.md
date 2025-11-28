@@ -1,12 +1,15 @@
 # Asset Path Fixes for Vercel Deployment
 
 ## Summary
+
 Fixed all asset loading issues for Vercel deployment by moving assets from `src/assets/` to `public/assets/` and updating all references to use root-level URLs.
 
 ## Changes Made
 
 ### 1. Asset Migration
+
 **Moved all static assets from `src/assets/` to `public/assets/`:**
+
 - `google_daydream.glb` (3D model)
 - `Vr-1.avif` (VR image 1)
 - `VR-2.avif` (VR image 2)
@@ -17,20 +20,24 @@ Fixed all asset loading issues for Vercel deployment by moving assets from `src/
 - `react.svg` (React logo)
 
 **Created `public/logo.svg`:**
+
 - Copied from `react.svg` as a placeholder logo for the navigation menu
 
 ### 2. Code Changes
 
 #### `pages/Landing.jsx`
+
 - **Before:** `url="/src/assets/google_daydream.glb"`
 - **After:** `url="/assets/google_daydream.glb"`
 
 #### `pages/Model.jsx`
+
 - **Before:** `url="/src/assets/google_daydream.glb"`
 - **After:** `url="/assets/google_daydream.glb"`
 
 #### `pages/AboutUs.jsx`
-- **Before:** 
+
+- **Before:**
   ```jsx
   import aboutImage from "@/assets/premium_photo-1676968002767-1f6a09891350.avif";
   import aboutsImage from "@/assets/kam-idris-_HqHX3LBN18-unsplash.jpg";
@@ -42,6 +49,7 @@ Fixed all asset loading issues for Vercel deployment by moving assets from `src/
   ```
 
 #### `pages/Services.jsx`
+
 - **Before:**
   ```jsx
   import VrImage from "@/assets/Vr-1.avif";
@@ -54,17 +62,20 @@ Fixed all asset loading issues for Vercel deployment by moving assets from `src/
   ```
 
 #### `src/components/ui/components/StaggeredMenu.jsx`
+
 - **Before:** `logoUrl = '/src/assets/logos/reactbits-gh-white.svg'`
 - **After:** `logoUrl = '/logo.svg'`
 - Updated fallback: `src={logoUrl || '/logo.svg'}`
 
 #### `src/App.jsx`
+
 - **Before:** `logoUrl="/path-to-your-logo.svg"`
 - **After:** `logoUrl="/logo.svg"`
 
 ### 3. Configuration Files
 
 #### Created `vercel.json`
+
 ```json
 {
   "rewrites": [
@@ -88,17 +99,20 @@ Fixed all asset loading issues for Vercel deployment by moving assets from `src/
 ```
 
 This configuration:
+
 - Handles client-side routing (SPA support)
 - Sets proper cache headers for static assets (1 year cache)
 
 ## Why These Changes Work
 
 ### The Problem
+
 - In development, Vite can resolve `@/assets/...` paths through its module system
 - When deployed to Vercel, the built application can't access paths like `/src/assets/...`
 - Static assets need to be in the `public/` folder to be served correctly
 
 ### The Solution
+
 1. **Public folder**: All assets in `public/` are copied to the root of the build output (`dist/`)
 2. **Root-level URLs**: Using `/assets/filename.ext` references files from the public root
 3. **No imports needed**: Direct URL strings work in both development and production
@@ -107,6 +121,7 @@ This configuration:
 ## File Structure
 
 ### Before:
+
 ```
 src/
   assets/
@@ -119,6 +134,7 @@ public/
 ```
 
 ### After:
+
 ```
 src/
   assets/           (kept as backup but not used)
@@ -137,6 +153,7 @@ public/
 ```
 
 ### Build Output (dist/):
+
 ```
 dist/
   index.html
@@ -158,21 +175,27 @@ dist/
 ## Verification
 
 ### Build Test
+
 ✅ Production build completed successfully:
+
 ```
 npm run build
 ✓ built in 15.06s
 ```
 
 ### Preview Test
+
 ✅ Local preview server running:
+
 ```
 npm run preview
 ➜ Local: http://localhost:4173/
 ```
 
 ### Assets Verified
+
 ✅ All assets copied to dist folder:
+
 - All images (.avif, .jpg, .svg)
 - 3D model (.glb)
 - Static files in correct locations
@@ -190,6 +213,7 @@ npm run preview
 ## Next Steps for Deployment
 
 1. **Commit all changes:**
+
    ```powershell
    git add .
    git commit -m "Fix asset paths for Vercel deployment"
@@ -197,6 +221,7 @@ npm run preview
    ```
 
 2. **Deploy to Vercel:**
+
    - Vercel will automatically detect and deploy the changes
    - All assets will be served from the CDN
    - 3D models, images, and logos will load correctly
