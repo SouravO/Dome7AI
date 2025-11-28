@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import image from "../dist/assets/Vr-Home.jpg";
 
 const WhatWeOffer = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -54,7 +53,7 @@ const WhatWeOffer = () => {
           >
             <div className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] overflow-hidden rounded-lg">
               <img
-                src={image}
+                src="/assets/photo-1618221195710-dd6b41faaea6.avif"
                 alt="Person using VR headset"
                 className="w-full h-full object-cover"
               />
