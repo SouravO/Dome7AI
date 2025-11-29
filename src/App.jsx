@@ -17,7 +17,6 @@ const menuItems = [
   { label: "What We Do", ariaLabel: "What we do", link: "#whatwedo" },
   { label: "What We Offer", ariaLabel: "What we offer", link: "#whatweoffer" },
   { label: "Services", ariaLabel: "View our services", link: "#services" },
-  { label: "3D Model", ariaLabel: "View 3D model", link: "#model" },
   { label: "Contact", ariaLabel: "Get in touch", link: "#contact" },
 ];
 
@@ -36,7 +35,7 @@ const App = () => {
         items={menuItems}
         socialItems={socialItems}
         displaySocials={true}
-        displayItemNumbering={true}
+        displayItemNumbering={false}
         menuButtonColor="#fff"
         openMenuButtonColor="#000"
         changeMenuColorOnOpen={true}

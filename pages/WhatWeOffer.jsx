@@ -1,139 +1,104 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 
 const WhatWeOffer = () => {
-  const [openIndex, setOpenIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const offerings = [
+  const items = [
     {
-      title: "Real-Time Virtual Interaction",
+      title: "Interact with virtual features",
       description:
-        "Interact directly with virtual spaces through real-time controls that allow you to modify layouts, reposition elements, and experience design changes instantly within a dynamic environment.",
+        "Transform your space like never before with our cutting-edge virtual design tools. Dive into an interactive experience where you can visualize your ideas in real time.",
     },
     {
-      title: "Multi-Purpose Virtual Design Solutions",
+      title: "Various virtual reality applications",
       description:
-        "A broad set of virtual applications supporting interior design, architectural visualization, and professional demonstrations, suitable for both residential and commercial design requirements.",
+        "Explore multiple virtual reality use cases including interior design, architecture visualization, and professional demonstrations.",
     },
     {
-      title: "Immersive Spatial Exploration",
+      title: "Look around the artificial world",
       description:
-        "Navigate digitally constructed environments with full spatial freedom, enabling detailed inspection of scale, depth, and layout from every perspective prior to implementation.",
+        "Navigate immersive digital environments that provide a true sense of depth, scale, and spatial awareness.",
     },
     {
-      title: "High-Fidelity Visual Representation",
+      title: "Image-based virtual reality systems",
       description:
-        "Generate highly detailed visual outputs that accurately represent materials, textures, and lighting, delivering a realistic preview of finalized design concepts.",
+        "Use image-based rendering pipelines to create realistic virtual spaces from captured visual data.",
     },
     {
-      title: "Accurate 3D Spatial Alignment",
+      title: "Accurately register acquired 3D data",
       description:
-        "Import and align detailed 3D capture data with precision to reflect real-world dimensions, ensuring consistency between digital models and physical spaces",
+        "Align and integrate 3D capture data with precision to ensure consistency between virtual and real-world environments.",
     },
   ];
 
-  const toggleAccordion = (index) => {
-    console.log("Clicked index:", index, "Current openIndex:", openIndex);
-    setOpenIndex(openIndex === index ? null : index);
+  const toggleItem = (index) => {
+    setActiveIndex((prev) => (prev === index ? null : index));
   };
 
-  console.log("Current openIndex state:", openIndex);
-
   return (
-    <section className="min-h-screen bg-[#000] py-12 sm:py-16 md:py-20 lg:py-24 px-6 sm:px-8 md:px-12 lg:px-16">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-          {/* Left Side - Image */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="relative"
-          >
-            <div className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] overflow-hidden rounded-lg">
-              <img
-                src="/assets/photo-1618221195710-dd6b41faaea6.avif"
-                alt="Person using VR headset"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            {/* <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mt-8 leading-tight"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Multi-projected
-              <br />
-              environments
-            </motion.h2> */}
-          </motion.div>
+    /**
+     * CRITICAL:
+     * relative + very high z-index + pointer-events-auto
+     * ensures nothing above can block clicks
+     */
+    <section className="relative  pointer-events-auto bg-[#000] py-24 px-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+        {/* LEFT SECTION */}
+        <div>
+          <p className="text-sm text-white mb-10">VR Experience</p>
 
-          {/* Right Side - Accordion */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="flex flex-col justify-center space-y-4"
-          >
-            {offerings.map((item, index) => {
-              const isOpen = openIndex === index;
-              console.log(`Item ${index} isOpen:`, isOpen);
+          <img
+            src="/assets/Vr.avif"
+            alt="VR Experience"
+            className="rounded-lg w-full max-w-md"
+          />
+        </div>
 
-              return (
-                <div key={index} className="border-b border-gray-400 pb-4">
-                  <button
-                    onClick={() => {
-                      console.log("Button clicked for index:", index);
-                      toggleAccordion(index);
-                    }}
-                    className="w-full flex items-center justify-between text-left group py-2"
-                    aria-expanded={isOpen}
-                    type="button"
+        {/* RIGHT ACCORDION */}
+        <div className="relative  pointer-events-auto">
+          {items.map((item, index) => {
+            const isOpen = activeIndex === index;
+
+            return (
+              <div key={index} className="border-b border-gray-300 py-4">
+                <button
+                  type="button"
+                  onClick={() => toggleItem(index)}
+                  className="w-full flex justify-between items-center text-left focus:outline-none cursor-pointer"
+                >
+                  <span className="text-lg font-medium text-white">
+                    {item.title}
+                  </span>
+
+                  <svg
+                    className={`w-5 h-5 text-white transition-transform duration-300 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <h3
-                      className="text-lg sm:text-xl md:text-2xl font-medium text-white group-hover:text-gray-300 transition-colors pr-4"
-                      style={{ fontFamily: "Poppins, sans-serif" }}
-                    >
-                      {item.title}
-                    </h3>
-                    <div className="flex-shrink-0">
-                      <svg
-                        className={`w-6 h-6 text-white transition-transform duration-300 ${
-                          isOpen ? "rotate-180" : "rotate-0"
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </div>
-                  </button>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
 
-                  {isOpen && (
-                    <div className="pt-4">
-                      <p
-                        className="text-sm sm:text-base text-gray-300 leading-relaxed"
-                        style={{ fontFamily: "Poppins, sans-serif" }}
-                      >
-                        {item.description}
-                      </p>
-                    </div>
-                  )}
+                <div
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    isOpen ? "max-h-40 opacity-100 mt-3" : "max-h-0 opacity-0"
+                  }`}
+                >
+                  <p className="text-sm text-white leading-relaxed pr-4">
+                    {item.description}
+                  </p>
                 </div>
-              );
-            })}
-          </motion.div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
