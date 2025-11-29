@@ -11,8 +11,24 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add your form submission logic here
+
+    // Format the message for WhatsApp
+    const message = `*New Contact Request from Dome7AI Website*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Email:* ${formData.email}%0A*Message:* ${formData.message}`;
+
+    // Replace with your WhatsApp number (include country code without + sign)
+    // Example: 1234567890 for US number
+    const whatsappNumber = "8129957753"; // Change this to your actual WhatsApp number
+
+    // Open WhatsApp with the pre-filled message
+    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, "_blank");
+
+    // Optional: Reset form after submission
+    setFormData({
+      name: "",
+      phone: "",
+      email: "",
+      message: "",
+    });
   };
 
   const handleChange = (e) => {
@@ -27,13 +43,7 @@ const Contact = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16">
           {/* Left Side - Heading */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="flex flex-col justify-center"
-          >
+          <div className="flex flex-col justify-center">
             <p
               className="text-xs tracking-widest mb-4 sm:mb-6 text-gray-400"
               style={{ fontFamily: "Poppins, sans-serif" }}
@@ -50,19 +60,14 @@ const Contact = () => {
               className="text-xs sm:text-sm md:text-base text-gray-300 leading-relaxed max-w-md"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Tell us more about your space, your ideas, and your aspirations.
-              We'll guide you through the next steps with care and intention.
+              Tell us about your learning goals, technical focus areas, and
+              career aspirations. We will guide you through the next steps with
+              structured support and clarity.
             </p>
-          </motion.div>
+          </div>
 
           {/* Right Side - Form */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="flex items-center"
-          >
+          <div className="flex items-center">
             <form onSubmit={handleSubmit} className="w-full space-y-6">
               {/* Name Field */}
               <div>
@@ -144,7 +149,7 @@ const Contact = () => {
                 </button>
               </div>
             </form>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

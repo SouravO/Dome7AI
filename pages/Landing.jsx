@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import { Spotlight } from "@/components/ui/spotlight";
 import ModelViewer from "../src/components/ui/components/ModeViewer";
 
 const Landing = () => {
@@ -10,8 +9,6 @@ const Landing = () => {
 
   return (
     <Card className="w-full min-h-screen lg:h-[700px] bg-black/[0.96] relative overflow-hidden">
-      <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" size={300} />
-
       <div className="flex flex-col lg:flex-row h-full min-h-screen lg:min-h-0">
         {/* Left content */}
         <div className="flex-1 p-6 pt-30 sm:p-18 md:p-10 lg:p-8 relative z-10 flex flex-col justify-center pb-4 lg:pb-8">

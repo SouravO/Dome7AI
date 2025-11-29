@@ -11,41 +11,55 @@ const Services = () => {
   const projects = [
     {
       id: 1,
-      title: "VR Interior Design Training",
-      location: "Lisbon, 2024",
-      date: "02/08",
+      title: "Augmented Reality",
+      location: "Dome7AI, 2024",
+      date: "01/04",
       description:
-        "Master interior design through immersive VR technology. Learn spatial planning, material selection, and design principles in a hands-on virtual environment.",
-      concept: "Comprehensive VR-based interior design training program.",
+        "Transform your reality with our cutting-edge AR solutions. Overlay digital content seamlessly onto the physical world for enhanced user experiences, training simulations, and interactive marketing campaigns.",
+      concept: "Advanced AR technology for business and entertainment.",
       mainImage: VrImages,
       accentImage: VrImage,
       palette:
-        "Course modules: Fundamentals, 3D visualization, client presentations",
+        "Applications: Training, Marketing, Product Visualization, Gaming",
     },
     {
       id: 2,
-      title: "Advanced VR Design Workshop",
-      location: "Porto, 2024",
-      date: "03/08",
+      title: "Mixed Reality",
+      location: "Dome7AI, 2024",
+      date: "02/04",
       description:
-        "Elevate your skills with advanced VR design techniques. Experience real-time rendering, virtual walkthroughs, and professional presentation methods.",
-      concept: "Professional development for aspiring interior designers.",
-      mainImage: VrImages,
-      accentImage: VrImage,
-      palette: "Specializations: Residential, commercial, sustainable design",
-    },
-    {
-      id: 3,
-      title: "Industry-Ready Certification",
-      location: "Algarve, 2024",
-      date: "04/08",
-      description:
-        "Complete your journey with industry-recognized certification. Build your portfolio with real-world VR projects and gain confidence to launch your design career.",
-      concept: "Certification program with portfolio development support.",
+        "Experience the perfect blend of physical and digital worlds. Our MR solutions enable natural interaction with both real and virtual objects, creating unprecedented possibilities for collaboration and innovation.",
+      concept: "Seamless integration of virtual and physical environments.",
       mainImage: VrImages,
       accentImage: VrImage,
       palette:
-        "Career focus: Portfolio building, client acquisition, business skills",
+        "Features: Real-time interaction, Spatial awareness, Multi-user collaboration",
+    },
+    {
+      id: 3,
+      title: "VR Styled Technology",
+      location: "Dome7AI, 2024",
+      date: "03/04",
+      description:
+        "Immerse yourself in fully realized virtual environments. Our VR technology delivers unparalleled experiences for gaming, training, design visualization, and virtual events with stunning realism.",
+      concept: "Complete virtual immersion for next-gen experiences.",
+      mainImage: VrImages,
+      accentImage: VrImage,
+      palette:
+        "Capabilities: 360° environments, Motion tracking, Haptic feedback",
+    },
+    {
+      id: 4,
+      title: "Projector-Based Reality",
+      location: "Dome7AI, 2024",
+      date: "04/04",
+      description:
+        "Revolutionize physical spaces with projection mapping technology. Create stunning visual experiences that transform surfaces into dynamic, interactive displays for events, exhibitions, and installations.",
+      concept: "Spatial augmentation through advanced projection systems.",
+      mainImage: VrImages,
+      accentImage: VrImage,
+      palette:
+        "Solutions: Event production, Architectural mapping, Interactive installations",
     },
   ];
 
@@ -92,7 +106,7 @@ const Services = () => {
             containerClassName="mb-0"
             textClassName="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white"
           >
-            IMPRESSIONS THAT ENDURE
+            OUR SERVICES
           </ScrollFloat>
         </div>
 
