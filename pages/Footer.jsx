@@ -10,12 +10,7 @@ const Footer = () => {
         <div className="block lg:hidden">
           {/* Brand */}
           <div className="text-center mb-8 sm:mb-10">
-            <h3
-              className="text-2xl sm:text-3xl font-light tracking-wider"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Dome 7 Ai
-            </h3>
+            <img src="/LogoFull.png" alt="Dome7AI Logo" className="mx-auto" />
           </div>
 
           {/* Menu & Social in Two Columns on Mobile/Tablet */}
@@ -143,12 +138,11 @@ const Footer = () => {
         <div className="hidden lg:grid lg:grid-cols-3 gap-12 xl:gap-16">
           {/* Brand */}
           <div>
-            <h3
-              className="text-3xl font-light tracking-wider"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Dome 7 Ai
-            </h3>
+            <img
+              src="/LogoFull.png"
+              alt="Dome7AI Logo"
+              className="w-32 h-auto"
+            />
           </div>
 
           {/* Menu & Social Combined */}
@@ -167,14 +161,7 @@ const Footer = () => {
                     ABOUT US
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="#portfolio"
-                    className="text-sm hover:opacity-70 transition-opacity"
-                  >
-                    PORTFOLIO
-                  </a>
-                </li>
+
                 <li>
                   <a
                     href="#services"
@@ -185,16 +172,19 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="#journal"
+                    href="#contact"
                     className="text-sm hover:opacity-70 transition-opacity"
                   >
-                    JOURNAL
+                    Contact Us
                   </a>
                 </li>
               </ul>
             </div>
 
             {/* Social Links */}
+            {/* https://www.instagram.com/dome_seven_ai?igsh=MTU1NjBrZjJ0MHl0Mg== */}
+            {/* https://www.facebook.com/share/p/19zb8gPjjT/ */}
+            {/* http://www.linkedin.com/in/dome-seven-ai-91362039b */}
             <div className="flex-1">
               <h4 className="text-xs tracking-widest mb-4 text-gray-400">
                 FOLLOW US
@@ -202,7 +192,7 @@ const Footer = () => {
               <ul className="space-y-2">
                 <li>
                   <a
-                    href="https://instagram.com"
+                    href="https://www.instagram.com/dome_seven_ai?igsh=MTU1NjBrZjJ0MHl0Mg=="
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm hover:opacity-70 transition-opacity"
@@ -212,27 +202,18 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="https://pinterest.com"
+                    href="https://www.facebook.com/people/Dome-Seven-Ai/61584208812699/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm hover:opacity-70 transition-opacity"
                   >
-                    PINTEREST
+                    Facebook
                   </a>
                 </li>
+
                 <li>
                   <a
-                    href="https://behance.net"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm hover:opacity-70 transition-opacity"
-                  >
-                    BEHANCE
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://linkedin.com"
+                    href="http://www.linkedin.com/in/dome-seven-ai-91362039b"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm hover:opacity-70 transition-opacity"

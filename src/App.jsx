@@ -17,13 +17,24 @@ const menuItems = [
   { label: "What We Do", ariaLabel: "What we do", link: "#whatwedo" },
   { label: "What We Offer", ariaLabel: "What we offer", link: "#whatweoffer" },
   { label: "Services", ariaLabel: "View our services", link: "#services" },
+  { label: "Plans", ariaLabel: "View our plans", link: "#plans" },
   { label: "Contact", ariaLabel: "Get in touch", link: "#contact" },
+  { label: "Login", ariaLabel: "Login to your account", link: "#login" },
 ];
 
 const socialItems = [
-  { label: "Twitter", link: "https://twitter.com" },
-  { label: "Instagram", link: "https://instagram.com" },
-  { label: "LinkedIn", link: "https://linkedin.com" },
+  {
+    label: "LinkedIn",
+    link: "http://www.linkedin.com/in/dome-seven-ai-91362039b",
+  },
+  {
+    label: "Instagram",
+    link: "https://www.instagram.com/dome_seven_ai?igsh=MTU1NjBrZjJ0MHl0Mg==",
+  },
+  {
+    label: "Facebook",
+    link: "https://www.facebook.com/people/Dome-Seven-Ai/61584208812699/",
+  },
 ];
 
 const App = () => {
@@ -40,7 +51,7 @@ const App = () => {
         openMenuButtonColor="#000"
         changeMenuColorOnOpen={true}
         colors={["#1a1a1a", "#2a2a2a"]}
-        logoUrl="/logo.svg"
+        logoUrl="/logo.png"
         accentColor="#ffffff"
         isFixed={true}
         onMenuOpen={() => console.log("Menu opened")}

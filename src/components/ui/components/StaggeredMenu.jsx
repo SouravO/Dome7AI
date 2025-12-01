@@ -362,7 +362,7 @@ export const StaggeredMenu = ({
 
   return (
     <div
-      className={`sm-scope z-40 ${
+      className={`sm-scope z-40  ${
         isFixed
           ? `fixed top-0 left-0 w-screen h-screen overflow-hidden ${
               open ? "pointer-events-auto" : "pointer-events-none"
@@ -371,7 +371,7 @@ export const StaggeredMenu = ({
       }`}
     >
       <div
-        className={
+        className={ 
           (className ? className + " " : "") +
           "staggered-menu-wrapper relative w-full h-full"
         }
@@ -381,7 +381,7 @@ export const StaggeredMenu = ({
       >
         <div
           ref={preLayersRef}
-          className="sm-prelayers absolute top-0 right-0 bottom-0 pointer-events-none z-[5]"
+          className=" sm-prelayers absolute top-0 right-0 bottom-0 pointer-events-none z-[5]"
           aria-hidden="true"
         >
           {(() => {
@@ -405,21 +405,25 @@ export const StaggeredMenu = ({
         </div>
 
         <header
-          className="staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-between p-[2em] bg-transparent pointer-events-none z-20"
+          className=" staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-between p-[2em]  pointer-events-none z-20"
           aria-label="Main navigation header"
         >
           <div
-            className="sm-logo flex items-center select-none pointer-events-auto"
+            className="sm-logo  flex items-center select-none pointer-events-auto"
             aria-label="Logo"
           >
-            <img
-              src={logoUrl || "/logo.svg"}
-              alt="Logo"
-              className="sm-logo-img block h-8 w-auto object-contain"
-              draggable={false}
-              width={110}
-              height={24}
-            />
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt="Logo"
+                className="sm-logo-img block h-8 w-auto object-contain"
+                draggable={false}
+                width={110}
+                height={24}
+              />
+            ) : (
+              <h1 className="text-black">Dome7Ai</h1>
+            )}
           </div>
 
           <button
