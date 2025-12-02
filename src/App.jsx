@@ -12,6 +12,7 @@ import Model from "../pages/Model";
 import Gallery from "../pages/Gallery";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+import Plans from "../pages/Plans";
 import ScrollVelocity from "./components/ui/components/ScrollVelocity";
 import StaggeredMenu from "./components/ui/components/StaggeredMenu";
 
@@ -68,7 +69,12 @@ const App = () => {
       link: "/gallery",
       isRoute: true,
     },
-    { label: "Plans", ariaLabel: "View our plans", link: "#plans" },
+    {
+      label: "Plans",
+      ariaLabel: "View our plans",
+      link: "/plans",
+      isRoute: true,
+    },
     { label: "Contact", ariaLabel: "Get in touch", link: "#contact" },
     {
       label: "Login",
@@ -78,7 +84,12 @@ const App = () => {
     },
   ];
   const galleryMenuItems = [
-    { label: "Home", ariaLabel: "Go to home page", link: "/#about", isRoute: true },
+    {
+      label: "Home",
+      ariaLabel: "Go to home page",
+      link: "/#about",
+      isRoute: true,
+    },
   ];
 
   const socialItems = [
@@ -101,6 +112,30 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/plans"
+          element={
+            <>
+              <StaggeredMenu
+                position="right"
+                items={menuItems}
+                socialItems={socialItems}
+                displaySocials={true}
+                displayItemNumbering={false}
+                menuButtonColor="#fff"
+                openMenuButtonColor="#000"
+                changeMenuColorOnOpen={true}
+                colors={["#1a1a1a", "#2a2a2a"]}
+                logoUrl="/logo.png"
+                accentColor="#ffffff"
+                isFixed={true}
+                onMenuOpen={() => console.log("Menu opened")}
+                onMenuClose={() => console.log("Menu closed")}
+              />
+              <Plans />
+            </>
+          }
+        />
         <Route
           path="/gallery"
           element={
