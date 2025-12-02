@@ -230,15 +230,18 @@ const Footer = () => {
             <h4 className="text-xs tracking-widest mb-4 text-gray-400">
               CONTACT
             </h4>
+            {/*  West Nadakkave, Vandipetta, Vellayil, Kozhikode, Kerala 673011
+             */}
             <div className="space-y-2 text-sm">
-              <p>RUA DE SÃO BENTO 142,</p>
-              <p>LISBON, PORTUGAL</p>
+              <p> CK Tower,Kannur Rd, West Nadakkave,</p>
+              <p>Vandipetta, Vellayil, Kozhikode, Kerala</p>
+              <p> 673011</p>
               <p className="mt-4">
                 <a
                   href="mailto:HELLO@SOLHAUS.STUDIO"
                   className="hover:opacity-70 transition-opacity"
                 >
-                  HELLO@SOLHAUS.STUDIO
+                 Dome7ai@gmail.com
                 </a>
               </p>
               <p className="mt-2">

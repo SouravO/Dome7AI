@@ -4,6 +4,7 @@ import ScrollFloat from "../src/components/ui/components/ScrollFloat";
 
 const VrImage = "/assets/Vr-1.avif";
 const VrImages = "/assets/VR-2.avif";
+const VrBox = "/assets/VrBox.jpg";
 
 const Services = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -18,7 +19,7 @@ const Services = () => {
         "Transform your reality with our cutting-edge AR solutions. Overlay digital content seamlessly onto the physical world for enhanced user experiences, training simulations, and interactive marketing campaigns.",
       concept: "Advanced AR technology for business and entertainment.",
       mainImage: VrImages,
-      accentImage: VrImage,
+      accentImage: VrBox,
       palette:
         "Applications: Training, Marketing, Product Visualization, Gaming",
     },
