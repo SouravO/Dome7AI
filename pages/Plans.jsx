@@ -17,7 +17,7 @@ const Plans = () => {
         "Removable finest logo",
         "Online/offline support",
       ],
-      bgColor: "bg-black",
+      bgColor: "bg-gray-500",
       textColor: "text-white",
       buttonBg: "bg-[#d4c5a9]",
       buttonText: "text-black",
