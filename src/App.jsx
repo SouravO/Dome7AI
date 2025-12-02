@@ -11,6 +11,7 @@ import Services from "../pages/Services";
 import Model from "../pages/Model";
 import Gallery from "../pages/Gallery";
 import Login from "../pages/Login";
+import AdminLogin from "../pages/AdminLogin";
 import Dashboard from "../pages/Dashboard";
 import Plans from "../pages/Plans";
 import ScrollVelocity from "./components/ui/components/ScrollVelocity";
@@ -90,6 +91,24 @@ const App = () => {
       link: "/#about",
       isRoute: true,
     },
+    {
+      label: "Gallery",
+      ariaLabel: "View our gallery",
+      link: "/gallery",
+      isRoute: true,
+    },
+    {
+      label: "Plans",
+      ariaLabel: "View our plans",
+      link: "/plans",
+      isRoute: true,
+    },
+    {
+      label: "Login",
+      ariaLabel: "Login to your account",
+      link: "/login",
+      isRoute: true,
+    },
   ];
 
   const socialItems = [
@@ -110,15 +129,53 @@ const App = () => {
   return (
     <div style={{ background: "#000000", scrollBehavior: "smooth" }}>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/login"
+          element={
+            <>
+            <StaggeredMenu
+              position="right"
+              items={galleryMenuItems}
+              socialItems={socialItems}
+              displaySocials={true}
+              displayItemNumbering={false}
+              menuButtonColor="#fff"
+              openMenuButtonColor="#000"
+              changeMenuColorOnOpen={true}
+              colors={["#1a1a1a", "#2a2a2a"]}
+              logoUrl="/logo.png"
+              accentColor="#ffffff"
+              isFixed={true}
+              onMenuOpen={() => console.log("Menu opened")}
+              onMenuClose={() => console.log("Menu closed")}
+            />
+              <Login />
+            </>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <>
+              <AdminLogin />
+            </>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <>
+              <Dashboard />
+            </>
+          }
+        />
         <Route
           path="/plans"
           element={
             <>
               <StaggeredMenu
                 position="right"
-                items={menuItems}
+                items={galleryMenuItems}
                 socialItems={socialItems}
                 displaySocials={true}
                 displayItemNumbering={false}

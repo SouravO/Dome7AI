@@ -36,7 +36,7 @@ const Dashboard = () => {
     if (!isAuth || !authTime || Date.now() - parseInt(authTime) > 86400000) {
       localStorage.removeItem("isAuthenticated");
       localStorage.removeItem("authTimestamp");
-      navigate("/login");
+      navigate("/admin");
       return;
     }
 
@@ -292,79 +292,83 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white py-8 px-4 sm:px-6 md:px-8 lg:px-12">
+    <div className="min-h-screen bg-black text-white py-4 sm:py-8 px-4 sm:px-6 md:px-8 lg:px-12">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
           <h1
-            className="text-3xl sm:text-4xl font-bold"
+            className="text-2xl sm:text-3xl md:text-4xl font-bold"
             style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Admin Dashboard
           </h1>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
             <button
               onClick={() => navigate("/")}
-              className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+              className="px-4 sm:px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm sm:text-base"
             >
               View Site
             </button>
             <button
               onClick={handleLogout}
-              className="px-6 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+              className="px-4 sm:px-6 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors text-sm sm:text-base"
             >
               Logout
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
           {/* Categories Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-gray-900 rounded-lg p-6"
+            className="bg-gray-900 rounded-lg p-4 sm:p-6"
           >
-            <h2 className="text-2xl font-semibold mb-6">Manage Categories</h2>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">
+              Manage Categories
+            </h2>
 
-            <form onSubmit={handleAddCategory} className="mb-6">
-              <div className="flex gap-2">
+            <form onSubmit={handleAddCategory} className="mb-4 sm:mb-6">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="text"
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value)}
                   placeholder="Enter category name"
-                  className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-white"
+                  className="flex-1 px-3 sm:px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-white text-sm sm:text-base"
                   required
                 />
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+                  className="px-4 sm:px-6 py-2 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm sm:text-base whitespace-nowrap"
                 >
                   Add
                 </button>
               </div>
             </form>
 
-            <div className="space-y-2">
+            <div className="space-y-2 max-h-[300px] sm:max-h-[400px] overflow-y-auto">
               {categories.length > 0 ? (
                 categories.map((category) => (
                   <div
                     key={category}
                     className="flex justify-between items-center bg-gray-800 p-3 rounded-lg"
                   >
-                    <span className="font-medium">{category}</span>
+                    <span className="font-medium text-sm sm:text-base break-words pr-2">
+                      {category}
+                    </span>
                     <button
                       onClick={() => handleDeleteCategory(category)}
-                      className="text-red-500 hover:text-red-400 text-sm"
+                      className="text-red-500 hover:text-red-400 text-xs sm:text-sm whitespace-nowrap flex-shrink-0"
                     >
                       Delete
                     </button>
                   </div>
                 ))
               ) : (
-                <p className="text-gray-400 text-center py-4">
+                <p className="text-gray-400 text-center py-4 text-sm sm:text-base">
                   No categories yet
                 </p>
               )}
@@ -376,13 +380,15 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-gray-900 rounded-lg p-6"
+            className="bg-gray-900 rounded-lg p-4 sm:p-6"
           >
-            <h2 className="text-2xl font-semibold mb-6">Upload Image</h2>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">
+              Upload Image
+            </h2>
 
             <form onSubmit={handleAddImage} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-xs sm:text-sm font-medium mb-2">
                   Image Title
                 </label>
                 <input
@@ -392,13 +398,13 @@ const Dashboard = () => {
                     setNewImage({ ...newImage, title: e.target.value })
                   }
                   placeholder="Enter image title"
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-white"
+                  className="w-full px-3 sm:px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-white text-sm sm:text-base"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-xs sm:text-sm font-medium mb-2">
                   Category
                 </label>
                 <select
@@ -406,7 +412,7 @@ const Dashboard = () => {
                   onChange={(e) =>
                     setNewImage({ ...newImage, category: e.target.value })
                   }
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-white"
+                  className="w-full px-3 sm:px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-white text-sm sm:text-base"
                   required
                 >
                   <option value="">Select category</option>
@@ -419,14 +425,14 @@ const Dashboard = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-xs sm:text-sm font-medium mb-2">
                   Image File
                 </label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleImageFileChange}
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-200"
+                  className="w-full px-3 sm:px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-white file:mr-2 sm:file:mr-4 file:py-1 sm:file:py-2 file:px-3 sm:file:px-4 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-200 text-xs sm:text-base"
                   required
                 />
                 <p className="text-xs text-gray-400 mt-1">Max file size: 5MB</p>
@@ -434,13 +440,13 @@ const Dashboard = () => {
 
               {imagePreview && (
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-xs sm:text-sm font-medium mb-2">
                     Preview
                   </label>
                   <img
                     src={imagePreview}
                     alt="Preview"
-                    className="w-full h-48 object-cover rounded-lg"
+                    className="w-full h-40 sm:h-48 object-cover rounded-lg"
                   />
                 </div>
               )}
@@ -448,7 +454,7 @@ const Dashboard = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 sm:px-6 py-2 sm:py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               >
                 {loading ? "Uploading..." : "Upload Image"}
               </button>
@@ -461,14 +467,14 @@ const Dashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-gray-900 rounded-lg p-6"
+          className="bg-gray-900 rounded-lg p-4 sm:p-6"
         >
-          <h2 className="text-2xl font-semibold mb-6">
+          <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">
             Gallery Images ({images.length})
           </h2>
 
           {images.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
               {images.map((image) => (
                 <div
                   key={image.id}
@@ -477,7 +483,7 @@ const Dashboard = () => {
                   <img
                     src={image.url}
                     alt={image.title}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-40 sm:h-48 object-cover"
                     onError={(e) => {
                       console.error(`Dashboard - Failed to load: ${image.url}`);
                       e.target.style.background = "#ef4444";
@@ -487,15 +493,17 @@ const Dashboard = () => {
                       console.log(`Dashboard - Loaded: ${image.url}`)
                     }
                   />
-                  <div className="p-4">
-                    <h3 className="font-semibold mb-1">{image.title}</h3>
-                    <p className="text-sm text-gray-400 mb-3">
+                  <div className="p-3 sm:p-4">
+                    <h3 className="font-semibold mb-1 text-sm sm:text-base truncate">
+                      {image.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-400 mb-2 sm:mb-3 truncate">
                       {image.category}
                     </p>
                     <button
                       onClick={() => handleDeleteImage(image)}
                       disabled={loading}
-                      className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full px-3 sm:px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-xs sm:text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {loading ? "Deleting..." : "Delete"}
                     </button>
@@ -504,7 +512,7 @@ const Dashboard = () => {
               ))}
             </div>
           ) : (
-            <p className="text-gray-400 text-center py-8">
+            <p className="text-gray-400 text-center py-8 text-sm sm:text-base">
               No images uploaded yet
             </p>
           )}

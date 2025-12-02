@@ -49,6 +49,7 @@ const Plans = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
+          //   on hover scale up
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -66,13 +67,6 @@ const Plans = () => {
           >
             Choose Your Plan
           </h1>
-          <p
-            className="text-gray-400 text-lg max-w-2xl mx-auto"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-          >
-            Select the perfect plan for your 3D rendering and visualization
-            needs
-          </p>
         </motion.div>
 
         {/* Pricing Cards */}
@@ -83,6 +77,7 @@ const Plans = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
+              whileHover={{ scale: 1.15 }}
               className={`${plan.bgColor} ${plan.textColor} ${
                 plan.border || ""
               } rounded-lg p-8 w-full lg:w-96 flex flex-col`}
