@@ -371,7 +371,7 @@ export const StaggeredMenu = ({
       }`}
     >
       <div
-        className={ 
+        className={
           (className ? className + " " : "") +
           "staggered-menu-wrapper relative w-full h-full"
         }
@@ -488,7 +488,7 @@ export const StaggeredMenu = ({
               {items && items.length ? (
                 items.map((it, idx) => (
                   <li
-                    className="sm-panel-itemWrap relative overflow-hidden leading-none"
+                    className="sm-panel-itemWrap relative overflow-hidden leading-none mb-2 border-b border-b-gray-300 pb-2"
                     key={it.label + idx}
                   >
                     <a
@@ -496,6 +496,7 @@ export const StaggeredMenu = ({
                       href={it.link}
                       aria-label={it.ariaLabel}
                       data-index={idx + 1}
+                      onClick={toggleMenu}
                     >
                       <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
                         {it.label}
