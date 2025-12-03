@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const Footer = () => {
+  const addressLines = ["Ck Tower,Kannur Rd, West Nadakkave,"];
   return (
     <footer className="bg-black text-white">
       {/* Main Footer Content */}
@@ -112,14 +113,15 @@ const Footer = () => {
               CONTACT
             </h4>
             <div className="space-y-2 text-sm">
-              <p>RUA DE SÃO BENTO 142,</p>
-              <p>LISBON, PORTUGAL</p>
+              <p>CK Tower,Kannur Rd, West Nadakkave,</p>
+              <p>Vandipetta, Vellayil, Kozhikode, Kerala</p>
+              <p>673011</p>
               <p className="mt-4">
                 <a
                   href="mailto:HELLO@SOLHAUS.STUDIO"
                   className="hover:opacity-70 transition-opacity"
                 >
-                  HELLO@SOLHAUS.STUDIO
+                  dome7ai@gmail.com
                 </a>
               </p>
               <p className="mt-2">
@@ -241,7 +243,7 @@ const Footer = () => {
                   href="mailto:HELLO@SOLHAUS.STUDIO"
                   className="hover:opacity-70 transition-opacity"
                 >
-                 Dome7ai@gmail.com
+                  Dome7ai@gmail.com
                 </a>
               </p>
               <p className="mt-2">
