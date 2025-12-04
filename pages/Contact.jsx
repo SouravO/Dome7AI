@@ -17,7 +17,7 @@ const Contact = () => {
 
     // Replace with your WhatsApp number (include country code without + sign)
     // Example: 1234567890 for US number
-    const whatsappNumber = "8129957753"; // Change this to your actual WhatsApp number
+    const whatsappNumber = "8086762014"; // Change this to your actual WhatsApp number
 
     // Open WhatsApp with the pre-filled message
     window.open(`https://wa.me/${whatsappNumber}?text=${message}`, "_blank");

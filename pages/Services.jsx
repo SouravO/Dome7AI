@@ -47,7 +47,7 @@ const Services = () => {
       mainImage: VrImages,
       accentImage: VrImage,
       palette:
-        "Capabilities: 360° environments, Motion tracking, Haptic feedback",
+        "Capabilities: Motion tracking, Haptic feedback",
     },
     {
       id: 4,

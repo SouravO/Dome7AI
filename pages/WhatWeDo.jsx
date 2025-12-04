@@ -39,10 +39,9 @@ const WhatWeDo = () => {
             Dome7AI is an online design and information platform for businesses
             in the home décor and furnishing industry. It supports 3D model
             creation, material and texture customization, and advanced floor
-            planning, with visualization through 360° views, augmented formats,
-            photo-realistic rendering, and virtual reality. The platform is
-            built on a modern, mobile-optimized web architecture for reliable
-            cross-device performance. 
+            planning, with visualization through photo-realistic rendering, and
+            virtual reality. The platform is built on a modern, mobile-optimized
+            web architecture for reliable cross-device performance.
           </ScrollReveal>
         </div>
       </div>

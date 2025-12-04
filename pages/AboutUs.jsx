@@ -76,7 +76,7 @@ const AboutUs = () => {
               variants={itemVariants}
             >
               Dome7AI is a high-performance 3D design and visualization
-              platform** designed to increase productivity and reduce production
+              platform designed to increase productivity and reduce production
               costs for interior and exterior design workflows. From a single
               base model, the platform enables the creation of multiple unique
               design variations with minimal effort, while delivering

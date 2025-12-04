@@ -30,14 +30,7 @@ const Footer = () => {
                     ABOUT US
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="#portfolio"
-                    className="text-sm hover:opacity-70 transition-opacity"
-                  >
-                    PORTFOLIO
-                  </a>
-                </li>
+
                 <li>
                   <a
                     href="#services"
@@ -48,10 +41,10 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="#journal"
+                    href="#contact"
                     className="text-sm hover:opacity-70 transition-opacity"
                   >
-                    JOURNAL
+                    CONTACT US
                   </a>
                 </li>
               </ul>
@@ -65,7 +58,7 @@ const Footer = () => {
               <ul className="space-y-2">
                 <li>
                   <a
-                    href="https://instagram.com"
+                    href="https://www.instagram.com/dome_seven_ai?igsh=MTU1NjBrZjJ0MHl0Mg=="
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm hover:opacity-70 transition-opacity"
@@ -75,27 +68,18 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="https://pinterest.com"
+                    href="https://www.facebook.com/people/Dome-Seven-Ai/61584208812699/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm hover:opacity-70 transition-opacity"
                   >
-                    PINTEREST
+                    FACEBOOK
                   </a>
                 </li>
+
                 <li>
                   <a
-                    href="https://behance.net"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm hover:opacity-70 transition-opacity"
-                  >
-                    BEHANCE
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://linkedin.com"
+                    href="http://www.linkedin.com/in/dome-seven-ai-91362039b"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm hover:opacity-70 transition-opacity"
@@ -129,7 +113,7 @@ const Footer = () => {
                   href="tel:+351912345678"
                   className="hover:opacity-70 transition-opacity"
                 >
-                  +351 912 345 678
+                  +91 8086762014
                 </a>
               </p>
             </div>
@@ -251,7 +235,7 @@ const Footer = () => {
                   href="tel:+351912345678"
                   className="hover:opacity-70 transition-opacity"
                 >
-                  +351 912 345 678
+                  +91 8086762014
                 </a>
               </p>
             </div>
