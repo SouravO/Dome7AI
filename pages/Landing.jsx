@@ -80,7 +80,7 @@ const Landing = () => {
               height="100%"
               defaultRotationX={0}
               defaultRotationY={0}
-              defaultZoom={8}
+              defaultZoom={2}
               minZoomDistance={2.5}
               maxZoomDistance={8}
               enableMouseParallax={false}
