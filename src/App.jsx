@@ -17,6 +17,7 @@ import Plans from "../pages/Plans";
 import ScrollVelocity from "./components/ui/components/ScrollVelocity";
 import StaggeredMenu from "./components/ui/components/StaggeredMenu";
 
+const Logo = "/LogoFull.png";
 const HomePage = () => {
   return (
     <>
@@ -133,22 +134,22 @@ const App = () => {
           path="/login"
           element={
             <>
-            <StaggeredMenu
-              position="right"
-              items={galleryMenuItems}
-              socialItems={socialItems}
-              displaySocials={true}
-              displayItemNumbering={false}
-              menuButtonColor="#fff"
-              openMenuButtonColor="#000"
-              changeMenuColorOnOpen={true}
-              colors={["#1a1a1a", "#2a2a2a"]}
-              logoUrl="/logo.png"
-              accentColor="#ffffff"
-              isFixed={true}
-              onMenuOpen={() => console.log("Menu opened")}
-              onMenuClose={() => console.log("Menu closed")}
-            />
+              <StaggeredMenu
+                position="right"
+                items={galleryMenuItems}
+                socialItems={socialItems}
+                displaySocials={true}
+                displayItemNumbering={false}
+                menuButtonColor="#fff"
+                openMenuButtonColor="#000"
+                changeMenuColorOnOpen={true}
+                colors={["#1a1a1a", "#2a2a2a"]}
+                logoUrl={Logo}
+                accentColor="#ffffff"
+                isFixed={true}
+                onMenuOpen={() => console.log("Menu opened")}
+                onMenuClose={() => console.log("Menu closed")}
+              />
               <Login />
             </>
           }
@@ -183,7 +184,7 @@ const App = () => {
                 openMenuButtonColor="#000"
                 changeMenuColorOnOpen={true}
                 colors={["#1a1a1a", "#2a2a2a"]}
-                logoUrl="/logo.png"
+                logoUrl={Logo}
                 accentColor="#ffffff"
                 isFixed={true}
                 onMenuOpen={() => console.log("Menu opened")}
@@ -207,7 +208,7 @@ const App = () => {
                 openMenuButtonColor="#000"
                 changeMenuColorOnOpen={true}
                 colors={["#1a1a1a", "#2a2a2a"]}
-                logoUrl="/logo.png"
+                logoUrl={Logo}
                 accentColor="#ffffff"
                 isFixed={true}
                 onMenuOpen={() => console.log("Menu opened")}
@@ -232,7 +233,7 @@ const App = () => {
                 openMenuButtonColor="#000"
                 changeMenuColorOnOpen={true}
                 colors={["#1a1a1a", "#2a2a2a"]}
-                logoUrl="/logo.png"
+                logoUrl={Logo}
                 accentColor="#ffffff"
                 isFixed={true}
                 onMenuOpen={() => console.log("Menu opened")}

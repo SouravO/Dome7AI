@@ -33,6 +33,37 @@ const Landing = () => {
             stunning environments that reflect your vision and elevate every
             room.
           </motion.p>
+          {/* Read more button and Enquiry button with gradient to navigate to sections*/}
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="mt-6 flex gap-4"
+          >
+            <button
+              className="bg-white text-black px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+              onClick={() => {
+                const section = document.getElementById("about");
+                if (section) {
+                  section.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
+              Read More
+            </button>
+            <button
+              className="bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+              onClick={() => {
+                const section = document.getElementById("contact");
+                if (section) {
+                  section.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
+              Enquire Now
+            </button>
+          </motion.div>
         </div>
 
         {/* Right content - 3D Model */}
@@ -40,18 +71,18 @@ const Landing = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex-1 relative flex items-center justify-center p-6 pt-0 sm:p-8 lg:p-0"
+          className="flex-1 relative flex items-center justify-center p-10 pt-0 sm:p-8 lg:p-10  "
         >
-          <div className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:w-[80%] lg:h-[80%]">
+          <div className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:w-[100%] lg:h-[100%]  flex items-center justify-center p-28  ">
             <ModelViewer
-              url="/assets/google_daydream.glb"
+              url="/assets/base_basic_pbr.glb"
               width="100%"
               height="100%"
               defaultRotationX={0}
               defaultRotationY={0}
-              defaultZoom={2}
-              minZoomDistance={1}
-              maxZoomDistance={5}
+              defaultZoom={50}
+              minZoomDistance={2.5}
+              maxZoomDistance={8}
               enableMouseParallax={false}
               enableManualRotation={false}
               enableHoverRotation={true}

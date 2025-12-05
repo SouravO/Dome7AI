@@ -5,8 +5,9 @@ const Plans = () => {
   const plans = [
     {
       name: "Platinum",
-      price: "$900",
+      price: "$682",
       period: "/year",
+      subtitle: "INCLUDES ONE YEAR DOME 7 LICENCE",
       features: [
         "2K to 6K (yearly)",
         "Unlimited projects",
@@ -23,6 +24,26 @@ const Plans = () => {
       buttonText: "text-black",
     },
     {
+      name: "Golden",
+      price: "$900",
+      period: "/year",
+      features: [
+        "2K to 8K (yearly)",
+        "Unlimited projects",
+        "750 4k rendering per year",
+        "Exclusive 3d model library",
+        "Automatic and downloadable bill of materials",
+        "Up to 1000 3d models upload",
+        "Removable finest logo",
+        "Online/offline support",
+        "Priority email support",
+      ],
+      bgColor: "bg-gradient-to-br from-yellow-600 to-yellow-800",
+      textColor: "text-white",
+      buttonBg: "bg-[#d4c5a9]",
+      buttonText: "text-black",
+    },
+    {
       name: "Diamond",
       price: "$1445",
       period: "/year",
@@ -30,7 +51,7 @@ const Plans = () => {
         "4K TO 32K (yearly)",
         "Unlimited projects",
         "Unlimited rendering in 4k",
-        "Unlimited 720-degree tours</",
+        "Unlimited 720-degree tours",
         "Exclusive 3d model library",
         "Removable finest logo",
         "Online/offline support",
@@ -70,7 +91,7 @@ const Plans = () => {
         </motion.div>
 
         {/* Pricing Cards */}
-        <div className="flex flex-col lg:flex-row justify-center items-center gap-8 max-w-5xl mx-auto">
+        <div className="flex flex-col lg:flex-row justify-center items-center gap-8 max-w-6xl mx-auto">
           {plans.map((plan, index) => (
             <motion.div
               key={plan.name}
@@ -84,11 +105,21 @@ const Plans = () => {
             >
               {/* Plan Name */}
               <h2
-                className="text-2xl font-semibold text-center mb-6"
+                className="text-2xl font-semibold text-center mb-2"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {plan.name}
               </h2>
+
+              {/* Subtitle */}
+              {plan.subtitle && (
+                <p
+                  className="text-xs text-center mb-6 opacity-90"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  {plan.subtitle}
+                </p>
+              )}
 
               {/* Price */}
               <div className="text-center mb-8">
@@ -107,7 +138,7 @@ const Plans = () => {
               </div>
 
               {/* Features */}
-              <ul className="space-y-4 mb-8 flex-grow">
+              <ul className="space-y-4 mb-8 grow">
                 {plan.features.map((feature, idx) => (
                   <li
                     key={idx}

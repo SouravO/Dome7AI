@@ -21,8 +21,8 @@ const Model = () => {
         <div className="w-full max-w-4xl">
           <ModelViewer
             url="/assets/google_daydream.glb"
-            width="100%"
-            height={600}
+            width="20%"
+            height="20%"
             defaultRotationX={-20}
             defaultRotationY={45}
             defaultZoom={2}
