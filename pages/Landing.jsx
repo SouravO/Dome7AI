@@ -80,9 +80,9 @@ const Landing = () => {
               height="100%"
               defaultRotationX={0}
               defaultRotationY={0}
-              defaultZoom={2}
-              minZoomDistance={2.5}
-              maxZoomDistance={8}
+              defaultZoom={2.2}
+              minZoomDistance={1.5}
+              maxZoomDistance={6}
               enableMouseParallax={false}
               enableManualRotation={false}
               enableHoverRotation={true}
@@ -92,9 +92,9 @@ const Landing = () => {
               fillLightIntensity={0.6}
               rimLightIntensity={0.8}
               environmentPreset="sunset"
-              autoFrame={true}
+              autoFrame={false}
               showScreenshotButton={false}
-              fadeIn={true}
+              fadeIn={false}
               autoRotate={isMobile}
               autoRotateSpeed={0.5}
             />
