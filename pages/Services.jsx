@@ -5,6 +5,14 @@ import ScrollFloat from "../src/components/ui/components/ScrollFloat";
 const VrImage = "/assets/Vr-1.avif";
 const VrImages = "/assets/VR-2.avif";
 const VrBox = "/assets/VrBox.jpg";
+const Gallery = "/assets/Gallery1.jpg";
+const Gallery2 = "/assets/Gallery2.jpg";
+const Gallery3 = "/assets/Gallery3.jpg";
+const Gallery4 = "/assets/Gallery4.jpg";  
+const Gallery5 = "/assets/Gallery5.jpg";
+const Gallery6 = "/assets/Gallery6.jpg"; 
+const Gallery7 = "/assets/Gallery7.jpg";
+const Gallery8 = "/assets/Gallery8.jpg";
 
 const Services = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -18,8 +26,8 @@ const Services = () => {
       description:
         "Transform your reality with our cutting-edge AR solutions. Overlay digital content seamlessly onto the physical world for enhanced user experiences, training simulations, and interactive marketing campaigns.",
       concept: "Advanced AR technology for business and entertainment.",
-      mainImage: VrImages,
-      accentImage: VrBox,
+      mainImage: Gallery3,
+      accentImage: Gallery4,
       palette:
         "Applications: Training, Marketing, Product Visualization, Gaming",
     },
@@ -31,8 +39,8 @@ const Services = () => {
       description:
         "Experience the perfect blend of physical and digital worlds. Our MR solutions enable natural interaction with both real and virtual objects, creating unprecedented possibilities for collaboration and innovation.",
       concept: "Seamless integration of virtual and physical environments.",
-      mainImage: VrImages,
-      accentImage: VrImage,
+      mainImage: Gallery,
+      accentImage: Gallery2,
       palette:
         "Features: Real-time interaction, Spatial awareness, Multi-user collaboration",
     },
@@ -44,8 +52,8 @@ const Services = () => {
       description:
         "Immerse yourself in fully realized virtual environments. Our VR technology delivers unparalleled experiences for gaming, training, design visualization, and virtual events with stunning realism.",
       concept: "Complete virtual immersion for next-gen experiences.",
-      mainImage: VrImages,
-      accentImage: VrImage,
+      mainImage: Gallery5,
+      accentImage: Gallery6,
       palette:
         "Capabilities: Motion tracking, Haptic feedback",
     },
@@ -57,8 +65,8 @@ const Services = () => {
       description:
         "Revolutionize physical spaces with projection mapping technology. Create stunning visual experiences that transform surfaces into dynamic, interactive displays for events, exhibitions, and installations.",
       concept: "Spatial augmentation through advanced projection systems.",
-      mainImage: VrImages,
-      accentImage: VrImage,
+      mainImage: Gallery7,
+      accentImage: Gallery8,
       palette:
         "Solutions: Event production, Architectural mapping, Interactive installations",
     },
