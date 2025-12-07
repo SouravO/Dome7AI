@@ -25,8 +25,9 @@ const Plans = () => {
     },
     {
       name: "Golden",
-      price: "$900",
+      price: "$3978",
       period: "/year",
+      subtitle: "INCLUDES VR INTEGRATED LICENCE PLUS ONE YEAR DOME 7 LICENCE ",
       features: [
         "2K to 8K (yearly)",
         "Unlimited projects",
@@ -44,9 +45,10 @@ const Plans = () => {
       buttonText: "text-black",
     },
     {
-      name: "Diamond",
-      price: "$1445",
-      period: "/year",
+      name: "Diamond Ultra",
+      // price: "Contact Customer Care",
+      // period: "/year",
+      subtitle: "Contact Customer Care for Custom Plans",
       features: [
         "4K TO 32K (yearly)",
         "Unlimited projects",

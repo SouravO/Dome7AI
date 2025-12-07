@@ -67,39 +67,25 @@ const Landing = () => {
         </div>
 
         {/* Right content - 3D Model */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex-1 relative flex items-center justify-center p-10 pt-0 sm:p-8 lg:p-10  "
-        >
-          <div className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:w-[100%] lg:h-[100%]  flex items-center justify-center p-28  ">
-            <ModelViewer
-              url="/assets/base_basic_pbr.glb"
-              width="100%"
-              height="100%"
-              defaultRotationX={0}
-              defaultRotationY={0}
-              defaultZoom={2.2}
-              minZoomDistance={1.5}
-              maxZoomDistance={6}
-              enableMouseParallax={false}
-              enableManualRotation={false}
-              enableHoverRotation={true}
-              enableManualZoom={true}
-              ambientIntensity={0.5}
-              keyLightIntensity={1.2}
-              fillLightIntensity={0.6}
-              rimLightIntensity={0.8}
-              environmentPreset="sunset"
-              autoFrame={false}
-              showScreenshotButton={false}
-              fadeIn={false}
-              autoRotate={isMobile}
-              autoRotateSpeed={0.5}
-            />
-          </div>
-        </motion.div>
+      <motion.div
+  className="flex-1 relative flex items-center justify-center"
+>
+  <div className="relative w-full h-[70vh] min-h-[520px] lg:h-full">
+    <ModelViewer
+      url="/assets/base_basic_pbr.glb"
+      width="100%"
+      height="100%"
+      defaultZoom={2.2}
+      minZoomDistance={1.5}
+      maxZoomDistance={6}
+      enableManualRotation={false}
+      enableHoverRotation={true}
+      enableManualZoom={true}
+      autoRotate={isMobile}
+    />
+  </div>
+</motion.div>
+
       </div>
     </Card>
   );

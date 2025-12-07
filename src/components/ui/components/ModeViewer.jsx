@@ -50,6 +50,18 @@ const Loader = ({ placeholderSrc }) => {
     </Html>
   );
 };
+//
+function ResizeHandler() {
+  const { invalidate } = useThree();
+
+  useEffect(() => {
+    const onResize = () => invalidate();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [invalidate]);
+
+  return null;
+}
 
 const DesktopControls = ({ pivot, min, max, zoomEnabled }) => {
   const ref = useRef(null);
@@ -514,6 +526,7 @@ const ModelViewer = ({
           />
         )}
       </Canvas>
+      <ResizeHandler />
     </div>
   );
 };
