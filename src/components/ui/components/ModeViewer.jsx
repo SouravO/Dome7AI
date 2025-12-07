@@ -448,14 +448,14 @@ const ModelViewer = ({
       }}
       className="relative"
     >
-      {showScreenshotButton && (
+      {/* {showScreenshotButton && (
         <button
           onClick={capture}
           className="absolute top-4 right-4 z-10 cursor-pointer px-4 py-2 border border-white rounded-xl bg-transparent text-white hover:bg-white hover:text-black transition-colors"
         >
           Take Screenshot
         </button>
-      )}
+      )} */}
 
       <Canvas
         shadows
@@ -495,6 +495,8 @@ const ModelViewer = ({
           blur={2}
         />
 
+        <ResizeHandler />
+
         <Suspense fallback={<Loader placeholderSrc={placeholderSrc} />}>
           <ModelInner
             url={url}
@@ -526,7 +528,6 @@ const ModelViewer = ({
           />
         )}
       </Canvas>
-      <ResizeHandler />
     </div>
   );
 };

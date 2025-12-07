@@ -1,184 +1,99 @@
 import React from "react";
-import { motion } from "framer-motion";
+
+const PlanCard = ({
+  title,
+  price,
+  period = "/year",
+  subtitle,
+  features = [],
+  bgClass = "bg-white",
+  textClass = "text-black",
+}) => (
+  <div className={`rounded-lg shadow-lg p-8 flex-1 ${bgClass} ${textClass}`}>
+    <h3 className="text-2xl font-semibold mb-2">{title}</h3>
+    <div className="text-4xl font-extrabold mb-2 flex items-baseline gap-2">
+      <span className="text-sm font-semibold">USD</span>
+      <span>${price}</span>
+      {period && (
+        <span className="text-base font-medium text-gray-200 sm:text-gray-600">
+          {period}
+        </span>
+      )}
+    </div>
+    {subtitle && <p className="text-sm mb-4 opacity-90">{subtitle}</p>}
+    <ul className="mb-6 space-y-2 text-sm">
+      {features.map((f, i) => (
+        <li key={i} className="leading-relaxed">
+          • {f}
+        </li>
+      ))}
+    </ul>
+    <button className="mt-auto px-6 py-2 rounded-full bg-amber-300 text-black font-semibold">
+      Subscribe
+    </button>
+  </div>
+);
 
 const Plans = () => {
-  const plans = [
-    {
-      name: "Platinum",
-      price: "$682",
-      period: "/year",
-      subtitle: "INCLUDES ONE YEAR DOME 7 LICENCE",
-      features: [
-        "2K to 6K (yearly)",
-        "Unlimited projects",
-        "500 4k rendering per year",
-        "Exclusive 3d model library",
-        "Automatic and downloadable bill of materials",
-        "Up to 500 3d models upload",
-        "Removable finest logo",
-        "Online/offline support",
-      ],
-      bgColor: "bg-gray-500",
-      textColor: "text-white",
-      buttonBg: "bg-[#d4c5a9]",
-      buttonText: "text-black",
-    },
-    {
-      name: "Golden",
-      price: "$3978",
-      period: "/year",
-      subtitle: "INCLUDES VR INTEGRATED LICENCE PLUS ONE YEAR DOME 7 LICENCE ",
-      features: [
-        "2K to 8K (yearly)",
-        "Unlimited projects",
-        "750 4k rendering per year",
-        "Exclusive 3d model library",
-        "Automatic and downloadable bill of materials",
-        "Up to 1000 3d models upload",
-        "Removable finest logo",
-        "Online/offline support",
-        "Priority email support",
-      ],
-      bgColor: "bg-gradient-to-br from-yellow-600 to-yellow-800",
-      textColor: "text-white",
-      buttonBg: "bg-[#d4c5a9]",
-      buttonText: "text-black",
-    },
-    {
-      name: "Diamond Ultra",
-      // price: "Contact Customer Care",
-      // period: "/year",
-      subtitle: "Contact Customer Care for Custom Plans",
-      features: [
-        "4K TO 32K (yearly)",
-        "Unlimited projects",
-        "Unlimited rendering in 4k",
-        "Unlimited 720-degree tours",
-        "Exclusive 3d model library",
-        "Removable finest logo",
-        "Online/offline support",
-        "Automatic and downloadable bill of materials",
-      ],
-      bgColor: "bg-white",
-      textColor: "text-black",
-      buttonBg: "bg-[#d4c5a9]",
-      buttonText: "text-black",
-      border: "border-2 border-gray-300",
-    },
+  const commonFeatures = [
+    "Unlimited projects",
+    "Exclusive 3d model library",
+    "Automatic and downloadable bill of materials",
+    "Online/offline support",
   ];
 
   return (
-    <section className="min-h-screen bg-black py-16 px-4 sm:px-6 md:px-8 lg:px-12">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          //   on hover scale up
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <p
-            className="text-xs tracking-widest mb-4 text-gray-400"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-          >
-            PRICING
-          </p>
-          <h1
-            className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-          >
-            Choose Your Plan
-          </h1>
-        </motion.div>
+    <div className="min-h-screen bg-neutral-50 flex items-center justify-center py-12 px-6">
+      <div className="max-w-7xl w-full">
+        <h1 className="text-4xl font-bold mb-8 text-center">Plans</h1>
 
-        {/* Pricing Cards */}
-        <div className="flex flex-col lg:flex-row justify-center items-center gap-8 max-w-6xl mx-auto">
-          {plans.map((plan, index) => (
-            <motion.div
-              key={plan.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              whileHover={{ scale: 1.15 }}
-              className={`${plan.bgColor} ${plan.textColor} ${
-                plan.border || ""
-              } rounded-lg p-8 w-full lg:w-96 flex flex-col`}
-            >
-              {/* Plan Name */}
-              <h2
-                className="text-2xl font-semibold text-center mb-2"
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                {plan.name}
-              </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <PlanCard
+            title="Platinum"
+            price="682"
+            period="/year"
+            subtitle="INCLUDES ONE YEAR DOME 7 LICENCE"
+            features={[
+              ...commonFeatures,
+              "Up to 500 3d models upload",
+              "500 4k rendering per year",
+            ]}
+            bgClass="bg-black text-white"
+            textClass=""
+          />
 
-              {/* Subtitle */}
-              {plan.subtitle && (
-                <p
-                  className="text-xs text-center mb-6 opacity-90"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
-                >
-                  {plan.subtitle}
-                </p>
-              )}
+          <PlanCard
+            title="Gold"
+            price="3978"
+            period="/year"
+            subtitle="INCLUDES VR INTEGRATED LICENCE PLUS ONE YEAR DOME 7 LICENCE"
+            features={[
+              ...commonFeatures,
+              "Unlimited 4k rendering",
+              "Unlimited 720-degree tours",
+              "Removable finest logo",
+            ]}
+            bgClass="bg-gradient-to-b from-yellow-400 to-amber-600 text-black"
+            textClass=""
+          />
 
-              {/* Price */}
-              <div className="text-center mb-8">
-                <span
-                  className="text-5xl font-bold"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
-                >
-                  {plan.price}
-                </span>
-                <span
-                  className="text-xl"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
-                >
-                  {plan.period}
-                </span>
-              </div>
-
-              {/* Features */}
-              <ul className="space-y-4 mb-8 grow">
-                {plan.features.map((feature, idx) => (
-                  <li
-                    key={idx}
-                    className="text-center text-sm"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
-                  >
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              {/* Subscribe Button */}
-              <button
-                className={`${plan.buttonBg} ${plan.buttonText} py-3 px-8 rounded-md font-semibold hover:opacity-90 transition-opacity w-full`}
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                Subscribe
-              </button>
-            </motion.div>
-          ))}
+          <PlanCard
+            title="Diamond Ultra"
+            price="Custom"
+            period=""
+            subtitle="CUSTOM LICENCE AND FEATURES"
+            features={[
+              "Custom integrations",
+              "Priority support",
+              "Dedicated account manager",
+              "Tailored feature set",
+            ]}
+            bgClass="bg-white text-black border"
+            textClass=""
+          />
         </div>
-
-        {/* Additional Info */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-center mt-16"
-        >
-          <p
-            className="text-gray-400 text-sm"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-          >
-            All plans include priority customer support and regular updates
-          </p>
-        </motion.div>
       </div>
-    </section>
+    </div>
   );
 };
 
