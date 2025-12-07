@@ -10,19 +10,29 @@ const Plans = () => {
     email: "",
     phone: "",
     company: "",
-    message: ""
+    message: "",
   });
 
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const mailtoLink = `mailto:support@dome7.com?subject=Subscription Request - ${selectedPlan.name} Plan&body=Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0APhone: ${formData.phone}%0D%0ACompany: ${formData.company}%0D%0AMessage: ${formData.message}%0D%0A%0D%0APlan Details:%0D%0A- Plan: ${selectedPlan.name}%0D%0A- Price: ${selectedPlan.price}${selectedPlan.period}%0D%0A- Features: ${selectedPlan.features.join(", ")}`;
+    const mailtoLink = `mailto:support@dome7.com?subject=Subscription Request - ${
+      selectedPlan.name
+    } Plan&body=Name: ${formData.name}%0D%0AEmail: ${
+      formData.email
+    }%0D%0APhone: ${formData.phone}%0D%0ACompany: ${
+      formData.company
+    }%0D%0AMessage: ${formData.message}%0D%0A%0D%0APlan Details:%0D%0A- Plan: ${
+      selectedPlan.name
+    }%0D%0A- Price: ${selectedPlan.price}${
+      selectedPlan.period
+    }%0D%0A- Features: ${selectedPlan.features.join(", ")}`;
     window.location.href = mailtoLink;
     setShowModal(false);
     setFormData({ name: "", email: "", phone: "", company: "", message: "" });
