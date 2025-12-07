@@ -1,7 +1,33 @@
 import React from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 const Plans = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+    message: ""
+  });
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const mailtoLink = `mailto:support@dome7.com?subject=Subscription Request - ${selectedPlan.name} Plan&body=Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0APhone: ${formData.phone}%0D%0ACompany: ${formData.company}%0D%0AMessage: ${formData.message}%0D%0A%0D%0APlan Details:%0D%0A- Plan: ${selectedPlan.name}%0D%0A- Price: ${selectedPlan.price}${selectedPlan.period}%0D%0A- Features: ${selectedPlan.features.join(", ")}`;
+    window.location.href = mailtoLink;
+    setShowModal(false);
+    setFormData({ name: "", email: "", phone: "", company: "", message: "" });
+  };
+
   const plans = [
     {
       name: "Platinum",
@@ -70,6 +96,117 @@ const Plans = () => {
 
   return (
     <section className="min-h-screen bg-black py-16 px-4 sm:px-6 md:px-8 lg:px-12">
+      {showModal && (
+        <div className="fixed inset-0 bg-transparent backdrop-blur-lg bg-opacity-50 flex items-center justify-center z-50 ">
+          <div className="bg-white rounded-lg p-8 w-full max-w-md mx-4 relative">
+            <button
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-3xl leading-none"
+              onClick={() => setShowModal(false)}
+            >
+              &times;
+            </button>
+            <h2
+              className="text-2xl font-bold mb-4 text-center"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              Subscribe to {selectedPlan?.name} Plan
+            </h2>
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Phone Number *
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="company"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Company Name
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Additional Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="3"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                Send Subscription Request
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -156,6 +293,10 @@ const Plans = () => {
 
               {/* Subscribe Button */}
               <button
+                onClick={() => {
+                  setSelectedPlan(plan);
+                  setShowModal(true);
+                }}
                 className={`${plan.buttonBg} ${plan.buttonText} py-3 px-8 rounded-md font-semibold hover:opacity-90 transition-opacity w-full`}
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
