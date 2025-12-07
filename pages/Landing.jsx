@@ -74,7 +74,7 @@ const Landing = () => {
         >
           <div className="w-full h-[350px] sm:h-[450px] md:h-[500px] lg:h-full max-w-[600px] lg:max-w-none">
             <ModelViewer
-              url="/assets/base_basic_pbr.glb"
+              url="/assets/base_basic_pbr_compressed.glb"
               width="100%"
               height="100%"
               defaultRotationX={0}
