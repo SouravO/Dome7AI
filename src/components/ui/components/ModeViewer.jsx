@@ -1,6 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/no-unknown-property */
-import { Suspense, useRef, useLayoutEffect, useEffect, useMemo } from "react";
+import {
+  Suspense,
+  useRef,
+  useLayoutEffect,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   Canvas,
   useFrame,
@@ -32,6 +39,24 @@ const PARALLAX_EASE = 0.12;
 const HOVER_MAG = deg2rad(180);
 const HOVER_EASE = 0.08;
 
+function useWindowSize() {
+  const [size, setSize] = useState(() => {
+    if (typeof window === "undefined") return { width: 1920, height: 1080 };
+    return { width: window.innerWidth, height: window.innerHeight };
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleResize = () => {
+      setSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return size;
+}
+
 const Loader = ({ placeholderSrc }) => {
   const { progress, active } = useProgress();
   if (!active && placeholderSrc) return null;
@@ -52,13 +77,18 @@ const Loader = ({ placeholderSrc }) => {
 };
 //
 function ResizeHandler() {
-  const { invalidate } = useThree();
+  const { invalidate, size } = useThree();
+  const prevSize = useRef({ width: size.width, height: size.height });
 
   useEffect(() => {
-    const onResize = () => invalidate();
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [invalidate]);
+    if (
+      prevSize.current.width !== size.width ||
+      prevSize.current.height !== size.height
+    ) {
+      prevSize.current = { width: size.width, height: size.height };
+      invalidate();
+    }
+  }, [size.width, size.height, invalidate]);
 
   return null;
 }
@@ -97,10 +127,11 @@ const ModelInner = ({
   autoRotate,
   autoRotateSpeed,
   onLoaded,
+  windowSize,
 }) => {
   const outer = useRef(null);
   const inner = useRef(null);
-  const { camera, gl } = useThree();
+  const { camera, gl, size, invalidate: inv } = useThree();
 
   const vel = useRef({ x: 0, y: 0 });
   const tPar = useRef({ x: 0, y: 0 });
@@ -118,17 +149,21 @@ const ModelInner = ({
   }, [url, ext]);
 
   const pivotW = useRef(new THREE.Vector3());
+  const modelLoaded = useRef(false);
+
   useLayoutEffect(() => {
-    if (!content) return;
+    if (!content || modelLoaded.current) return;
+    modelLoaded.current = true;
+
     const g = inner.current;
     g.updateWorldMatrix(true, true);
 
-    const sphere = new THREE.Box3()
-      .setFromObject(g)
-      .getBoundingSphere(new THREE.Sphere());
-    const s = 1 / (sphere.radius * 2);
-    g.position.set(-sphere.center.x, -sphere.center.y, -sphere.center.z);
-    g.scale.setScalar(s);
+    const box = new THREE.Box3().setFromObject(g);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+
+    g.position.set(-center.x, -center.y, -center.z);
+    g.scale.setScalar(1);
 
     g.traverse((o) => {
       if (o.isMesh) {
@@ -145,18 +180,22 @@ const ModelInner = ({
     pivot.copy(pivotW.current);
     outer.current.rotation.set(initPitch, initYaw, 0);
 
-    if (autoFrame && camera.isPerspectiveCamera) {
+    if (camera.isPerspectiveCamera) {
       const persp = camera;
-      const fitR = sphere.radius * s;
-      const d = (fitR * 1.2) / Math.sin((persp.fov * Math.PI) / 180 / 2);
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const fov = persp.fov * (Math.PI / 180);
+      const cameraDistance = Math.abs(maxDim / (2 * Math.tan(fov / 2)));
+      const offset = 1.5;
+
       persp.position.set(
         pivotW.current.x,
         pivotW.current.y,
-        pivotW.current.z + d
+        pivotW.current.z + cameraDistance * offset
       );
-      persp.near = d / 10;
-      persp.far = d * 10;
+      persp.near = (cameraDistance * offset) / 10;
+      persp.far = cameraDistance * offset * 10;
       persp.updateProjectionMatrix();
+      inv();
     }
 
     if (fadeIn) {
@@ -167,16 +206,17 @@ const ModelInner = ({
         g.traverse((o) => {
           if (o.isMesh) o.material.opacity = v;
         });
-        invalidate();
+        inv();
         if (v === 1) {
           clearInterval(id);
           onLoaded?.();
         }
       }, 16);
       return () => clearInterval(id);
-    } else onLoaded?.();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [content]);
+    } else {
+      onLoaded?.();
+    }
+  }, [content, camera, pivot, initPitch, initYaw, fadeIn, onLoaded, inv]);
 
   useEffect(() => {
     if (!enableManualRotation || isTouch) return;
@@ -200,7 +240,7 @@ const ModelInner = ({
       outer.current.rotation.y += dx * ROTATE_SPEED;
       outer.current.rotation.x += dy * ROTATE_SPEED;
       vel.current = { x: dx * ROTATE_SPEED, y: dy * ROTATE_SPEED };
-      invalidate();
+      inv();
     };
     const up = () => (drag = false);
     el.addEventListener("pointerdown", down);
@@ -210,7 +250,7 @@ const ModelInner = ({
       el.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", up);
     };
-  }, [gl, enableManualRotation]);
+  }, [gl, enableManualRotation, inv]);
 
   useEffect(() => {
     if (!isTouch) return;
@@ -239,7 +279,7 @@ const ModelInner = ({
         startZ = camera.position.z;
         e.preventDefault();
       }
-      invalidate();
+      inv();
     };
 
     const move = (e) => {
@@ -271,7 +311,7 @@ const ModelInner = ({
         outer.current.rotation.y += dx * ROTATE_SPEED;
         outer.current.rotation.x += dy * ROTATE_SPEED;
         vel.current = { x: dx * ROTATE_SPEED, y: dy * ROTATE_SPEED };
-        invalidate();
+        inv();
       } else if (mode === "pinch" && pts.size === 2) {
         e.preventDefault();
         const [p1, p2] = [...pts.values()];
@@ -282,7 +322,7 @@ const ModelInner = ({
           minZoom,
           maxZoom
         );
-        invalidate();
+        inv();
       }
     };
 
@@ -302,24 +342,31 @@ const ModelInner = ({
       window.removeEventListener("pointerup", up);
       window.removeEventListener("pointercancel", up);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gl, enableManualRotation, enableManualZoom, minZoom, maxZoom]);
+  }, [
+    gl,
+    enableManualRotation,
+    enableManualZoom,
+    minZoom,
+    maxZoom,
+    camera,
+    inv,
+  ]);
 
   useEffect(() => {
     if (isTouch) return;
     const mm = (e) => {
       if (e.pointerType !== "mouse") return;
-      const nx = (e.clientX / window.innerWidth) * 2 - 1;
-      const ny = (e.clientY / window.innerHeight) * 2 - 1;
+      const nx = (e.clientX / windowSize.width) * 2 - 1;
+      const ny = (e.clientY / windowSize.height) * 2 - 1;
       if (enableMouseParallax)
         tPar.current = { x: -nx * PARALLAX_MAG, y: -ny * PARALLAX_MAG };
       if (enableHoverRotation)
         tHov.current = { x: ny * HOVER_MAG, y: nx * HOVER_MAG };
-      invalidate();
+      inv();
     };
     window.addEventListener("pointermove", mm);
     return () => window.removeEventListener("pointermove", mm);
-  }, [enableMouseParallax, enableHoverRotation]);
+  }, [enableMouseParallax, enableHoverRotation, windowSize, inv]);
 
   useFrame((_, dt) => {
     let need = false;
@@ -358,7 +405,7 @@ const ModelInner = ({
     )
       need = true;
 
-    if (need) invalidate();
+    if (need) inv();
   });
 
   if (!content) return null;
@@ -400,6 +447,7 @@ const ModelViewer = ({
   onModelLoaded,
 }) => {
   useEffect(() => void useGLTF.preload(url), [url]);
+  const windowSize = useWindowSize();
   const pivot = useRef(new THREE.Vector3()).current;
   const contactRef = useRef(null);
   const rendererRef = useRef(null);
@@ -460,6 +508,7 @@ const ModelViewer = ({
       <Canvas
         shadows
         frameloop="demand"
+        dpr={[1, 2]}
         gl={{ preserveDrawingBuffer: true }}
         onCreated={({ gl, scene, camera }) => {
           rendererRef.current = gl;
@@ -516,6 +565,7 @@ const ModelViewer = ({
             autoRotate={autoRotate}
             autoRotateSpeed={autoRotateSpeed}
             onLoaded={onModelLoaded}
+            windowSize={windowSize}
           />
         </Suspense>
 
