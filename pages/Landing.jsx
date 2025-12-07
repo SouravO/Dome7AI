@@ -14,12 +14,12 @@ const Landing = () => {
 
       <div className="flex flex-col lg:flex-row h-full min-h-screen lg:min-h-0">
         {/* Left content */}
-        <div className="flex-1 p-6 pt-30 sm:p-18 md:p-10 lg:p-8 relative z-10 flex flex-col justify-center pb-4 lg:pb-8">
+        <div className="flex-1 p-6 pt-24 sm:pt-28 sm:p-8 md:p-10 lg:p-12 relative z-10 flex flex-col justify-center pb-8 lg:pb-12">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-6xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-9xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white via-neutral-100 to-neutral-400 mb-4 sm:mb-2 tracking-tight leading-tight"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white via-neutral-100 to-neutral-400 mb-4 sm:mb-6 tracking-tight leading-tight"
           >
             Dome7ai
           </motion.h1>
@@ -27,22 +27,21 @@ const Landing = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-sm sm:text-base md:text-lg text-neutral-300 max-w-lg leading-relaxed"
+            className="text-sm sm:text-base md:text-lg text-neutral-300 max-w-lg leading-relaxed mb-6 sm:mb-8"
           >
             Transform spaces with innovative interior design solutions. Create
             stunning environments that reflect your vision and elevate every
             room.
           </motion.p>
-          {/* Read more button and Enquiry button with gradient to navigate to sections*/}
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-6 flex gap-4"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4"
           >
             <button
-              className="bg-white text-black px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+              className="bg-white text-black px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
               onClick={() => {
                 const section = document.getElementById("about");
                 if (section) {
@@ -53,7 +52,7 @@ const Landing = () => {
               Read More
             </button>
             <button
-              className="bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+              className="bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
               onClick={() => {
                 const section = document.getElementById("contact");
                 if (section) {
@@ -71,9 +70,9 @@ const Landing = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex-1 relative flex items-center justify-center p-4 lg:p-8"
+          className="flex-1 relative flex items-center justify-center px-4 pb-8 lg:p-8"
         >
-          <div className="w-full h-[500px] sm:h-[600px] lg:h-full">
+          <div className="w-full h-[350px] sm:h-[450px] md:h-[500px] lg:h-full max-w-[600px] lg:max-w-none">
             <ModelViewer
               url="/assets/base_basic_pbr.glb"
               width="100%"
@@ -100,7 +99,6 @@ const Landing = () => {
             />
           </div>
         </motion.div>
-
       </div>
     </Card>
   );
