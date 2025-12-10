@@ -51,7 +51,6 @@ const Plans = () => {
         "Exclusive 3d model library",
         "Automatic and downloadable bill of materials",
         "Up to 500 3d models upload",
-        "Removable finest logo",
         "Online/offline support",
       ],
       bgColor: "bg-gray-500",
@@ -71,7 +70,6 @@ const Plans = () => {
         "Unlimited 720-degree tours",
         "Exclusive 3d model library",
         "Automatic and downloadable bill of materials",
-        "Removable finest logo",
         "Online/offline support",
       ],
       bgColor: "bg-gradient-to-br from-yellow-600 to-yellow-800",
@@ -93,7 +91,6 @@ const Plans = () => {
         "Custom 3d model library",
         "On-site training and onboarding",
         "Extended warranty and maintenance",
-        "Early access to new features",
         "Custom analytics and reporting",
       ],
       bgColor: "bg-white",
@@ -156,7 +153,7 @@ const Plans = () => {
                   required
                 />
               </div>
-              <div>
+              {/* <div>
                 <label
                   htmlFor="phone"
                   className="block text-sm font-medium text-gray-700"
@@ -172,7 +169,7 @@ const Plans = () => {
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   required
                 />
-              </div>
+              </div> */}
               <div>
                 <label
                   htmlFor="company"

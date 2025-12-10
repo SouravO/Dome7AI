@@ -40,8 +40,8 @@ const WhatWeDo = () => {
             in the home décor and furnishing industry. It supports 3D model
             creation, material and texture customization, and advanced floor
             planning, with visualization through photo-realistic rendering, and
-            virtual reality. The platform is built on a modern, mobile-optimized
-            web architecture for reliable cross-device performance.
+            virtual reality. The platform is built on a modern, optimized web
+            architecture for reliable cross-device performance.
           </ScrollReveal>
         </div>
       </div>
