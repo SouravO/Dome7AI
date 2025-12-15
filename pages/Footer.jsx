@@ -97,11 +97,8 @@ const Footer = () => {
               CONTACT
             </h4>
             <div className="space-y-2 text-sm">
-              <p>CK Tower,Kannur Rd, West Nadakkave,</p>
-              <p>Vandipetta, Vellayil, Kozhikode</p>
-              <p>Kerala, 673011</p>
               {/* India , UAE , Saudi Arabia */}
-              <p>India, UAE, Saudi Arabia</p>
+              <p className="font-bold">India, UAE, Saudi Arabia</p>
               <p className="mt-4">
                 <a
                   href="mailto:HELLO@SOLHAUS.STUDIO"
@@ -221,11 +218,8 @@ const Footer = () => {
             {/*  West Nadakkave, Vandipetta, Vellayil, Kozhikode, Kerala 673011
              */}
             <div className="space-y-2 text-sm">
-              <p> CK Tower,Kannur Rd, West Nadakkave,</p>
-              <p>Vandipetta, Vellayil, Kozhikode </p>
-              <p> Kerala, 673011</p>
-              {/* India , UAE , Saudi Arabia in a highlighted way*/}  
-              <p  className="font-bold">India, UAE, Saudi Arabia</p>
+              {/* India , UAE , Saudi Arabia in a highlighted way*/}
+              <p className="font-bold">India, UAE, Saudi Arabia</p>
               <p className="mt-4">
                 <a
                   href="mailto:HELLO@SOLHAUS.STUDIO"
