@@ -107,14 +107,14 @@ const Footer = () => {
                   dome7ai@gmail.com
                 </a>
               </p>
-              <p className="mt-2">
+              {/* <p className="mt-2">
                 <a
                   href="tel:+351912345678"
                   className="hover:opacity-70 transition-opacity"
                 >
                   +91 8086762014
                 </a>
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
@@ -228,14 +228,14 @@ const Footer = () => {
                   Dome7ai@gmail.com
                 </a>
               </p>
-              <p className="mt-2">
+              {/* <p className="mt-2">
                 <a
                   href="tel:+351912345678"
                   className="hover:opacity-70 transition-opacity"
                 >
                   +91 8086762014
                 </a>
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
