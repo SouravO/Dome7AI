@@ -119,12 +119,12 @@ const Plans = () => {
               Subscribe to {selectedPlan?.name} Plan
             </h2>
             <form className="space-y-4" onSubmit={handleSubmit}>
-              <div>
+              {/* <div>
                 <label
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Full Name *
+                  Company Name *
                 </label>
                 <input
                   type="text"
@@ -135,7 +135,7 @@ const Plans = () => {
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   required
                 />
-              </div>
+              </div> */}
               <div>
                 <label
                   htmlFor="email"
@@ -153,6 +153,61 @@ const Plans = () => {
                   required
                 />
               </div>
+              {/* place */}
+                <div>
+                <label
+                  htmlFor="place"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Place *
+                </label>
+                <input
+                  type="text"
+                  id="place"
+                  name="place"
+                  value={formData.place}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  required
+                />  
+                </div>
+                {/* District */}
+                <div>
+                <label
+                  htmlFor="district"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  District *
+                </label>
+                <input
+                  type="text"
+                  id="district" 
+                  name="district"
+                  value={formData.district}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  required
+                />
+                </div>
+                {/* state */}
+              <div>
+                <label
+                  htmlFor="state"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  State *
+                </label>
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  required
+                />
+              </div>
+
               {/* <div>
                 <label
                   htmlFor="phone"
@@ -175,7 +230,7 @@ const Plans = () => {
                   htmlFor="company"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Company Name
+                  Company Name *
                 </label>
                 <input
                   type="text"
@@ -184,6 +239,7 @@ const Plans = () => {
                   value={formData.company}
                   onChange={handleInputChange}
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  required
                 />
               </div>
               <div>

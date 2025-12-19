@@ -69,18 +69,62 @@ const Contact = () => {
           {/* Right Side - Form */}
           <div className="flex items-center">
             <form onSubmit={handleSubmit} className="w-full space-y-6">
-              {/* Name Field */}
-              <div>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Name"
-                  className="w-full bg-transparent border-b border-gray-600 py-3 px-0 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white transition-colors"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
-                  required
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {/* Name Field */}
+                <div>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Comapany Name"
+                    className="w-full bg-transparent border-b border-gray-600 py-3 px-0 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white transition-colors"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                    required
+                  />
+                </div>
+                {/* District */}
+
+                <div>
+                  <input
+                    type="text"
+                    name="district"
+                    value={formData.district}
+                    onChange={handleChange}
+                    placeholder="District"
+                    className="w-full bg-transparent border-b border-gray-600 py-3 px-0 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white transition-colors"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {/* place */}
+                <div>
+                  <input
+                    type="text"
+                    name="place"
+                    value={formData.place}
+                    onChange={handleChange}
+                    placeholder="Place"
+                    className="w-full bg-transparent border-b border-gray-600 py-3 px-0 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white transition-colors"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                    required
+                  />
+                </div>
+                {/* State */}
+                <div>
+                  <input
+                    type="text"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    placeholder="State"
+                    className="w-full bg-transparent border-b border-gray-600 py-3 px-0 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white transition-colors"
+                    style={{ fontFamily: "Poppins, sans-serif" }}
+                    required
+                  />
+                </div>
               </div>
 
               {/* Phone and Email Row */}
