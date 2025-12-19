@@ -4,36 +4,44 @@ import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Spotlight } from "@/components/ui/spotlight";
 import ModelViewer from "../src/components/ui/components/ModeViewer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 const Landing = () => {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
   const [displayedText, setDisplayedText] = useState("");
   const fullText = "Dome 7 AI = Faster Interior Designing + Technical Accuracy + Advanced VR Experience + Cost Transparency + Maximum Creativity.";
+  const indexRef = useRef(0);
+  const isCountingRef = useRef(true);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
-    let index = 0;
-    let isCounting = true;
-
-    const interval = setInterval(() => {
-      if (isCounting) {
-        if (index <= fullText.length) {
-          setDisplayedText(fullText.substring(0, index));
-          index++;
-        } else {
-          // Pause after typing completes
-          isCounting = false;
-          setTimeout(() => {
-            index = 0;
-            setDisplayedText("");
-            isCounting = true;
-          }, 2000); // 2 second pause before restarting
+    const startTyping = () => {
+      indexRef.current = 0;
+      isCountingRef.current = true;
+      
+      intervalRef.current = setInterval(() => {
+        if (isCountingRef.current) {
+          if (indexRef.current <= fullText.length) {
+            setDisplayedText(fullText.substring(0, indexRef.current));
+            indexRef.current++;
+          } else {
+            isCountingRef.current = false;
+            setTimeout(() => {
+              indexRef.current = 0;
+              setDisplayedText("");
+              isCountingRef.current = true;
+            }, 2000);
+          }
         }
-      }
-    }, 50); // Adjust typing speed (lower = faster)
+      }, 50);
+    };
 
-    return () => clearInterval(interval);
-  }, []);
+    startTyping();
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [fullText]);
 
   // Animation Option 1: Gentle floating up and down
   const floatingAnimation = {
@@ -68,7 +76,7 @@ const Landing = () => {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-lg sm:text-xl md:text-3xl font-semibold bg-gradient-to-r from-[#f516ff] to-[#31b5f9] bg-clip-text text-transparent mb-6 sm:mb-8 relative"
+            className="text-lg sm:text-sm md:text-lg font-semibold bg-gradient-to-r from-[#f516ff] to-[#31b5f9] bg-clip-text text-transparent mb-6 sm:mb-8 relative"
           >
             {displayedText}
             <motion.span
@@ -106,7 +114,7 @@ const Landing = () => {
               Read More
             </button>
             <button
-              className="bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
+              className="bg-white text-black px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
               onClick={() => {
                 const section = document.getElementById("contact");
                 if (section) {
@@ -121,10 +129,10 @@ const Landing = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="w-1/3 flex justify-center items-center"
+            className="md:w-1/3 flex justify-center items-center "
           >
             <button
-              className="bg-white text-black px-6 py-3 mt-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
+              className="bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-6 py-3 mt-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
               onClick={() => {
                 const section = document.getElementById("contact");
                 if (section) {

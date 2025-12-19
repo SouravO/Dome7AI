@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Landing from "../pages/Landing";
 import AboutUs from "../pages/AboutUs";
@@ -9,16 +9,25 @@ import Footer from "../pages/Footer";
 import Contact from "../pages/Contact";
 import Services from "../pages/Services";
 import Model from "../pages/Model";
-import Gallery from "../pages/Gallery";
 import Login from "../pages/Login";
 import AdminLogin from "../pages/AdminLogin";
 import Dashboard from "../pages/Dashboard";
 import Plans from "../pages/Plans";
-import TermsAndConditions from "../pages/TermsAndConditions";
-import CookiePolicy from "../pages/CookiePolicy";
 import ScrollVelocity from "./components/ui/components/ScrollVelocity";
 import StaggeredMenu from "./components/ui/components/StaggeredMenu";
 import CookieConsent from "./components/CookieConsent";
+
+// Lazy load heavy components
+const Gallery = lazy(() => import("../pages/Gallery"));
+const TermsAndConditions = lazy(() => import("../pages/TermsAndConditions"));
+const CookiePolicy = lazy(() => import("../pages/CookiePolicy"));
+
+// Loading component
+const PageLoader = () => (
+  <div className="w-full h-screen flex items-center justify-center bg-black">
+    <div className="text-white">Loading...</div>
+  </div>
+);
 
 const Logo = "/LogoFull.png";
 const HomePage = () => {
@@ -217,7 +226,9 @@ const App = () => {
                 onMenuOpen={() => console.log("Menu opened")}
                 onMenuClose={() => console.log("Menu closed")}
               />
-              <Gallery />
+              <Suspense fallback={<PageLoader />}>
+                <Gallery />
+              </Suspense>
             </>
           }
         />
@@ -241,7 +252,9 @@ const App = () => {
                 onMenuOpen={() => console.log("Menu opened")}
                 onMenuClose={() => console.log("Menu closed")}
               />
-              <TermsAndConditions />
+              <Suspense fallback={<PageLoader />}>
+                <TermsAndConditions />
+              </Suspense>
               <Footer />
             </>
           }
@@ -266,7 +279,9 @@ const App = () => {
                 onMenuOpen={() => console.log("Menu opened")}
                 onMenuClose={() => console.log("Menu closed")}
               />
-              <CookiePolicy />
+              <Suspense fallback={<PageLoader />}>
+                <CookiePolicy />
+              </Suspense>
               <Footer />
             </>
           }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 
@@ -7,14 +7,14 @@ const CookieConsent = () => {
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
-    // Check if user has already made a choice
+    // Check if user has already made a choice - only run once
     const cookieConsent = localStorage.getItem("cookieConsent");
     if (!cookieConsent) {
       setIsVisible(true);
     }
   }, []);
 
-  const handleAcceptAll = () => {
+  const handleAcceptAll = useCallback(() => {
     localStorage.setItem(
       "cookieConsent",
       JSON.stringify({
@@ -25,9 +25,9 @@ const CookieConsent = () => {
       })
     );
     setIsVisible(false);
-  };
+  }, []);
 
-  const handleRejectAll = () => {
+  const handleRejectAll = useCallback(() => {
     localStorage.setItem(
       "cookieConsent",
       JSON.stringify({
@@ -38,10 +38,9 @@ const CookieConsent = () => {
       })
     );
     setIsVisible(false);
-  };
+  }, []);
 
-  const handleSavePreferences = () => {
-    // Get checkbox values
+  const handleSavePreferences = useCallback(() => {
     const analyticsCheckbox = document.getElementById("analytics-consent");
     const marketingCheckbox = document.getElementById("marketing-consent");
 
@@ -56,7 +55,7 @@ const CookieConsent = () => {
     );
     setIsVisible(false);
     setShowDetails(false);
-  };
+  }, []);
 
   return (
     <AnimatePresence>
