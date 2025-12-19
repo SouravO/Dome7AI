@@ -1,5 +1,7 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+// import { nav } from "framer-motion/client";
+import { useNavigate } from "react-router-dom";
 
 export const StaggeredMenu = ({
   position = "right",
@@ -46,6 +48,7 @@ export const StaggeredMenu = ({
 
   const offscreenValue = position === "left" ? -100 : 100;
 
+  const navigate = useNavigate();
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const panel = panelRef.current;
@@ -403,8 +406,16 @@ export const StaggeredMenu = ({
               <img
                 src={logoUrl}
                 alt="Logo"
-                className="block h-16 sm:h-20 md:h-24 lg:h-32 w-auto object-contain"
+                className="block h-16 sm:h-20 md:h-24 lg:h-32 w-auto object-contain cursor-pointer"
                 draggable={false}
+                onClick={() => {
+                  const homeElement = document.getElementById('home');
+                  if (homeElement) {
+                    homeElement.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    navigate('/');
+                  }
+                }}
               />
             ) : (
               <h1 className="text-black text-xl sm:text-2xl font-bold">

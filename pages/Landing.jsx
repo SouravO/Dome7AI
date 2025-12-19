@@ -4,9 +4,50 @@ import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Spotlight } from "@/components/ui/spotlight";
 import ModelViewer from "../src/components/ui/components/ModeViewer";
+import { useState, useEffect } from "react";
 
 const Landing = () => {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+  const [displayedText, setDisplayedText] = useState("");
+  const fullText = "Dome 7 AI = Faster Interior Designing + Technical Accuracy + Advanced VR Experience + Cost Transparency + Maximum Creativity.";
+
+  useEffect(() => {
+    let index = 0;
+    let isCounting = true;
+
+    const interval = setInterval(() => {
+      if (isCounting) {
+        if (index <= fullText.length) {
+          setDisplayedText(fullText.substring(0, index));
+          index++;
+        } else {
+          // Pause after typing completes
+          isCounting = false;
+          setTimeout(() => {
+            index = 0;
+            setDisplayedText("");
+            isCounting = true;
+          }, 2000); // 2 second pause before restarting
+        }
+      }
+    }, 50); // Adjust typing speed (lower = faster)
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Animation Option 1: Gentle floating up and down
+  const floatingAnimation = {
+    initial: { opacity: 0, x: -30 },
+    animate: { opacity: 1, x: 0 },
+    float: {
+      y: [0, -8, 0],
+      transition: {
+        duration: 3,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }
+    }
+  };
 
   return (
     <Card className="w-full min-h-screen lg:h-[700px] bg-black/[0.96] relative overflow-hidden">
@@ -19,10 +60,23 @@ const Landing = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white via-neutral-100 to-neutral-400 mb-4 sm:mb-6 tracking-tight leading-tight"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white via-neutral-100 to-neutral-400 mb-1 sm:mb-1 tracking-tight leading-tight"
           >
             Dome7ai
           </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-lg sm:text-xl md:text-3xl font-semibold bg-gradient-to-r from-[#f516ff] to-[#31b5f9] bg-clip-text text-transparent mb-6 sm:mb-8 relative"
+          >
+            {displayedText}
+            <motion.span
+              animate={{ opacity: [1, 0] }}
+              transition={{ duration: 0.7, repeat: Infinity }}
+              className="ml-1 inline-block w-1 h-8 sm:h-10 md:h-12 bg-gradient-to-r from-[#f516ff] to-[#31b5f9]"
+            />
+          </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -61,6 +115,24 @@ const Landing = () => {
               }}
             >
               Enquire Now
+            </button>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="w-1/3 flex justify-center items-center"
+          >
+            <button
+              className="bg-white text-black px-6 py-3 mt-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
+              onClick={() => {
+                const section = document.getElementById("contact");
+                if (section) {
+                  section.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
+              Book a Free Demo
             </button>
           </motion.div>
         </div>

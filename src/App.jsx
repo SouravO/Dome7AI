@@ -14,8 +14,11 @@ import Login from "../pages/Login";
 import AdminLogin from "../pages/AdminLogin";
 import Dashboard from "../pages/Dashboard";
 import Plans from "../pages/Plans";
+import TermsAndConditions from "../pages/TermsAndConditions";
+import CookiePolicy from "../pages/CookiePolicy";
 import ScrollVelocity from "./components/ui/components/ScrollVelocity";
 import StaggeredMenu from "./components/ui/components/StaggeredMenu";
+import CookieConsent from "./components/CookieConsent";
 
 const Logo = "/LogoFull.png";
 const HomePage = () => {
@@ -219,6 +222,56 @@ const App = () => {
           }
         />
         <Route
+          path="/terms-and-conditions"
+          element={
+            <>
+              <StaggeredMenu
+                position="right"
+                items={galleryMenuItems}
+                socialItems={socialItems}
+                displaySocials={true}
+                displayItemNumbering={false}
+                menuButtonColor="#fff"
+                openMenuButtonColor="#000"
+                changeMenuColorOnOpen={true}
+                colors={["#1a1a1a", "#2a2a2a"]}
+                logoUrl={Logo}
+                accentColor="#ffffff"
+                isFixed={true}
+                onMenuOpen={() => console.log("Menu opened")}
+                onMenuClose={() => console.log("Menu closed")}
+              />
+              <TermsAndConditions />
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/cookie-policy"
+          element={
+            <>
+              <StaggeredMenu
+                position="right"
+                items={galleryMenuItems}
+                socialItems={socialItems}
+                displaySocials={true}
+                displayItemNumbering={false}
+                menuButtonColor="#fff"
+                openMenuButtonColor="#000"
+                changeMenuColorOnOpen={true}
+                colors={["#1a1a1a", "#2a2a2a"]}
+                logoUrl={Logo}
+                accentColor="#ffffff"
+                isFixed={true}
+                onMenuOpen={() => console.log("Menu opened")}
+                onMenuClose={() => console.log("Menu closed")}
+              />
+              <CookiePolicy />
+              <Footer />
+            </>
+          }
+        />
+        <Route
           path="/*"
           element={
             <>
@@ -244,6 +297,7 @@ const App = () => {
           }
         />
       </Routes>
+      <CookieConsent />
     </div>
   );
 };
