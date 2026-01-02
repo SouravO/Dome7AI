@@ -3,7 +3,7 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const KJL_IFRAME_BASE_URL = "https://www.kujiale.com/v/auth";
-const DEFAULT_DEST = "5";
+const DEFAULT_DEST = "1";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*", // or http://localhost:5173
