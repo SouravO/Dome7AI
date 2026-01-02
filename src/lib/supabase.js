@@ -14,7 +14,9 @@ export const supabase = createClient(
     supabaseAnonKey,
     {
         auth: {
-            persistSession: false
+            persistSession: true,
+            autoRefreshToken: true,      // refresh JWT automatically
+            // detectSessionInUrl: true,    // needed for OAuth/magic links
         }
     }
 );

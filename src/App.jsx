@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Landing from "../pages/Landing";
 import AboutUs from "../pages/AboutUs";
 import WhatWeDo from "../pages/WhatWeDo";
@@ -15,7 +15,9 @@ import Dashboard from "../pages/Dashboard";
 import Plans from "../pages/Plans";
 import ScrollVelocity from "./components/ui/components/ScrollVelocity";
 import StaggeredMenu from "./components/ui/components/StaggeredMenu";
-import CookieConsent from "./components/CookieConsent";
+import Console from "../pages/Console";
+import ProtectedRoute from "./components/ProtectedRoute";
+// import CookieConsent from "./components/CookieConsent";
 
 // Lazy load heavy components
 const Gallery = lazy(() => import("../pages/Gallery"));
@@ -65,7 +67,6 @@ const HomePage = () => {
 };
 
 const App = () => {
-  const navigate = useNavigate();
 
   const menuItems = [
     { label: "Home", ariaLabel: "Go to home page", link: "#home" },
@@ -180,6 +181,14 @@ const App = () => {
             <>
               <Dashboard />
             </>
+          }
+        />
+        <Route
+          path="/console"
+          element={
+            <ProtectedRoute>
+              <Console/>
+            </ProtectedRoute>
           }
         />
         <Route
@@ -312,7 +321,7 @@ const App = () => {
           }
         />
       </Routes>
-      <CookieConsent />
+      {/* <CookieConsent /> */}
     </div>
   );
 };

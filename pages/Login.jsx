@@ -1,29 +1,50 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { supabase } from "../src/lib/supabase";
+import { useAuth } from "../src/context/useAuth";
+import { Navigate } from "react-router-dom";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const { user, loading } = useAuth();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  
+  if (user) {
+    return <Navigate to={'/console'} replace />;
+  }
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
 
     // Simple validation
-    if (!username || !password) {
+    if (!email || !password) {
       setError("Please enter both username and password");
       return;
     }
 
-    // Simulate login (you can add actual authentication here)
-    setSuccess(true);
-    setTimeout(() => {
-      setSuccess(false);
-      setUsername("");
-      setPassword("");
-    }, 2000);
+    const { data, error: authError } =
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+      if (authError || !data.session) {
+        throw authError ?? new Error("Login failed");
+      }
+
+      // 2️⃣ Exchange token (SSO)
+      // const { error: exchangeError } =
+      //   await supabase.functions.invoke("exchange-token");
+
+      // if (exchangeError) {
+      //   throw exchangeError;
+      // }
+
+      // 3️⃣ Redirect user
+      setSuccess(true);
   };
 
   return (
@@ -72,19 +93,19 @@ const Login = () => {
             {/* Username Field */}
             <div>
               <label
-                htmlFor="username"
+                htmlFor="email"
                 className="block text-sm font-semibold text-black mb-2"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                Username
+                Email
               </label>
               <input
-                type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg text-black focus:outline-none focus:border-black transition-colors"
-                placeholder="Enter your username"
+                placeholder="Enter your email"
                 required
               />
             </div>
@@ -126,7 +147,8 @@ const Login = () => {
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors shadow-lg"
+              disabled={loading}
+              className="w-full cursor-pointer bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors shadow-lg"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Sign In
