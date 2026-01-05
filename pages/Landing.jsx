@@ -2,14 +2,15 @@
 
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import { Spotlight } from "@/components/ui/spotlight";
+// import { Spotlight } from "@/components/ui/spotlight";
 import ModelViewer from "../src/components/ui/components/ModeViewer";
 import { useState, useEffect, useCallback, useRef } from "react";
 
 const Landing = () => {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
   const [displayedText, setDisplayedText] = useState("");
-  const fullText = "Dome 7 AI = Faster Interior Designing + Technical Accuracy + Advanced VR Experience + Cost Transparency + Maximum Creativity.";
+  const fullText =
+    "Dome 7 AI = Faster Interior Designing + Technical Accuracy + Advanced VR Experience + Cost Transparency + Maximum Creativity.";
   const indexRef = useRef(0);
   const isCountingRef = useRef(true);
   const intervalRef = useRef(null);
@@ -18,7 +19,7 @@ const Landing = () => {
     const startTyping = () => {
       indexRef.current = 0;
       isCountingRef.current = true;
-      
+
       intervalRef.current = setInterval(() => {
         if (isCountingRef.current) {
           if (indexRef.current <= fullText.length) {
@@ -53,15 +54,29 @@ const Landing = () => {
         duration: 3,
         repeat: Infinity,
         ease: "easeInOut",
-      }
-    }
+      },
+    },
   };
 
   return (
-    <Card className="w-full min-h-screen lg:h-[700px] bg-black/[0.96] relative overflow-hidden">
-      <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" size={300} />
+    <Card className="w-full min-h-screen lg:h-[700px] bg-gradient-to-r from-[#1a0033] via-[#2d0b4e] to-[#31b5f9] relative overflow-hidden">
+      {/* Responsive background image, left-aligned on desktop, centered on mobile */}
+      <div
+        className="absolute inset-0 w-full h-full bg-no-repeat bg-left bg-cover bg-[url('/assets/bgDome.jpg')]"
+        style={{
+          backgroundPosition: isMobile ? "left center" : "right center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          // Optional: Zoom in more if needed
+          backgroundSize: "150% 100%",
+        }}
+      >
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/40" />
+      </div>
+      {/* <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" size={300} /> */}
 
-      <div className="flex flex-col lg:flex-row h-full min-h-screen lg:min-h-0">
+      <div className="flex flex-col lg:flex-row h-full min-h-screen lg:min-h-0 relative z-10">
         {/* Left content */}
         <div className="flex-1 p-6 pt-24 sm:pt-28 sm:p-8 md:p-10 lg:p-12 relative z-10 flex flex-col justify-center pb-8 lg:pb-12">
           <motion.h1
@@ -76,7 +91,7 @@ const Landing = () => {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-lg sm:text-sm md:text-lg font-semibold bg-gradient-to-r from-[#f516ff] to-[#31b5f9] bg-clip-text text-transparent mb-6 sm:mb-8 relative"
+            className="text-sm sm:text-sm md:text-lg font-semibold bg-gradient-to-r from-[#f516ff] to-[#31b5f9] bg-clip-text text-transparent mb-6 sm:mb-8 relative w-1/2 line-hight-1.2 flex items-center"
           >
             {displayedText}
             <motion.span
@@ -96,6 +111,7 @@ const Landing = () => {
             room.
           </motion.p>
 
+          {/* button */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -129,7 +145,7 @@ const Landing = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="md:w-1/3 flex justify-center items-center "
+            className="md:w-1/3 flex justify-start items-center "
           >
             <button
               className="bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-6 py-3 mt-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
@@ -146,7 +162,7 @@ const Landing = () => {
         </div>
 
         {/* Right content - 3D Model */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
@@ -174,11 +190,8 @@ const Landing = () => {
               autoFrame={false}
               showScreenshotButton={false}
               fadeIn={false}
-              autoRotate={isMobile}
-              autoRotateSpeed={0.5}
-            />
           </div>
-        </motion.div>
+        </motion.div> */}
       </div>
     </Card>
   );
