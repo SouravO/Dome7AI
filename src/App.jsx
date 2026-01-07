@@ -17,6 +17,7 @@ import ScrollVelocity from "./components/ui/components/ScrollVelocity";
 import StaggeredMenu from "./components/ui/components/StaggeredMenu";
 import Console from "../pages/Console";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ForgotPassword from "../pages/ForgotPassword";
 // import CookieConsent from "./components/CookieConsent";
 
 // Lazy load heavy components
@@ -67,7 +68,6 @@ const HomePage = () => {
 };
 
 const App = () => {
-
   const menuItems = [
     { label: "Home", ariaLabel: "Go to home page", link: "#home" },
     { label: "About", ariaLabel: "Learn about us", link: "#about" },
@@ -187,8 +187,16 @@ const App = () => {
           path="/console"
           element={
             <ProtectedRoute>
-              <Console/>
+              <Console />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <>
+              <ForgotPassword />
+            </>
           }
         />
         <Route

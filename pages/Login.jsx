@@ -10,9 +10,10 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  
+  const [errorMessage, setErrorMessage] = useState("");
+
   if (user) {
-    return <Navigate to={'/console'} replace />;
+    return <Navigate to={"/console"} replace />;
   }
 
   const handleLogin = async (e) => {
@@ -25,26 +26,27 @@ const Login = () => {
       return;
     }
 
-    const { data, error: authError } =
-        await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+    const { data, error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-      if (authError || !data.session) {
-        throw authError ?? new Error("Login failed");
-      }
+    if (authError || !data.session) {
+      console.log("Login error:", authError?.message);
+      setErrorMessage(authError?.message || "Login failed");
+      return;
+    }
 
-      // 2️⃣ Exchange token (SSO)
-      // const { error: exchangeError } =
-      //   await supabase.functions.invoke("exchange-token");
+    // 2️⃣ Exchange token (SSO)
+    // const { error: exchangeError } =
+    //   await supabase.functions.invoke("exchange-token");
 
-      // if (exchangeError) {
-      //   throw exchangeError;
-      // }
+    // if (exchangeError) {
+    //   throw exchangeError;
+    // }
 
-      // 3️⃣ Redirect user
-      setSuccess(true);
+    // 3️⃣ Redirect user
+    setSuccess(true);
   };
 
   return (
@@ -128,6 +130,9 @@ const Login = () => {
                 placeholder="Enter your password"
                 required
               />
+              {errorMessage && (
+                <span className="text-red-600">{errorMessage}</span>
+              )}
             </div>
 
             {/* Remember Me & Forgot Password */}
@@ -139,7 +144,10 @@ const Login = () => {
                 />
                 <span className="ml-2 text-gray-600">Remember me</span>
               </label>
-              <a href="#" className="text-black hover:underline font-medium">
+              <a
+                href="/forgot-password"
+                className="text-black hover:underline font-medium"
+              >
                 Forgot password?
               </a>
             </div>
@@ -156,7 +164,6 @@ const Login = () => {
           </form>
 
           {/* Divider */}
-      
         </div>
       </motion.div>
     </div>
