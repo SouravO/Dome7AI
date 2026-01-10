@@ -1,7 +1,7 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-// import { nav } from "framer-motion/client";
 import { useNavigate } from "react-router-dom";
+import ProfileDropdown from "../../ProfileDropdown";
 
 export const StaggeredMenu = ({
   position = "right",
@@ -48,6 +48,8 @@ export const StaggeredMenu = ({
 
   const offscreenValue = position === "left" ? -100 : 100;
 
+
+  const isLoggedIn = Boolean(localStorage.getItem("sb-pecdeaansqtmawzzpsgw-auth-token"));
   const navigate = useNavigate();
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -398,6 +400,7 @@ export const StaggeredMenu = ({
           className="absolute top-0 left-0 w-full flex items-center justify-between p-4 sm:p-6 md:p-8 pointer-events-none z-20"
           aria-label="Main navigation header"
         >
+          {/* Left - Logo */}
           <div
             className="flex items-center select-none pointer-events-auto "
             aria-label="Logo"
@@ -424,44 +427,50 @@ export const StaggeredMenu = ({
             )}
           </div>
 
-          <button
-            ref={toggleBtnRef}
-            className="relative inline-flex items-center gap-1.5 bg-transparent border-0 cursor-pointer text-white font-medium leading-none pointer-events-auto focus-visible:outline-2 focus-visible:outline-white/70 focus-visible:outline-offset-4 rounded"
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            aria-controls="staggered-menu-panel"
-            onClick={toggleMenu}
-            type="button"
-          >
-            <span
-              ref={textWrapRef}
-              className="relative inline-block h-[1em] overflow-hidden whitespace-nowrap"
-              aria-hidden="true"
-            >
-              <span ref={textInnerRef} className="flex flex-col leading-none">
-                {textLines.map((l, i) => (
-                  <span className="block h-[1em] leading-none" key={i}>
-                    {l}
-                  </span>
-                ))}
-              </span>
-            </span>
+          {/* Right - Profile Dropdown and Menu Button */}
+          <div className="flex items-center gap-4 pointer-events-auto">
+           
+            {isLoggedIn && <ProfileDropdown />}
 
-            <span
-              ref={iconRef}
-              className="relative w-3.5 h-3.5 shrink-0 inline-flex items-center justify-center"
-              aria-hidden="true"
+            <button
+              ref={toggleBtnRef}
+              className="relative inline-flex items-center gap-1.5 bg-transparent border-0 cursor-pointer text-white font-medium leading-none pointer-events-auto focus-visible:outline-2 focus-visible:outline-white/70 focus-visible:outline-offset-4 rounded"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="staggered-menu-panel"
+              onClick={toggleMenu}
+              type="button"
             >
               <span
-                ref={plusHRef}
-                className="absolute left-1/2 top-1/2 w-full h-0.5 bg-current rounded-sm -translate-x-1/2 -translate-y-1/2"
-              />
+                ref={textWrapRef}
+                className="relative inline-block h-[1em] overflow-hidden whitespace-nowrap"
+                aria-hidden="true"
+              >
+                <span ref={textInnerRef} className="flex flex-col leading-none">
+                  {textLines.map((l, i) => (
+                    <span className="block h-[1em] leading-none" key={i}>
+                      {l}
+                    </span>
+                  ))}
+                </span>
+              </span>
+
               <span
-                ref={plusVRef}
-                className="absolute left-1/2 top-1/2 w-full h-0.5 bg-current rounded-sm -translate-x-1/2 -translate-y-1/2"
-              />
-            </span>
-          </button>
+                ref={iconRef}
+                className="relative w-3.5 h-3.5 shrink-0 inline-flex items-center justify-center"
+                aria-hidden="true"
+              >
+                <span
+                  ref={plusHRef}
+                  className="absolute left-1/2 top-1/2 w-full h-0.5 bg-current rounded-sm -translate-x-1/2 -translate-y-1/2"
+                />
+                <span
+                  ref={plusVRef}
+                  className="absolute left-1/2 top-1/2 w-full h-0.5 bg-current rounded-sm -translate-x-1/2 -translate-y-1/2"
+                />
+              </span>
+            </button>
+          </div>
         </header>
 
         <aside
