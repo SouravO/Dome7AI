@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import logo from "@/assets/user.png";
 
 const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +11,7 @@ const ProfileDropdown = () => {
   // Get user info from localStorage
   const userEmail = localStorage.getItem("userEmail") || "User";
   const userInitials = userEmail
+
     .split("@")[0]
     .substring(0, 2)
     .toUpperCase();
@@ -45,7 +47,7 @@ const ProfileDropdown = () => {
         aria-label="Profile menu"
         aria-expanded={isOpen}
       >
-        {userInitials}
+       <img src={logo} alt="User Avatar" />
       </button>
 
       {/* Dropdown Menu */}
