@@ -18,6 +18,7 @@ import StaggeredMenu from "./components/ui/components/StaggeredMenu";
 import Console from "../pages/Console";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ForgotPassword from "../pages/ForgotPassword";
+import Shared from "../pages/Shared";
 // import CookieConsent from "./components/CookieConsent";
 
 // Lazy load heavy components
@@ -189,6 +190,12 @@ const App = () => {
             <ProtectedRoute>
               <Console />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/shared"
+          element={
+              <Shared />
           }
         />
         <Route
