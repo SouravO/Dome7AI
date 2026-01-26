@@ -315,7 +315,8 @@ export const StaggeredMenu = ({
       const btn = toggleBtnRef.current;
       if (!btn) return;
       colorTweenRef.current?.kill();
-      if (changeMenuColorOnOpen) {
+      // Don't animate color on mobile - let CSS handle it
+      if (changeMenuColorOnOpen && window.innerWidth >= 768) {
         const targetColor = opening ? openMenuButtonColor : menuButtonColor;
         colorTweenRef.current = gsap.to(btn, {
           color: targetColor,
@@ -323,15 +324,13 @@ export const StaggeredMenu = ({
           duration: 0.3,
           ease: "power2.out",
         });
-      } else {
-        gsap.set(btn, { color: menuButtonColor });
       }
     },
     [openMenuButtonColor, menuButtonColor, changeMenuColorOnOpen]
   );
 
   React.useEffect(() => {
-    if (toggleBtnRef.current) {
+    if (toggleBtnRef.current && window.innerWidth >= 768) {
       if (changeMenuColorOnOpen) {
         const targetColor = openRef.current
           ? openMenuButtonColor
@@ -478,8 +477,8 @@ export const StaggeredMenu = ({
 
           {/* Right - Profile Dropdown and Menu Button */}
           <div className="flex items-center gap-4 pointer-events-auto">
-            {/* Desktop Navigation - Shown on md and above */}
-            <nav className="hidden md:flex items-center gap-4 sm:gap-6">
+            {/* Desktop Navigation - Shown on lg and above */}
+            <nav className="hidden lg:flex items-center gap-4 sm:gap-6">
               {items?.length ? (
                 items.filter(it => !(isLoggedIn && it.label === 'Login')).map((it, idx) => (
                   <a
@@ -509,12 +508,18 @@ export const StaggeredMenu = ({
               ) : null}
             </nav>
 
-            {isLoggedIn && <ProfileDropdown />}
+            {isLoggedIn && (
+              <div className="hidden lg:block">
+                <ProfileDropdown />
+              </div>
+            )}
 
-            {/* Mobile Menu Button - Shown on mobile only */}
+            {/* Mobile Menu Button - Hidden on large screens only */}
             <button
               ref={toggleBtnRef}
-              className="relative inline-flex items-center gap-1 bg-transparent border-0 cursor-pointer text-white font-medium leading-none pointer-events-auto focus-visible:outline-2 focus-visible:outline-white/70 focus-visible:outline-offset-4 rounded md:hidden"
+              className={`relative inline-flex items-center gap-1 bg-transparent border-0 cursor-pointer font-medium leading-none pointer-events-auto focus-visible:outline-2 focus-visible:outline-offset-4 rounded lg:hidden z-50 ${
+                open ? 'text-black focus-visible:outline-black' : 'text-white focus-visible:outline-white/70'
+              }`}
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               aria-controls="staggered-menu-panel"
@@ -551,9 +556,9 @@ export const StaggeredMenu = ({
               </span>
             </button>
 
-            {/* Desktop Menu Button - Shown on md and above */}
+            {/* Desktop Menu Button - Shown on lg and above */}
             <button
-              className="hidden md:block bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-opacity"
+              className="hidden lg:block bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-opacity"
               onClick={() => {
                 const contactSection = document.getElementById("contact");
                 if (contactSection) {
@@ -669,9 +674,6 @@ export const StaggeredMenu = ({
 .sm-socials-list .sm-socials-link { opacity: 1; transition: opacity 0.3s ease; }
 .sm-socials-list:hover .sm-socials-link:not(:hover) { opacity: 0.35; }
 .sm-socials-list:focus-within .sm-socials-link:not(:focus-visible) { opacity: 0.35; }
-@media (max-width: 1024px) {
-  [data-open] img[alt="Logo"] { filter: invert(100%); }
-}
       `}</style>
     </div>
   );
