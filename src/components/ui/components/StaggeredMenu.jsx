@@ -29,13 +29,7 @@ export const StaggeredMenu = ({
   const preLayersRef = useRef(null);
   const preLayerElsRef = useRef([]);
 
-  const plusHRef = useRef(null);
-  const plusVRef = useRef(null);
   const iconRef = useRef(null);
-
-  const textInnerRef = useRef(null);
-  const textWrapRef = useRef(null);
-  const [textLines, setTextLines] = useState(["Menu", "Close"]);
 
   const openTlRef = useRef(null);
   const closeTweenRef = useRef(null);
@@ -102,12 +96,9 @@ export const StaggeredMenu = ({
     const ctx = gsap.context(() => {
       const panel = panelRef.current;
       const preContainer = preLayersRef.current;
-      const plusH = plusHRef.current;
-      const plusV = plusVRef.current;
       const icon = iconRef.current;
-      const textInner = textInnerRef.current;
 
-      if (!panel || !plusH || !plusV || !icon || !textInner) return;
+      if (!panel || !icon) return;
 
       let preLayers = [];
       if (preContainer) {
@@ -116,10 +107,7 @@ export const StaggeredMenu = ({
       preLayerElsRef.current = preLayers;
 
       gsap.set([panel, ...preLayers], { xPercent: offscreenValue });
-      gsap.set(plusH, { transformOrigin: "50% 50%", rotate: 0 });
-      gsap.set(plusV, { transformOrigin: "50% 50%", rotate: 90 });
       gsap.set(icon, { rotate: 0, transformOrigin: "50% 50%" });
-      gsap.set(textInner, { yPercent: 0 });
 
       if (toggleBtnRef.current)
         gsap.set(toggleBtnRef.current, { color: menuButtonColor });
@@ -517,7 +505,7 @@ export const StaggeredMenu = ({
             {/* Mobile Menu Button - Hidden on large screens only */}
             <button
               ref={toggleBtnRef}
-              className={`relative inline-flex items-center gap-1 bg-transparent border-0 cursor-pointer font-medium leading-none pointer-events-auto focus-visible:outline-2 focus-visible:outline-offset-4 rounded lg:hidden z-50 ${
+              className={`relative inline-flex items-center justify-center w-10 h-10 bg-transparent border-0 cursor-pointer pointer-events-auto focus-visible:outline-2 focus-visible:outline-offset-4 rounded lg:hidden z-50 ${
                 open ? 'text-black focus-visible:outline-black' : 'text-white focus-visible:outline-white/70'
               }`}
               aria-label={open ? "Close menu" : "Open menu"}
@@ -527,31 +515,24 @@ export const StaggeredMenu = ({
               type="button"
             >
               <span
-                ref={textWrapRef}
-                className="relative inline-block h-[1em] overflow-hidden whitespace-nowrap"
-                aria-hidden="true"
-              >
-                <span ref={textInnerRef} className="flex flex-col leading-none">
-                  {textLines.map((l, i) => (
-                    <span className="block h-[1em] leading-none" key={i}>
-                      {l}
-                    </span>
-                  ))}
-                </span>
-              </span>
-
-              <span
                 ref={iconRef}
-                className="relative w-3 h-3 shrink-0 inline-flex items-center justify-center"
+                className="relative w-6 h-5 flex flex-col justify-between"
                 aria-hidden="true"
               >
                 <span
-                  ref={plusHRef}
-                  className="absolute left-1/2 top-1/2 w-full h-0.5 bg-current rounded-sm -translate-x-1/2 -translate-y-1/2"
+                  className={`w-full h-0.5 bg-current rounded-full transition-all duration-300 origin-center ${
+                    open ? 'rotate-45 translate-y-2' : 'rotate-0 translate-y-0'
+                  }`}
                 />
                 <span
-                  ref={plusVRef}
-                  className="absolute left-1/2 top-1/2 w-full h-0.5 bg-current rounded-sm -translate-x-1/2 -translate-y-1/2"
+                  className={`w-full h-0.5 bg-current rounded-full transition-all duration-300 ${
+                    open ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
+                  }`}
+                />
+                <span
+                  className={`w-full h-0.5 bg-current rounded-full transition-all duration-300 origin-center ${
+                    open ? '-rotate-45 -translate-y-2' : 'rotate-0 translate-y-0'
+                  }`}
                 />
               </span>
             </button>

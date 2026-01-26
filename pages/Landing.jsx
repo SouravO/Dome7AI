@@ -65,7 +65,7 @@ const Landing = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-sm sm:text-base md:text-lg text-neutral-300 max-w-lg leading-relaxed mb-6 sm:mb-8"
+            className="text-lg sm:text-lg md:text-lg text-neutral-300 max-w-lg leading-relaxed mb-6 sm:mb-8 pt-0"
           >
             Transform spaces with innovative interior design solutions. Create
             stunning environments that reflect your vision and elevate every
@@ -77,7 +77,7 @@ const Landing = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-3 sm:gap-4"
+            className="flex sm:flex-row gap-3 sm:gap-4"
           >
             {/* <button
               className="bg-white text-black px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
@@ -91,7 +91,7 @@ const Landing = () => {
               Read More
             </button> */}
               <button
-              className="bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-6 py-3 mt-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
+              className="bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-6 py-3 mt-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-1/2 sm:w-auto"
               onClick={() => {
                 const section = document.getElementById("contact");
                 if (section) {
@@ -102,7 +102,7 @@ const Landing = () => {
               Book a Free Demo
             </button>
             <button
-              className="bg-white text-black px-6 py-3 mt-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto border border-gray-300"
+              className="bg-white text-black px-6 py-3 mt-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-1/3 sm:w-auto border border-gray-300"
               onClick={() => {
                 const section = document.getElementById("contact");
                 if (section) {
