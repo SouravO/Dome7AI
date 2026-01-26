@@ -13,7 +13,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   if (user) {
-    return <Navigate to={"/console"} replace />;
+    return <Navigate to={"/my-projects"} replace />;
   }
 
   const handleLogin = async (e) => {

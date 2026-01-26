@@ -1,12 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import logo from "@/assets/user.png";
+import { useAuth } from "../context/useAuth";
 
 const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   // Get user info from localStorage (Supabase auth token)
   const getUserInfo = () => {
@@ -38,6 +39,7 @@ const ProfileDropdown = () => {
   }, []);
 
   const handleSignOut = () => {
+    signOut()
     // Clear authentication data
     localStorage.removeItem("userEmail");
     localStorage.removeItem("authToken");

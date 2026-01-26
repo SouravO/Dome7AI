@@ -2,10 +2,19 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import Loader from "../components/ui/loader";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useNavigate } from "react-router-dom";
 
-const PAGE_SIZE = 15
+const PAGE_SIZE = 15;
+
+const LoaderWrapper = () => (
+    <div className="flex w-full align-center justify-center">
+        <Loader />
+    </div>
+);
 
 const MyProjects = () => {
+    const navigate = useNavigate();
+
     const [designs, setDesigns] = useState([]);
     const [start, setStart] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -73,13 +82,21 @@ const MyProjects = () => {
     }, []);
 
     const loadMore = () => {
-      console.log("load more", start)
+        console.log("load more", start);
         fetchDesigns(start);
     };
 
     const onViewClick = (designId) => {
-      const params = new URLSearchParams({ designid: String(designId) });
-      window.open(`/console?${params.toString()}`, "_blank", "noopener,noreferrer");
+        const params = new URLSearchParams({ designid: String(designId) });
+        window.open(
+            `/console?${params.toString()}`,
+            "_blank",
+            "noopener,noreferrer",
+        );
+    };
+
+    const onCreateClick = () => {
+      navigate("/console");
     }
 
     // const refresh = () => {
@@ -106,16 +123,16 @@ const MyProjects = () => {
                 </div>
 
                 {loading && !totalCount ? (
-                    <div className="flex w-full align-center justify-center">
-                        <Loader />
-                    </div>
+                    <LoaderWrapper/>
                 ) : (
                     <div>
                         <InfiniteScroll
                             dataLength={designs.length}
                             next={loadMore}
                             hasMore={hasMore}
-                            loader={<Loader />}
+                            loader={
+                                <LoaderWrapper/>
+                            }
                             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-10"
                         >
                             {designs.map((project) => (
@@ -155,7 +172,14 @@ const MyProjects = () => {
                                         </div>
 
                                         <div className="mt-6 pt-6 border-t border-gray-800 flex justify-between items-center">
-                                            <button onClick={() => onViewClick(project.designId)} className="cursor-pointer px-5 py-2.5 bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white font-medium rounded-lg hover:from-[#31b5f9] hover:to-[#f516ff] transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#31b5f9]/50 focus:ring-opacity-50">
+                                            <button
+                                                onClick={() =>
+                                                    onViewClick(
+                                                        project.designId,
+                                                    )
+                                                }
+                                                className="cursor-pointer px-5 py-2.5 bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white font-medium rounded-lg hover:from-[#31b5f9] hover:to-[#f516ff] transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#31b5f9]/50 focus:ring-opacity-50"
+                                            >
                                                 View Details
                                             </button>
 
@@ -229,7 +253,7 @@ const MyProjects = () => {
                                     Start creating your first project to
                                     showcase your work.
                                 </p>
-                                <button className="mt-6 px-6 py-3 bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white font-medium rounded-lg hover:from-[#31b5f9] hover:to-[#f516ff] transition-all duration-300">
+                                <button onClick={onCreateClick} className="mt-6 px-6 py-3 bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white font-medium rounded-lg hover:from-[#31b5f9] hover:to-[#f516ff] transition-all duration-300">
                                     Create New Project
                                 </button>
                             </div>
