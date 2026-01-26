@@ -219,7 +219,9 @@ const App = () => {
                 onMenuOpen={() => console.log("Menu opened")}
                 onMenuClose={() => console.log("Menu closed")}
               />
-              <MyProjects />
+              <ProtectedRoute>
+                <MyProjects />
+              </ProtectedRoute>
             </>
           }
         />

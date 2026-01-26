@@ -54,7 +54,7 @@ const Console = () => {
       // if (!urlObj.hostname.includes("kujiale.com")) return;
 
       iframeRef.current.src = urlObj.toString();
-    } catch (e) {
+    } catch {
       console.warn("Invalid URL received:", nextUrl);
     }
   }, []);
@@ -100,7 +100,7 @@ const Console = () => {
       if (eventName === 'appcoretopbarmenuitem') {
         if (ownProps?.action === 'click') {
           if (ownProps?.logKey === "help-copyLink") {
-
+            //
           }
         }
       }
