@@ -11,8 +11,8 @@ const Footer = () => {
         {/* Mobile and Tablet Layout */}
         <div className="block lg:hidden">
           {/* Brand */}
-          <div className="text-center mb-8 sm:mb-10">
-            <img src="/LogoFull.png" alt="Dome7AI Logo" className="mx-auto" />
+          <div className="text-center mb-8 sm:mb-10 ">
+            <img src="/LogoFull.png" alt="Dome7AI Logo" className="mx-auto h-2 w-2" />
           </div>
 
           {/* Menu & Social in Two Columns on Mobile/Tablet */}

@@ -15,34 +15,7 @@ const Landing = () => {
   const isCountingRef = useRef(true);
   const intervalRef = useRef(null);
 
-  useEffect(() => {
-    const startTyping = () => {
-      indexRef.current = 0;
-      isCountingRef.current = true;
-
-      intervalRef.current = setInterval(() => {
-        if (isCountingRef.current) {
-          if (indexRef.current <= fullText.length) {
-            setDisplayedText(fullText.substring(0, indexRef.current));
-            indexRef.current++;
-          } else {
-            isCountingRef.current = false;
-            setTimeout(() => {
-              indexRef.current = 0;
-              setDisplayedText("");
-              isCountingRef.current = true;
-            }, 2000);
-          }
-        }
-      }, 50);
-    };
-
-    startTyping();
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [fullText]);
+  
 
   // Animation Option 1: Gentle floating up and down
   const floatingAnimation = {
@@ -79,27 +52,15 @@ const Landing = () => {
       <div className="flex flex-col lg:flex-row h-full min-h-screen lg:min-h-0 relative z-10">
         {/* Left content */}
         <div className="flex-1 p-6 pt-24 sm:pt-28 sm:p-8 md:p-10 lg:p-12 relative z-10 flex flex-col justify-center pb-8 lg:pb-12">
-          <motion.h1
+          {/* <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white via-neutral-100 to-neutral-400 mb-1 sm:mb-1 tracking-tight leading-tight"
           >
             Dome7ai
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-sm sm:text-sm md:text-lg font-semibold bg-gradient-to-r from-[#f516ff] to-[#31b5f9] bg-clip-text text-transparent mb-6 sm:mb-8 relative w-1/2 line-hight-1.2 flex items-center"
-          >
-            {displayedText}
-            <motion.span
-              animate={{ opacity: [1, 0] }}
-              transition={{ duration: 0.7, repeat: Infinity }}
-              className="ml-1 inline-block w-1 h-8 sm:h-10 md:h-12 bg-gradient-to-r from-[#f516ff] to-[#31b5f9]"
-            />
-          </motion.p>
+          </motion.h1> */}
+          
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -118,7 +79,7 @@ const Landing = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-3 sm:gap-4"
           >
-            <button
+            {/* <button
               className="bg-white text-black px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
               onClick={() => {
                 const section = document.getElementById("about");
@@ -128,26 +89,8 @@ const Landing = () => {
               }}
             >
               Read More
-            </button>
-            <button
-              className="bg-white text-black px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
-              onClick={() => {
-                const section = document.getElementById("contact");
-                if (section) {
-                  section.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
-            >
-              Enquire Now
-            </button>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="md:w-1/3 flex justify-start items-center "
-          >
-            <button
+            </button> */}
+              <button
               className="bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-6 py-3 mt-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
               onClick={() => {
                 const section = document.getElementById("contact");
@@ -158,7 +101,19 @@ const Landing = () => {
             >
               Book a Free Demo
             </button>
+            <button
+              className="bg-white text-black px-6 py-3 mt-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto border border-gray-300"
+              onClick={() => {
+                const section = document.getElementById("contact");
+                if (section) {
+                  section.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
+              Enquire Now
+            </button>
           </motion.div>
+         
         </div>
 
         {/* Right content - 3D Model */}

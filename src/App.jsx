@@ -13,6 +13,7 @@ import Login from "../pages/Login";
 import AdminLogin from "../pages/AdminLogin";
 import Dashboard from "../pages/Dashboard";
 import Plans from "../pages/Plans";
+import MyProjects from "./pages/MyProjects";
 import ScrollVelocity from "./components/ui/components/ScrollVelocity";
 import StaggeredMenu from "./components/ui/components/StaggeredMenu";
 import Console from "../pages/Console";
@@ -73,11 +74,11 @@ const App = () => {
     { label: "Home", ariaLabel: "Go to home page", link: "#home" },
     { label: "About", ariaLabel: "Learn about us", link: "#about" },
     { label: "What We Do", ariaLabel: "What we do", link: "#whatwedo" },
-    {
-      label: "What We Offer",
-      ariaLabel: "What we offer",
-      link: "#whatweoffer",
-    },
+    // {
+    //   label: "What We Offer",
+    //   ariaLabel: "What we offer",
+    //   link: "#whatweoffer",
+    // },
     { label: "Services", ariaLabel: "View our services", link: "#services" },
     {
       label: "Gallery",
@@ -91,7 +92,7 @@ const App = () => {
       link: "/plans",
       isRoute: true,
     },
-    { label: "Contact", ariaLabel: "Get in touch", link: "#contact" },
+    // { label: "Contact", ariaLabel: "Get in touch", link: "#contact" },
     {
       label: "Login",
       ariaLabel: "Login to your account",
@@ -196,6 +197,30 @@ const App = () => {
           path="/shared"
           element={
               <Shared />
+          }
+        />
+        <Route
+          path="/my-projects"
+          element={
+            <>
+              <StaggeredMenu
+                position="right"
+                items={galleryMenuItems}
+                socialItems={socialItems}
+                displaySocials={true}
+                displayItemNumbering={false}
+                menuButtonColor="#fff"
+                openMenuButtonColor="#000"
+                changeMenuColorOnOpen={true}
+                colors={["#1a1a1a", "#2a2a2a"]}
+                logoUrl={Logo}
+                accentColor="#ffffff"
+                isFixed={true}
+                onMenuOpen={() => console.log("Menu opened")}
+                onMenuClose={() => console.log("Menu closed")}
+              />
+              <MyProjects />
+            </>
           }
         />
         <Route

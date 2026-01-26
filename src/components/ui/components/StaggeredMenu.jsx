@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState, useEffect } from "react";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
 import ProfileDropdown from "../../ProfileDropdown";
@@ -22,6 +22,8 @@ export const StaggeredMenu = ({
 }) => {
   const [open, setOpen] = useState(false);
   const openRef = useRef(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
 
   const panelRef = useRef(null);
   const preLayersRef = useRef(null);
@@ -51,6 +53,51 @@ export const StaggeredMenu = ({
 
   const isLoggedIn = Boolean(localStorage.getItem("sb-pecdeaansqtmawzzpsgw-auth-token"));
   const navigate = useNavigate();
+
+  // Get user info from localStorage
+  const getUserInfo = () => {
+    try {
+      const authData = localStorage.getItem("sb-pecdeaansqtmawzzpsgw-auth-token");
+      if (authData) {
+        const parsed = JSON.parse(authData);
+        const user = parsed.user;
+        return {
+          name: user?.user_metadata?.name || user?.user_metadata?.full_name || null,
+          email: user?.email || null
+        };
+      }
+    } catch (e) {
+      console.error("Error parsing user data:", e);
+    }
+    return { name: null, email: null };
+  };
+
+  const userInfo = getUserInfo();
+  const displayName = userInfo.name || userInfo.email?.split('@')[0] || 'User';
+
+  // Handle scroll to hide/show navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        // Scrolling down
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY.current) {
+        // Scrolling up
+        setIsVisible(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const panel = panelRef.current;
@@ -397,7 +444,9 @@ export const StaggeredMenu = ({
         </div>
 
         <header
-          className="absolute top-0 left-0 w-full flex items-center justify-between p-4 sm:p-6 md:p-8 pointer-events-none z-20"
+          className={`absolute top-0 left-0 w-full flex items-center justify-between p-3 sm:p-4 md:p-5 pointer-events-none z-20 bg-black transition-transform duration-300 ${
+            isVisible ? 'translate-y-0' : '-translate-y-full'
+          }`}
           aria-label="Main navigation header"
         >
           {/* Left - Logo */}
@@ -409,7 +458,7 @@ export const StaggeredMenu = ({
               <img
                 src={logoUrl}
                 alt="Logo"
-                className="block h-16 sm:h-20 md:h-24 lg:h-32 w-auto object-contain cursor-pointer"
+                className="block h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain cursor-pointer"
                 draggable={false}
                 onClick={() => {
                   const homeElement = document.getElementById('home');
@@ -421,7 +470,7 @@ export const StaggeredMenu = ({
                 }}
               />
             ) : (
-              <h1 className="text-black text-xl sm:text-2xl font-bold">
+              <h1 className="text-black text-lg sm:text-xl md:text-2xl font-bold">
                 Dome7Ai
               </h1>
             )}
@@ -429,12 +478,43 @@ export const StaggeredMenu = ({
 
           {/* Right - Profile Dropdown and Menu Button */}
           <div className="flex items-center gap-4 pointer-events-auto">
-           
+            {/* Desktop Navigation - Shown on md and above */}
+            <nav className="hidden md:flex items-center gap-4 sm:gap-6">
+              {items?.length ? (
+                items.filter(it => !(isLoggedIn && it.label === 'Login')).map((it, idx) => (
+                  <a
+                    key={it.label + idx}
+                    className="text-white font-medium text-sm sm:text-base hover:text-gray-300 transition-colors border-b border-transparent hover:border-white"
+                    href={it.link}
+                    aria-label={it.ariaLabel}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (it.link.startsWith('#')) {
+                        const element = document.getElementById(it.link.substring(1));
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      } else {
+                        navigate(it.link);
+                      }
+                      // Close the menu if it's open (though it shouldn't be visible on desktop)
+                      if (open) {
+                        toggleMenu();
+                      }
+                    }}
+                  >
+                    {it.label}
+                  </a>
+                ))
+              ) : null}
+            </nav>
+
             {isLoggedIn && <ProfileDropdown />}
 
+            {/* Mobile Menu Button - Shown on mobile only */}
             <button
               ref={toggleBtnRef}
-              className="relative inline-flex items-center gap-1.5 bg-transparent border-0 cursor-pointer text-white font-medium leading-none pointer-events-auto focus-visible:outline-2 focus-visible:outline-white/70 focus-visible:outline-offset-4 rounded"
+              className="relative inline-flex items-center gap-1 bg-transparent border-0 cursor-pointer text-white font-medium leading-none pointer-events-auto focus-visible:outline-2 focus-visible:outline-white/70 focus-visible:outline-offset-4 rounded md:hidden"
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               aria-controls="staggered-menu-panel"
@@ -457,7 +537,7 @@ export const StaggeredMenu = ({
 
               <span
                 ref={iconRef}
-                className="relative w-3.5 h-3.5 shrink-0 inline-flex items-center justify-center"
+                className="relative w-3 h-3 shrink-0 inline-flex items-center justify-center"
                 aria-hidden="true"
               >
                 <span
@@ -469,6 +549,19 @@ export const StaggeredMenu = ({
                   className="absolute left-1/2 top-1/2 w-full h-0.5 bg-current rounded-sm -translate-x-1/2 -translate-y-1/2"
                 />
               </span>
+            </button>
+
+            {/* Desktop Menu Button - Shown on md and above */}
+            <button
+              className="hidden md:block bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-opacity"
+              onClick={() => {
+                const contactSection = document.getElementById("contact");
+                if (contactSection) {
+                  contactSection.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
+              Contact Us
             </button>
           </div>
         </header>
@@ -488,7 +581,7 @@ export const StaggeredMenu = ({
               data-numbering={displayItemNumbering || undefined}
             >
               {items?.length ? (
-                items.map((it, idx) => (
+                items.filter(it => !(isLoggedIn && it.label === 'Login')).map((it, idx) => (
                   <li
                     className="relative overflow-hidden leading-none mb-2 border-b border-gray-300 pb-2"
                     key={it.label + idx}
