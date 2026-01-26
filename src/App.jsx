@@ -56,11 +56,11 @@ const HomePage = () => {
       {/* <div id="gallery">
         <Gallery />
       </div> */}
-      <ScrollVelocity
+      {/* <ScrollVelocity
         texts={["Interior Design Training,", "Enroll Today,"]}
         velocity={100}
         className="custom-scroll-text"
-      />
+      /> */}
       <div id="contact">
         <Contact />
       </div>
