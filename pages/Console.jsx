@@ -11,7 +11,7 @@ const KJL_ORIGINS = new Set([
   "http://yun.kujiale.com",
 ]);
 
-const appBaseUrl = import.meta.env.VITE_APP_BASE_URL;
+// const appBaseUrl = import.meta.env.VITE_APP_BASE_URL;
 
 const isAllowedKjlOrigin = (origin) => {
   if (!origin) return false;
@@ -70,8 +70,8 @@ const Console = () => {
       const data = safeParseMessage(event.data);
       if (!data?.data) return;
 
-      const eventName = data?.data?.eventName
-      const ownProps = data?.data?.ownProps
+      // const eventName = data?.data?.eventName
+      // const ownProps = data?.data?.ownProps
 
       // console.log("KJL Message:", data);
       // console.log("EVENT TYPE:", data?.data?.eventName)
@@ -97,21 +97,21 @@ const Console = () => {
       // fr.addEventListener("click", (e) => console.log(e))
       // console.log(fr.querySelectorAll('#miniapp-playground-dock'), fr.onlick((e) => console.log(e)))
 
-      if (eventName === 'appcoretopbarmenuitem') {
-        if (ownProps?.action === 'click') {
-          if (ownProps?.logKey === "help-copyLink") {
-            //
-          }
-        }
-      }
+      // if (eventName === 'appcoretopbarmenuitem') {
+      //   if (ownProps?.action === 'click') {
+      //     if (ownProps?.logKey === "help-copyLink") {
+      //       //
+      //     }
+      //   }
+      // }
 
-      if (eventName === 'yunturender_newgallery_click') {
-        if (ownProps?.Click === 'share') {
-          console.log("Share Link", ownProps)
-          const designId = ownProps?.picid[0]
-            navigator.clipboard.writeText(`${appBaseUrl}?designid=${designId}`);
-        }
-      }
+      // if (eventName === 'yunturender_newgallery_click') {
+      //   if (ownProps?.Click === 'share') {
+      //     console.log("Share Link", ownProps)
+      //     const designId = ownProps?.picid[0]
+      //       navigator.clipboard.writeText(`${appBaseUrl}?designid=${designId}`);
+      //   }
+      // }
 
       if (data?.action === "kjl_logout") {
         console.log("User logged out from Kujiale");

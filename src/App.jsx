@@ -194,7 +194,7 @@ const App = () => {
           }
         />
         <Route
-          path="/shared"
+          path="/shared/*"
           element={
               <Shared />
           }

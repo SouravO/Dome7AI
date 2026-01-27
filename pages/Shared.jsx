@@ -1,25 +1,27 @@
 import { useCallback, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+
+const appBaseUrl = import.meta.env.VITE_APP_BASE_URL;
 
 const Shared = () => {
     const iframeRef = useRef(null);
-    const [searchParams] = useSearchParams();
-
-    const designId = searchParams.get("designid");
-
 
     const getIframeUrl = useCallback(async () => {
         try {
             
-            if (!designId || !iframeRef.current) return;
-            
-            const url = `https://www.kujiale.com/xiaoguotu/pano/${designId}`;
+            if (!iframeRef.current) return;
 
+            const currentUrl = window.location.href;
+
+            const url = currentUrl.replace(
+            `${appBaseUrl}/shared`,
+            "https://www.kujiale.com"
+            );
+            
             iframeRef.current.src = url;
         } catch (error) {
             console.log("Iframe load error:", error);
         }
-    }, [designId]);
+    }, []);
 
     useEffect(() => {
         getIframeUrl();
