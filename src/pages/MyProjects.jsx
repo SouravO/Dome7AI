@@ -96,124 +96,100 @@ const MyProjects = () => {
     };
 
     const onCreateClick = () => {
-      navigate("/console");
-    }
-
-    // const refresh = () => {
-    //     setStart(0);
-    //     setHasMore(true);
-    //     fetchDesigns(0);
-    // };
+        navigate("/console");
+    };
 
     return (
-        <div className="min-h-screen bg-black py-12 px-4 sm:px-6">
-            <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-16">
-                    <h1
-                        className="text-4xl mt-16 md:text-5xl font-bold text-white mb-4 tracking-tight"
-                        style={{ fontFamily: "Poppins, sans-serif" }}
-                    >
-                        My Projects
-                    </h1>
-                    <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-                        Explore our portfolio of innovative interior design
-                        projects showcasing creativity, functionality, and
-                        attention to detail.
+        <div className="min-h-screen bg-black">
+            {/* Hero Section */}
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-24 pb-16">
+                <div className="max-w-3xl">
+                    <p className="text-gray-400 text-xs tracking-[0.3em] uppercase mb-6">
+                        CURATED EXCELLENCE
                     </p>
+                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-light text-white mb-6 leading-tight">
+                        Innovative
+                        <br />
+                        <span className="italic font-serif">Interior Vision.</span>
+                    </h1>
+                    <p className="text-gray-400 text-base md:text-lg leading-relaxed mb-8 max-w-xl">
+                        Defining the next era of high-end architectural environments through monochromatic precision and nocturnal elegance.
+                    </p>
+                    <button 
+                        onClick={onCreateClick}
+                        className="group inline-flex items-center gap-3 px-8 py-4 border border-white text-white text-sm tracking-wider uppercase hover:bg-white hover:text-black transition-all duration-300"
+                    >
+                        START PROJECT
+                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </button>
                 </div>
+            </div>
 
+            {/* Projects Grid */}
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16">
                 {loading && !totalCount ? (
-                    <LoaderWrapper/>
+                    <LoaderWrapper />
                 ) : (
-                    <div>
+                    <>
                         <InfiniteScroll
                             dataLength={designs.length}
                             next={loadMore}
                             hasMore={hasMore}
-                            loader={
-                                <LoaderWrapper/>
-                            }
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-10"
+                            loader={<LoaderWrapper />}
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                         >
                             {designs.map((project) => (
                                 <div
                                     key={project.planId}
-                                    className="group relative bg-gradient-to-b from-[#1a0033] to-[#2d0b4e] rounded-2xl border border-gray-800 shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+                                    className="group bg-black border border-gray-900 overflow-hidden hover:border-gray-700 transition-all duration-500"
                                 >
-                                    {/* Project Image/Thumbnail */}
-                                    <div className="relative h-56 overflow-hidden">
+                                    {/* Project Image */}
+                                    <div className="relative h-80 overflow-hidden bg-neutral-900">
                                         <img
                                             src={project.coverPic}
                                             alt={project.name}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                                         />
-
-                                        {/* Status badge overlay */}
+                                        {/* Category Badge */}
+                                        <div className="absolute top-6 left-6">
+                                            <span className="inline-block px-4 py-1.5 bg-black/80 backdrop-blur-sm text-white text-[10px] tracking-widest uppercase border border-white/20">
+                                                {project.commName || 'DESIGN'}
+                                            </span>
+                                        </div>
                                     </div>
 
                                     {/* Project Content */}
-                                    <div className="p-6">
-                                        <div className="mb-4">
-                                            <span className="inline-block px-3 py-1 bg-indigo-900/30 text-indigo-300 rounded-full text-xs font-medium mb-3 border border-indigo-700/50">
-                                                {project.commName}
-                                            </span>
-                                            <h3
-                                                className="text-xl font-bold text-white group-hover:text-[#31b5f9] transition-colors duration-300 mb-2"
-                                                style={{
-                                                    fontFamily:
-                                                        "Poppins, sans-serif",
-                                                }}
-                                            >
-                                                {project.name}
-                                            </h3>
-                                            <p className="text-gray-300 leading-relaxed">
-                                                {project.description}
-                                            </p>
-                                        </div>
+                                    <div className="p-8 bg-black">
+                                        <h3 className="text-2xl font-light text-white mb-3 group-hover:text-gray-300 transition-colors">
+                                            {project.name}
+                                        </h3>
+                                        <p className="text-gray-400 text-sm leading-relaxed mb-8">
+                                            {project.description || 'A sophisticated design project showcasing innovation and elegance.'}
+                                        </p>
 
-                                        <div className="mt-6 pt-6 border-t border-gray-800 flex justify-between items-center">
+                                        {/* Action Buttons */}
+                                        <div className="flex items-center justify-between pt-6 border-t border-gray-900">
                                             <button
-                                                onClick={() =>
-                                                    onViewClick(
-                                                        project.designId,
-                                                    )
-                                                }
-                                                className="cursor-pointer px-5 py-2.5 bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white font-medium rounded-lg hover:from-[#31b5f9] hover:to-[#f516ff] transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#31b5f9]/50 focus:ring-opacity-50"
+                                                onClick={() => onViewClick(project.designId)}
+                                                className="group/btn inline-flex items-center gap-2 text-white text-xs tracking-widest uppercase hover:text-gray-400 transition-colors"
                                             >
-                                                View Details
+                                                VIEW DETAILS
+                                                <svg className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                </svg>
                                             </button>
 
-                                            <div className="flex space-x-2">
-                                                <button className="p-2 rounded-lg border border-gray-700 hover:border-[#31b5f9] hover:bg-[#31b5f9]/10 text-gray-300 hover:text-[#31b5f9] transition-colors">
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        className="h-5 w-5"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={2}
-                                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                                        />
+                                            <div className="flex items-center gap-3">
+                                                <button className="text-gray-500 hover:text-white transition-colors">
+                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                                                     </svg>
                                                 </button>
-                                                <button className="p-2 rounded-lg border border-gray-700 hover:border-[#31b5f9] hover:bg-[#31b5f9]/10 text-gray-300 hover:text-[#31b5f9] transition-colors">
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        className="h-5 w-5"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={2}
-                                                            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                                                        />
+                                                <button className="text-gray-500 hover:text-white transition-colors">
+                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                                                     </svg>
                                                 </button>
                                             </div>
@@ -223,42 +199,32 @@ const MyProjects = () => {
                             ))}
                         </InfiniteScroll>
 
+                        {/* Empty State */}
                         {totalCount === 0 && (
-                            <div className="text-center py-16">
-                                <div className="mx-auto w-24 h-24 bg-gray-800 rounded-full flex items-center justify-center mb-6">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-12 w-12 text-gray-400"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
+                            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-32 text-center">
+                                <div className="max-w-md mx-auto">
+                                    <p className="text-gray-600 text-xs tracking-[0.3em] uppercase mb-4">
+                                        NO PROJECTS
+                                    </p>
+                                    <h3 className="text-3xl font-light text-white mb-4">
+                                        Your gallery awaits
+                                    </h3>
+                                    <p className="text-gray-400 text-sm leading-relaxed mb-8">
+                                        Begin your design journey and showcase your architectural vision.
+                                    </p>
+                                    <button 
+                                        onClick={onCreateClick}
+                                        className="inline-flex items-center gap-3 px-8 py-4 border border-white text-white text-xs tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
                                     >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                                        />
-                                    </svg>
+                                        CREATE PROJECT
+                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                        </svg>
+                                    </button>
                                 </div>
-                                <h3
-                                    className="text-2xl font-bold text-white mb-2"
-                                    style={{
-                                        fontFamily: "Poppins, sans-serif",
-                                    }}
-                                >
-                                    No projects yet
-                                </h3>
-                                <p className="text-gray-500 max-w-md mx-auto">
-                                    Start creating your first project to
-                                    showcase your work.
-                                </p>
-                                <button onClick={onCreateClick} className="mt-6 px-6 py-3 bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white font-medium rounded-lg hover:from-[#31b5f9] hover:to-[#f516ff] transition-all duration-300">
-                                    Create New Project
-                                </button>
                             </div>
                         )}
-                    </div>
+                    </>
                 )}
             </div>
         </div>
