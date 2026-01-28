@@ -38,7 +38,7 @@ const Landing = () => {
         className="absolute inset-0 w-full h-full bg-no-repeat bg-left bg-cover bg-[url('/assets/bgDome.jpg')]"
         style={{
           backgroundPosition: isMobile ? "left center" : "right center",
-          backgroundSize: "cover",
+          // backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           // Optional: Zoom in more if needed
           backgroundSize: "150% 100%",

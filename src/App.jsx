@@ -14,6 +14,7 @@ import AdminLogin from "../pages/AdminLogin";
 import Dashboard from "../pages/Dashboard";
 import Plans from "../pages/Plans";
 import MyProjects from "./pages/MyProjects";
+import MyAccount from "./components/MyAccount";
 import ScrollVelocity from "./components/ui/components/ScrollVelocity";
 import StaggeredMenu from "./components/ui/components/StaggeredMenu";
 import Console from "../pages/Console";
@@ -197,6 +198,30 @@ const App = () => {
           path="/shared/*"
           element={
               <Shared />
+          }
+        />
+        <Route
+          path="/my-account"
+          element={
+            <>
+              <StaggeredMenu
+                position="right"
+                items={galleryMenuItems}
+                socialItems={socialItems}
+                displaySocials={true}
+                displayItemNumbering={false}
+                menuButtonColor="#fff"
+                openMenuButtonColor="#000"
+                changeMenuColorOnOpen={true}
+                colors={["#1a1a1a", "#2a2a2a"]}
+                logoUrl={Logo}
+                accentColor="#ffffff"
+                isFixed={true}
+                onMenuOpen={() => console.log("Menu opened")}
+                onMenuClose={() => console.log("Menu closed")}
+              />
+              <MyAccount />
+            </>
           }
         />
         <Route
