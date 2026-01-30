@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "../lib/supabase";
 import Loader from "../components/ui/loader";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -20,6 +20,7 @@ const MyProjects = () => {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [totalCount, setTotalCount] = useState(null);
+    const [activeDropdown, setActiveDropdown] = useState(null);
 
     const fetchDesigns = async (nextStart) => {
         if (loading) return;
@@ -81,6 +82,26 @@ const MyProjects = () => {
         fetchDesigns(0);
     }, []);
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            // Check if clicked outside of any dropdown
+            const dropdowns = document.querySelectorAll('.project-dropdown-menu');
+            const isClickInsideDropdown = Array.from(dropdowns).some(dropdown =>
+                dropdown.contains(event.target)
+            );
+
+            if (!isClickInsideDropdown) {
+                setActiveDropdown(null);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     const loadMore = () => {
         console.log("load more", start);
         fetchDesigns(start);
@@ -102,7 +123,7 @@ const MyProjects = () => {
     return (
         <div className="min-h-screen bg-black">
             {/* Hero Section */}
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-24 pb-16">
+            <div className="max-w-[95rem] mx-auto px-6 sm:px-8 lg:px-12 pt-24 pb-16">
                 <div className="max-w-3xl">
                     <p className="text-gray-400 text-xs tracking-[0.3em] uppercase mb-6">
                         CURATED EXCELLENCE
@@ -117,7 +138,7 @@ const MyProjects = () => {
                     </p>
                     <button 
                         onClick={onCreateClick}
-                        className="group inline-flex items-center gap-3 px-8 py-4 border border-white text-white text-sm tracking-wider uppercase hover:bg-white hover:text-black transition-all duration-300"
+                        className="group inline-flex items-center gap-3 px-8 py-4 border border-white text-lg tracking-wider uppercase  hover:text-black transition-all duration-300 bg-white text-black"
                     >
                         START PROJECT
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,7 +149,7 @@ const MyProjects = () => {
             </div>
 
             {/* Projects Grid */}
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16">
+            <div className="max-w-[95rem] mx-auto px-6 sm:px-8 lg:px-12 py-16">
                 {loading && !totalCount ? (
                     <LoaderWrapper />
                 ) : (
@@ -138,7 +159,7 @@ const MyProjects = () => {
                             next={loadMore}
                             hasMore={hasMore}
                             loader={<LoaderWrapper />}
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8"
                         >
                             {designs.map((project) => (
                                 <div
@@ -173,7 +194,7 @@ const MyProjects = () => {
                                         <div className="flex items-center justify-between pt-6 border-t border-gray-900">
                                             <button
                                                 onClick={() => onViewClick(project.designId)}
-                                                className="group/btn inline-flex items-center gap-2 text-white text-xs tracking-widest uppercase hover:text-gray-400 transition-colors"
+                                                className="group/btn inline-flex items-center gap-2 text-white text-xs tracking-widest uppercase hover:text-gray-400 transition-colors  bg-gradient-to-r from-[#f516ff] to-[#31b5f9] p-2"
                                             >
                                                 VIEW DETAILS
                                                 <svg className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,17 +202,80 @@ const MyProjects = () => {
                                                 </svg>
                                             </button>
 
-                                            <div className="flex items-center gap-3">
-                                                <button className="text-gray-500 hover:text-white transition-colors">
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                                                    </svg>
-                                                </button>
-                                                <button className="text-gray-500 hover:text-white transition-colors">
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                                                    </svg>
-                                                </button>
+                                            <div className="relative flex items-center gap-3">
+                                                {/* More button with dropdown */}
+                                                <div className="relative">
+                                                    <button
+                                                        className="text-gray-400 hover:text-gray-200 transition-colors"
+                                                        onClick={() => setActiveDropdown(activeDropdown === project.planId ? null : project.planId)}
+                                                    >
+                                                        More
+                                                    </button>
+
+                                                    {activeDropdown === project.planId && (
+                                                        <div className="project-dropdown-menu absolute right-0 -top-24 w-48 bg-gray-900 border border-gray-700 rounded-md shadow-lg z-10 overflow-hidden">
+                                                            <ul className="py-1">
+                                                                <li>
+                                                                    <button
+                                                                        className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
+                                                                        onClick={() => {
+                                                                            alert(`Edit project: ${project.name}`);
+                                                                            setActiveDropdown(null);
+                                                                        }}
+                                                                    >
+                                                                        Edit Project
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+                                                                    <button
+                                                                        className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
+                                                                        onClick={() => {
+                                                                            alert(`Duplicate project: ${project.name}`);
+                                                                            setActiveDropdown(null);
+                                                                        }}
+                                                                    >
+                                                                        Duplicate
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+                                                                    <button
+                                                                        className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
+                                                                        onClick={() => {
+                                                                            alert(`Share project: ${project.name}`);
+                                                                            setActiveDropdown(null);
+                                                                        }}
+                                                                    >
+                                                                        Share
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+                                                                    <button
+                                                                        className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
+                                                                        onClick={() => {
+                                                                            alert(`Export project: ${project.name}`);
+                                                                            setActiveDropdown(null);
+                                                                        }}
+                                                                    >
+                                                                        Export
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+                                                                    <button
+                                                                        className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 transition-colors"
+                                                                        onClick={() => {
+                                                                            if (window.confirm(`Are you sure you want to delete ${project.name}?`)) {
+                                                                                alert(`Delete project: ${project.name}`);
+                                                                                setActiveDropdown(null);
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        Delete
+                                                                    </button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

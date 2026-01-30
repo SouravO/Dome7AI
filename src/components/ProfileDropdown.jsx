@@ -54,11 +54,28 @@ const ProfileDropdown = () => {
       {/* Email Text Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-white font-medium text-sm hover:text-gray-300 transition-colors cursor-pointer pointer-events-auto focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 rounded px-2 py-1"
+        className="text-black font-medium text-sm hover:text-gray-300 transition-colors cursor-pointer pointer-events-auto focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 rounded px-2 py-1 flex items-center gap-1 bg-white "
         aria-label="Profile menu"
         aria-expanded={isOpen}
       >
-        {userEmail}
+        <span className=" text-black px-1.5 py-0.5 rounded-md font-semibold ">
+          {userEmail}
+        </span>
+        {/* Down Arrow Icon */}
+        <svg
+          className="w-4 h-4 text-black ml-1"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
       </button>
 
       {/* Dropdown Menu */}
@@ -75,7 +92,9 @@ const ProfileDropdown = () => {
             <div className="px-4 py-3 border-b border-gray-700">
               <p className="text-xs text-gray-400">Logged in as</p>
               <p className="text-sm font-semibold text-white truncate">
-                {userEmail}
+                <span className="bg-yellow-400/20 px-1.5 py-0.5 rounded-md text-yellow-100 font-semibold">
+                  {userEmail} 
+                </span>
               </p>
             </div>
 
