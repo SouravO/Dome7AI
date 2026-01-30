@@ -164,7 +164,7 @@ const MyProjects = () => {
                             {designs.map((project) => (
                                 <div
                                     key={project.planId}
-                                    className="group bg-black border border-gray-900 overflow-hidden hover:border-gray-700 transition-all duration-500"
+                                    className="group bg-black border border-gray-900 overflow-hidden hover:border-gray-700 transition-all duration-500 flex flex-col h-10/12"
                                 >
                                     {/* Project Image */}
                                     <div className="relative h-80 overflow-hidden bg-neutral-900">
@@ -182,16 +182,18 @@ const MyProjects = () => {
                                     </div>
 
                                     {/* Project Content */}
-                                    <div className="p-8 bg-black">
-                                        <h3 className="text-2xl font-light text-white mb-3 group-hover:text-gray-300 transition-colors">
-                                            {project.name}
-                                        </h3>
-                                        <p className="text-gray-400 text-sm leading-relaxed mb-8">
-                                            {project.description || 'A sophisticated design project showcasing innovation and elegance.'}
-                                        </p>
+                                    <div className="p-8 bg-black flex flex-col h-full">
+                                        <div>
+                                            <h3 className="text-2xl font-light text-white mb-3 group-hover:text-gray-300 transition-colors">
+                                                {project.name}
+                                            </h3>
+                                            <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                                                {project.description || 'A sophisticated design project showcasing innovation and elegance.'}
+                                            </p>
+                                        </div>
 
-                                        {/* Action Buttons */}
-                                        <div className="flex items-center justify-between pt-6 border-t border-gray-900">
+                                        {/* Action Buttons fixed at bottom */}
+                                        <div className="flex items-center justify-between  border-t border-gray-900 mt-auto">
                                             <button
                                                 onClick={() => onViewClick(project.designId)}
                                                 className="group/btn inline-flex items-center gap-2 text-white text-xs tracking-widest uppercase hover:text-gray-400 transition-colors  bg-gradient-to-r from-[#f516ff] to-[#31b5f9] p-2"
