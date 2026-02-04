@@ -21,6 +21,36 @@ const MyProjects = () => {
     const [hasMore, setHasMore] = useState(true);
     const [totalCount, setTotalCount] = useState(null);
     const [activeDropdown, setActiveDropdown] = useState(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+
+    // Handle window resize for responsive banner
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 1024);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Background configuration based on screen size
+    const getBackgroundConfig = () => {
+        if (isMobile) {
+            return {
+                backgroundImage: "url('/assets/myprojectsMobile.png')",
+                backgroundSize: "fill",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+            };
+        } else {
+            return {
+                backgroundImage: "url('/assets/myprojectbanner.png')",
+                backgroundSize: "cover",
+                backgroundPosition: "top center",
+                backgroundRepeat: "no-repeat",
+            };
+        }
+    };
 
     const fetchDesigns = async (nextStart) => {
         if (loading) return;
@@ -122,8 +152,13 @@ const MyProjects = () => {
 
     return (
         <div className="min-h-screen bg-black">
-            {/* Hero Section */}
-            <div className="max-w-[95rem] mx-auto px-6 sm:px-8 lg:px-12 pt-24 pb-16">
+            {/* Hero Section - Responsive Banner with Dynamic Background */}
+            <div 
+                className="max-w-[95rem] mx-auto px-6 sm:px-8 lg:px-12 pt-24 pb-16 min-h-[70vh] flex flex-col justify-center relative"
+                style={{
+                    ...getBackgroundConfig(),
+                }}
+            >
                 <div className="max-w-3xl">
                     <p className="text-gray-400 text-xs tracking-[0.3em] uppercase mb-6">
                         CURATED EXCELLENCE
@@ -138,7 +173,7 @@ const MyProjects = () => {
                     </p>
                     <button 
                         onClick={onCreateClick}
-                        className="group inline-flex items-center gap-3 px-8 py-4 border border-white text-lg tracking-wider uppercase  hover:text-black transition-all duration-300 bg-white text-black"
+                        className="group inline-flex items-center gap-3 px-8 py-4 border border-white text-lg tracking-wider uppercase hover:bg-white hover:text-black transition-all duration-300 bg-white text-black font-medium"
                     >
                         START PROJECT
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

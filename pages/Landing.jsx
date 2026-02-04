@@ -7,7 +7,7 @@ import ModelViewer from "../src/components/ui/components/ModeViewer";
 import { useState, useEffect, useCallback, useRef } from "react";
 
 const Landing = () => {
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+  const [isMobile, setIsMobile] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
   const fullText =
     "Dome 7 AI = Faster Interior Designing + Technical Accuracy + Advanced VR Experience + Cost Transparency + Maximum Creativity.";
@@ -15,7 +15,40 @@ const Landing = () => {
   const isCountingRef = useRef(true);
   const intervalRef = useRef(null);
 
-  
+  // Detect screen size on mount and on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    // Set initial value
+    if (typeof window !== "undefined") {
+      setIsMobile(window.innerWidth < 1024);
+    }
+
+    // Add listener for window resizeis
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Background configuration based on screen size
+  const getBackgroundConfig = () => {
+    if (isMobile) {
+      return {
+        backgroundImage: "url('/assets/bgdomeMobile.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      };
+    } else {
+      return {
+        backgroundImage: "url('/assets/bgdome.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "right center",
+        backgroundRepeat: "no-repeat",
+      };
+    }
+  };
 
   // Animation Option 1: Gentle floating up and down
   const floatingAnimation = {
@@ -32,16 +65,12 @@ const Landing = () => {
   };
 
   return (
-    <Card className="w-full min-h-screen lg:h-[700px] bg-gradient-to-r from-[#1a0033] via-[#2d0b4e] to-[#31b5f9] relative overflow-hidden">
-      {/* Responsive background image, left-aligned on desktop, centered on mobile */}
+    <Card className="w-full min-h-screen lg:h-[700px]  from-[#1a0033] via-[#2d0b4e] to-[#31b5f9] relative overflow-hidden">
+      {/* Responsive background image - Dynamic for mobile and desktop */}
       <div
-        className="absolute inset-0 w-full h-full bg-no-repeat bg-left bg-cover bg-[url('/assets/bgDome.jpg')]"
+        className="absolute inset-0 w-full h-full"
         style={{
-          backgroundPosition: isMobile ? "left center" : "right center",
-          // backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          // Optional: Zoom in more if needed
-          backgroundSize: "150% 100%",
+          ...getBackgroundConfig(),
         }}
       >
         {/* Dark overlay for better text readability */}
