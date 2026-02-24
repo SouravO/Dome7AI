@@ -199,7 +199,11 @@ const MyProjects = () => {
                             {designs.map((project) => (
                                 <div
                                     key={project.planId}
-                                    className="group bg-black border border-gray-900 overflow-hidden hover:border-gray-700 transition-all duration-500 flex flex-col h-10/12"
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onViewClick(project.designId)
+                                    }}
+                                    className="cursor-pointer group bg-black border border-gray-900 overflow-hidden hover:border-gray-700 transition-all duration-500 flex flex-col h-10/12"
                                 >
                                     {/* Project Image */}
                                     <div className="relative h-80 overflow-hidden bg-neutral-900">
@@ -230,8 +234,11 @@ const MyProjects = () => {
                                         {/* Action Buttons fixed at bottom */}
                                         <div className="flex items-center justify-between  border-t border-gray-900 mt-auto">
                                             <button
-                                                onClick={() => onViewClick(project.designId)}
-                                                className="group/btn inline-flex items-center gap-2 text-white text-xs tracking-widest uppercase hover:text-gray-400 transition-colors  bg-gradient-to-r from-[#f516ff] to-[#31b5f9] p-2"
+                                                // onClick={(e) => {
+                                                //     e.stopPropagation()
+                                                //  navigate to project details
+                                                // }}
+                                                className="cursor-pointer group/btn inline-flex items-center gap-2 text-white text-xs tracking-widest uppercase hover:text-gray-400 transition-colors  bg-gradient-to-r from-[#f516ff] to-[#31b5f9] p-2"
                                             >
                                                 VIEW DETAILS
                                                 <svg className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -243,19 +250,22 @@ const MyProjects = () => {
                                                 {/* More button with dropdown */}
                                                 <div className="relative">
                                                     <button
-                                                        className="text-gray-400 hover:text-gray-200 transition-colors"
-                                                        onClick={() => setActiveDropdown(activeDropdown === project.planId ? null : project.planId)}
+                                                        className="cursor-pointer text-gray-400 hover:text-gray-200 transition-colors"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            setActiveDropdown(activeDropdown === project.planId ? null : project.planId)}}
                                                     >
                                                         More
                                                     </button>
 
                                                     {activeDropdown === project.planId && (
-                                                        <div className="project-dropdown-menu absolute right-0 -top-24 w-48 bg-gray-900 border border-gray-700 rounded-md shadow-lg z-10 overflow-hidden">
+                                                        <div className="project-dropdown-menu absolute right-0 -top-48 w-48 bg-gray-900 border border-gray-700 rounded-md shadow-lg z-10 overflow-hidden">
                                                             <ul className="py-1">
                                                                 <li>
                                                                     <button
                                                                         className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
-                                                                        onClick={() => {
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation()
                                                                             alert(`Edit project: ${project.name}`);
                                                                             setActiveDropdown(null);
                                                                         }}
@@ -266,7 +276,8 @@ const MyProjects = () => {
                                                                 <li>
                                                                     <button
                                                                         className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
-                                                                        onClick={() => {
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation()
                                                                             alert(`Duplicate project: ${project.name}`);
                                                                             setActiveDropdown(null);
                                                                         }}
@@ -277,7 +288,8 @@ const MyProjects = () => {
                                                                 <li>
                                                                     <button
                                                                         className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
-                                                                        onClick={() => {
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation()
                                                                             alert(`Share project: ${project.name}`);
                                                                             setActiveDropdown(null);
                                                                         }}
@@ -288,7 +300,8 @@ const MyProjects = () => {
                                                                 <li>
                                                                     <button
                                                                         className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
-                                                                        onClick={() => {
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation()
                                                                             alert(`Export project: ${project.name}`);
                                                                             setActiveDropdown(null);
                                                                         }}
@@ -299,7 +312,8 @@ const MyProjects = () => {
                                                                 <li>
                                                                     <button
                                                                         className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 transition-colors"
-                                                                        onClick={() => {
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation()
                                                                             if (window.confirm(`Are you sure you want to delete ${project.name}?`)) {
                                                                                 alert(`Delete project: ${project.name}`);
                                                                                 setActiveDropdown(null);

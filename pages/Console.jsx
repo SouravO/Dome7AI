@@ -70,8 +70,16 @@ const Console = () => {
       const data = safeParseMessage(event.data);
       if (!data?.data) return;
 
-      // const eventName = data?.data?.eventName
-      // const ownProps = data?.data?.ownProps
+      
+      const eventName = data?.data?.eventName
+      const ownProps = data?.data?.ownProps
+
+      if (eventName === "appcoretopbarmenuitem") {
+        if(ownProps?.action === "click" && ownProps?.logKey === "avatar-quit") {
+          //navigate to mydesigns
+          navigate("/my-projects");
+        }
+      }
 
       // console.log("KJL Message:", data);
       // console.log("EVENT TYPE:", data?.data?.eventName)

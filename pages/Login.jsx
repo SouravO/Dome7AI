@@ -49,6 +49,27 @@ const Login = () => {
     setSuccess(true);
   };
 
+
+    // const createUser = async () => {
+    //     try {
+
+    //          const { data, error } = await supabase.functions.invoke(
+    //             `signup`,
+    //             {
+    //                 method: "POST",
+    //                 body: JSON.stringify({ email: "test@gmail.com", password: "password", app_uid: "app_uid" } ),
+    //                 headers: {
+    //                     'Content-Type': 'application/json' 
+    //                 },
+    //             },
+    //         );
+
+    //         console.log("data", data, error)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <motion.div
