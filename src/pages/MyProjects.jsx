@@ -146,6 +146,25 @@ const MyProjects = () => {
         );
     };
 
+    const onDeleteProject = async (designId) => {
+        try {
+            const params = new URLSearchParams({
+                designid: designId
+            });
+
+            await supabase.functions.invoke(
+                `delete-design?${params.toString()}`,
+                {
+                    method: "POST",
+                },
+            );
+            alert('Design deleted successfully')
+        } catch (error) {
+            //
+            alert('Failed to delet design')
+        }
+    }
+
     const onCreateClick = () => {
         navigate("/console");
     };
@@ -315,7 +334,7 @@ const MyProjects = () => {
                                                                         onClick={(e) => {
                                                                             e.stopPropagation()
                                                                             if (window.confirm(`Are you sure you want to delete ${project.name}?`)) {
-                                                                                alert(`Delete project: ${project.name}`);
+                                                                                onDeleteProject(project.designId)
                                                                                 setActiveDropdown(null);
                                                                             }
                                                                         }}
