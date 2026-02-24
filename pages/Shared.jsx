@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 
-// const appBaseUrl = import.meta.env.VITE_APP_BASE_URL;
-const appBaseUrl = 'http://localhost:5173';
+const appBaseUrl = import.meta.env.VITE_APP_BASE_URL;
 
 const Shared = () => {
     const iframeRef = useRef(null);

@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
 
   try {
     const u = new URL(url);
-    const designId = u.searchParams.get("dsignid")
+    const designId = u.searchParams.get("designid")
 
     if (!designId) {
       return new Response("Invalid designid", {
