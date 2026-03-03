@@ -1,5 +1,4 @@
 import { useEffect, useRef, useCallback } from "react";
-import { supabase } from "../src/lib/supabase";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../src/context/useAuth";
 import { Card } from "../src/components/ui/card";
@@ -70,12 +69,12 @@ const Console = () => {
       const data = safeParseMessage(event.data);
       if (!data?.data) return;
 
-      
+
       const eventName = data?.data?.eventName
       const ownProps = data?.data?.ownProps
 
       if (eventName === "appcoretopbarmenuitem") {
-        if(ownProps?.action === "click" && ownProps?.logKey === "avatar-quit") {
+        if (ownProps?.action === "click" && ownProps?.logKey === "avatar-quit") {
           //navigate to mydesigns
           navigate("/my-projects");
         }
@@ -136,10 +135,14 @@ const Console = () => {
 
   const getIframeUrl = useCallback(async () => {
     try {
-      await supabase.functions.invoke("exchange-token");
+      const { functions } = await import("../src/lib/firebase");
+      const { httpsCallable } = await import("firebase/functions");
 
-      const { data, error } = await supabase.functions.invoke("iframe-proxy");
-      if (error) throw error;
+      const exchangeToken = httpsCallable(functions, 'exchangeToken');
+      await exchangeToken();
+
+      const iframeProxy = httpsCallable(functions, 'iframeProxy');
+      const { data } = await iframeProxy();
 
       if (!data?.iframeUrl || !iframeRef.current) return;
 

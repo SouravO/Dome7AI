@@ -26,3 +26,11 @@ dist-ssr
 /supabase/.temp/*
 
 test-sso.js
+
+/functions/node_modules
+
+/functions/.env
+
+/functions/lib/
+
+/.firebase/

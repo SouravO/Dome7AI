@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { supabase } from "../src/lib/supabase";
 import { useAuth } from "../src/context/useAuth";
 import { Navigate } from "react-router-dom";
 
 const Login = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,6 +18,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setErrorMessage("");
 
     // Simple validation
     if (!email || !password) {
@@ -26,49 +26,16 @@ const Login = () => {
       return;
     }
 
-    const { data, error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (authError || !data.session) {
-      console.log("Login error:", authError?.message);
-      setErrorMessage(authError?.message || "Login failed");
-      return;
+    try {
+      await signIn({ email, password });
+      setSuccess(true);
+    } catch (err) {
+      setErrorMessage(err.message || "Login failed");
     }
-
-    // 2️⃣ Exchange token (SSO)
-    // const { error: exchangeError } =
-    //   await supabase.functions.invoke("exchange-token");
-
-    // if (exchangeError) {
-    //   throw exchangeError;
-    // }
-
-    // 3️⃣ Redirect user
-    setSuccess(true);
   };
 
-
-    // const createUser = async () => {
-    //     try {
-
-    //          const { data, error } = await supabase.functions.invoke(
-    //             `signup`,
-    //             {
-    //                 method: "POST",
-    //                 body: JSON.stringify({ email: "test@gmail.com", password: "password", app_uid: "app_uid" } ),
-    //                 headers: {
-    //                     'Content-Type': 'application/json' 
-    //                 },
-    //             },
-    //         );
-
-    //         console.log("data", data, error)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
+  // 3️⃣ Redirect user
+  // setSuccess(true);
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { supabase } from "../src/lib/supabase";
+import { useAuth } from "../src/context/useAuth";
 import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
+  const { resetPassword } = useAuth();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -21,22 +22,15 @@ const ForgotPassword = () => {
 
     setLoading(true);
 
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(
-      email,
-      {
-        redirectTo: `${window.location.origin}/reset-password`,
-      }
-    );
-
-    setLoading(false);
-
-    if (resetError) {
+    try {
+      await resetPassword(email);
+      setMessage("Check your email for the password reset link!");
+    } catch (resetError) {
       console.log("Reset error:", resetError?.message);
       setError(resetError.message);
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    setMessage("Check your email for the password reset link!");
   };
 
   return (

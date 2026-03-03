@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { useAuth } from "../context/useAuth";
 const MyAccount = () => {
   const [userData, setUserData] = useState({
     email: "",
@@ -8,25 +8,17 @@ const MyAccount = () => {
     avatarUrl: null
   });
 
+  const { user } = useAuth();
+
   useEffect(() => {
-    // Get user info from localStorage (Supabase auth token)
-    try {
-      const authData = localStorage.getItem("sb-pecdeaansqtmawzzpsgw-auth-token");
-      if (authData) {
-        const parsed = JSON.parse(authData);
-        const user = parsed.user;
-        if (user) {
-          setUserData({
-            email: user.email || "N/A",
-            fullName: user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0] || "N/A",
-            phone: user.phone || user.user_metadata?.phone || "N/A",
-            avatarUrl: user.user_metadata?.avatar_url || null
-          });
-        }
-      }
-    } catch (e) {
-      console.error("Error parsing user data:", e);
-      // Set default values in case of error
+    if (user) {
+      setUserData({
+        email: user.email || "N/A",
+        fullName: user.displayName || user.email?.split('@')[0] || "N/A",
+        phone: user.phoneNumber || "N/A",
+        avatarUrl: user.photoURL || null
+      });
+    } else {
       setUserData({
         email: "user@example.com",
         fullName: "John Doe",
@@ -34,7 +26,7 @@ const MyAccount = () => {
         avatarUrl: null
       });
     }
-  }, []);
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -88,7 +80,7 @@ const MyAccount = () => {
               <h3 className="text-gray-400 text-xs tracking-[0.3em] uppercase mb-8">
                 PERSONAL INFORMATION
               </h3>
-              
+
               <div className="space-y-8">
                 <div className="border-b border-gray-900 pb-6">
                   <label className="text-gray-500 text-xs tracking-wider uppercase block mb-2">

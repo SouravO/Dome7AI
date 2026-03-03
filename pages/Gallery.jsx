@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { supabase, getImageUrl } from "../src/lib/supabase";
+import { db, storage } from "../src/lib/firebase";
+import { collection, onSnapshot, getDocs, query, orderBy } from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
 import StaggeredMenu from "../src/components/ui/components/StaggeredMenu";
 
 const Gallery = () => {
@@ -12,61 +14,43 @@ const Gallery = () => {
   useEffect(() => {
     loadGalleryData();
 
-    // Subscribe to realtime changes
-    const subscription = supabase
-      .channel("gallery_changes")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "gallery_images" },
-        () => {
-          loadGalleryData();
-        }
-      )
-      .subscribe();
+    // Subscribe to realtime changes in Firestore
+    const unsubscribe = onSnapshot(collection(db, "gallery_images"), (snapshot) => {
+      loadGalleryData();
+    });
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   const loadGalleryData = async () => {
     try {
       setLoading(true);
 
-      // Load images from Supabase
-      const { data: imagesData, error: imgError } = await supabase
-        .from("gallery_images")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (imgError) {
-        console.error("Error loading images:", imgError);
-        throw imgError;
-      }
+      // Load images from Firestore
+      const imagesSnap = await getDocs(query(collection(db, "gallery_images"), orderBy("created_at", "desc")));
+      const imagesData = imagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
       console.log({ imagesData });
 
-      // Generate URLs for each image from image_path
-      const imagesWithUrls =
-        imagesData?.map((img) => {
-          const url = getImageUrl(img.image_path);
-          console.log(`Generated URL for ${img.image_path}:`, url);
-          return {
-            ...img,
-            url: url,
-          };
-        }) || [];
+      // Generate URLs for each image from Firebase Storage
+      const imagesWithUrls = await Promise.all(
+        imagesData.map(async (img) => {
+          try {
+            const url = await getDownloadURL(ref(storage, `gallery/${img.image_path}`));
+            return { ...img, url };
+          } catch (e) {
+            console.error(`Gallery - Failed to get URL for ${img.image_path}:`, e);
+            return { ...img, url: null };
+          }
+        })
+      );
 
       setImages(imagesWithUrls);
       console.log("Images with URLs:", imagesWithUrls);
 
-      // Load categories
-      const { data: categoriesData, error: catError } = await supabase
-        .from("categories")
-        .select("*")
-        .order("name", { ascending: true });
-
-      if (catError) throw catError;
+      // Load categories from Firestore
+      const categoriesSnap = await getDocs(query(collection(db, "categories"), orderBy("name", "asc")));
+      const categoriesData = categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
       const uniqueCategories = [
         "all",
@@ -87,7 +71,7 @@ const Gallery = () => {
 
   return (
     <>
-     
+
       <section className="min-h-screen bg-black py-16 px-4 sm:px-6 md:px-8 lg:px-12">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
@@ -116,11 +100,10 @@ const Gallery = () => {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedCategory === category
+                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${selectedCategory === category
                       ? "bg-white text-black"
                       : "bg-gray-800 text-white hover:bg-gray-700"
-                  }`}
+                    }`}
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   {category.toUpperCase()}

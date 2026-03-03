@@ -7,24 +7,8 @@ const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
-  const { signOut } = useAuth();
-
-  // Get user info from localStorage (Supabase auth token)
-  const getUserInfo = () => {
-    try {
-      const authData = localStorage.getItem("sb-pecdeaansqtmawzzpsgw-auth-token");
-      if (authData) {
-        const parsed = JSON.parse(authData);
-        const user = parsed.user;
-        return user?.email || "User";
-      }
-    } catch (e) {
-      console.error("Error parsing user data:", e);
-    }
-    return "User";
-  };
-
-  const userEmail = getUserInfo();
+  const { user, signOut } = useAuth();
+  const userEmail = user?.email || "User";
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -40,11 +24,9 @@ const ProfileDropdown = () => {
 
   const handleSignOut = () => {
     signOut()
-    // Clear authentication data
+    // Clear authentication data (if we manually stored it)
     localStorage.removeItem("userEmail");
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("user");
-    
+
     setIsOpen(false);
     navigate("/login");
   };
@@ -93,7 +75,7 @@ const ProfileDropdown = () => {
               <p className="text-xs text-gray-400">Logged in as</p>
               <p className="text-sm font-semibold text-white truncate">
                 <span className="bg-yellow-400/20 px-1.5 py-0.5 rounded-md text-yellow-100 font-semibold">
-                  {userEmail} 
+                  {userEmail}
                 </span>
               </p>
             </div>

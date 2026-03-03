@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
-  supabase,
-  uploadImage,
-  getImageUrl,
-  deleteImage as deleteImageFromStorage,
-} from "../src/lib/supabase";
+  db,
+  storage,
+} from "../src/lib/firebase";
+import { collection, getDocs, addDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -48,20 +48,13 @@ const Dashboard = () => {
     try {
       setLoading(true);
 
-      // Load categories from Supabase
-      const { data: categoriesData, error: catError } = await supabase
-        .from("categories")
-        .select("*")
-        .order("name", { ascending: true });
+      // Load categories from Firestore
+      const categoriesSnap = await getDocs(query(collection(db, "categories"), orderBy("name", "asc")));
+      setCategories(categoriesSnap.docs.map(doc => doc.data().name));
 
-      if (catError) throw catError;
-      setCategories(categoriesData?.map((cat) => cat.name) || []);
-
-      // Load images from Supabase
-      const { data: imagesData, error: imgError } = await supabase
-        .from("gallery_images")
-        .select("*")
-        .order("created_at", { ascending: false });
+      // Load images from Firestore
+      const imagesSnap = await getDocs(query(collection(db, "gallery_images"), orderBy("created_at", "desc")));
+      const imagesData = imagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
       if (imgError) {
         console.error("Dashboard - Error loading images:", imgError);
@@ -70,16 +63,17 @@ const Dashboard = () => {
 
       console.log("Dashboard - Raw images from DB:", imagesData);
 
-      // Generate URLs for each image from image_path
-      const imagesWithUrls =
-        imagesData?.map((img) => {
-          const url = getImageUrl(img.image_path);
-          console.log(`Dashboard - Generated URL for ${img.image_path}:`, url);
-          return {
-            ...img,
-            url: url,
-          };
-        }) || [];
+      const imagesWithUrls = await Promise.all(
+        imagesData.map(async (img) => {
+          try {
+            const url = await getDownloadURL(ref(storage, `gallery/${img.image_path}`));
+            return { ...img, url };
+          } catch (e) {
+            console.error(`Dashboard - Failed to get URL for ${img.image_path}:`, e);
+            return { ...img, url: null };
+          }
+        })
+      );
 
       console.log("Dashboard - Images with URLs:", imagesWithUrls);
       setImages(imagesWithUrls);
@@ -105,17 +99,7 @@ const Dashboard = () => {
     }
 
     try {
-      const { data, error } = await supabase
-        .from("categories")
-        .insert([{ name: newCategory.trim() }])
-        .select();
-
-      if (error) {
-        console.error("Add category error:", error);
-        throw error;
-      }
-
-      console.log("Added category:", data);
+      await addDoc(collection(db, "categories"), { name: newCategory.trim() });
 
       // Immediately update local state
       setCategories((prevCategories) => [
@@ -148,28 +132,20 @@ const Dashboard = () => {
     try {
       console.log("Attempting to delete category:", categoryToDelete);
 
-      // Delete the category from the database
-      const { data, error } = await supabase
-        .from("categories")
-        .delete()
-        .eq("name", categoryToDelete)
-        .select();
+      // Find the category document
+      const q = query(collection(db, "categories"));
+      const querySnapshot = await getDocs(q);
+      const docToDelete = querySnapshot.docs.find(doc => doc.data().name === categoryToDelete);
 
-      if (error) {
-        console.error("Delete error:", error);
-        throw error;
-      }
-
-      console.log("Deleted category response:", data);
-
-      if (!data || data.length === 0) {
-        console.warn(
-          "No rows were deleted - category might not exist in database"
-        );
+      if (!docToDelete) {
+        console.warn("Category not found in database");
         alert("Category may not exist in database. Refreshing...");
         await loadData();
         return;
       }
+
+      // Delete the document
+      await deleteDoc(doc(db, "categories", docToDelete.id));
 
       // Immediately update local state
       setCategories((prevCategories) =>
@@ -198,21 +174,20 @@ const Dashboard = () => {
       const fileExt = newImage.file.name.split(".").pop();
       const fileName = `${Date.now()}-${Math.random()
         .toString(36)
-        .substring(7)}.${fileExt}`;
+        .substring(7)
+        }.${fileExt}`;
 
-      // Upload image to Supabase Storage
-      await uploadImage(newImage.file, fileName);
+      // Upload image to Firebase Storage
+      const storageRef = ref(storage, `gallery/${fileName}`);
+      await uploadBytes(storageRef, newImage.file);
 
-      // Save image metadata to database (no url field, just image_path)
-      const { error } = await supabase.from("gallery_images").insert([
-        {
-          title: newImage.title,
-          category: newImage.category,
-          image_path: fileName,
-        },
-      ]);
-
-      if (error) throw error;
+      // Save image metadata to Firestore
+      await addDoc(collection(db, "gallery_images"), {
+        title: newImage.title,
+        category: newImage.category,
+        image_path: fileName,
+        created_at: new Date().toISOString()
+      });
 
       // Reload data
       await loadData();
@@ -269,16 +244,12 @@ const Dashboard = () => {
 
       // Delete image from storage
       if (image.image_path) {
-        await deleteImageFromStorage(image.image_path);
+        const imageRef = ref(storage, `gallery/${image.image_path}`);
+        await deleteObject(imageRef).catch(console.error);
       }
 
-      // Delete from database
-      const { error } = await supabase
-        .from("gallery_images")
-        .delete()
-        .eq("id", image.id);
-
-      if (error) throw error;
+      // Delete from Firestore
+      await deleteDoc(doc(db, "gallery_images", image.id));
 
       // Reload data
       await loadData();

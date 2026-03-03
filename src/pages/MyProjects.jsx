@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import { supabase } from "../lib/supabase";
 import Loader from "../components/ui/loader";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useNavigate } from "react-router-dom";
@@ -59,27 +58,15 @@ const MyProjects = () => {
         setLoading(true);
 
         try {
-            const params = new URLSearchParams({
-                start: String(nextStart),
-                num: String(PAGE_SIZE),
+            const { functions } = await import("../lib/firebase");
+            const { httpsCallable } = await import("firebase/functions");
+            const getDesignList = httpsCallable(functions, 'designList');
+
+            const { data } = await getDesignList({
+                start: nextStart,
+                num: PAGE_SIZE,
             });
 
-            const { data, error } = await supabase.functions.invoke(
-                `design-list?${params.toString()}`,
-                {
-                    method: "GET",
-                },
-            );
-
-            if (error) throw error;
-
-            /**
-             * Expected response structure example:
-             * data.d.result = items array
-             * data.d.count = number
-             * data.d.hasMore = boolean
-             * data.d.totalCount = number
-             */
             const result = data?.d;
 
             const items = result?.result;
@@ -90,16 +77,13 @@ const MyProjects = () => {
             setTotalCount(total);
             setHasMore(more);
 
-            // If it's first page => reset
             if (nextStart === 0) {
-                setDesigns(items);
+                setDesigns(items || []);
             } else {
-                // Append (avoid duplicates by id if needed)
-                setDesigns((prev) => [...prev, ...items]);
+                setDesigns((prev) => [...prev, ...(items || [])]);
             }
 
-            // Move offset forward based on count returned
-            setStart(nextStart + count);
+            setStart(nextStart + (count || 0));
         } catch (e) {
             console.error("Pagination fetch error:", e);
         } finally {
@@ -133,7 +117,6 @@ const MyProjects = () => {
     }, []);
 
     const loadMore = () => {
-        console.log("load more", start);
         fetchDesigns(start);
     };
 
@@ -148,20 +131,15 @@ const MyProjects = () => {
 
     const onDeleteProject = async (designId) => {
         try {
-            const params = new URLSearchParams({
-                designid: designId
-            });
+            const { functions } = await import("../lib/firebase");
+            const { httpsCallable } = await import("firebase/functions");
+            const deleteDesignFunc = httpsCallable(functions, 'deleteDesign');
 
-            await supabase.functions.invoke(
-                `delete-design?${params.toString()}`,
-                {
-                    method: "POST",
-                },
-            );
+            await deleteDesignFunc({ designid: designId });
             alert('Design deleted successfully')
         } catch (error) {
-            //
-            alert('Failed to delet design')
+            console.error(error);
+            alert('Failed to delete design')
         }
     }
 
@@ -172,7 +150,7 @@ const MyProjects = () => {
     return (
         <div className="min-h-screen bg-black">
             {/* Hero Section - Responsive Banner with Dynamic Background */}
-            <div 
+            <div
                 className="max-w-[95rem] mx-auto px-6 sm:px-8 lg:px-12 pt-24 pb-16 min-h-[70vh] flex flex-col justify-center relative"
                 style={{
                     ...getBackgroundConfig(),
@@ -190,7 +168,7 @@ const MyProjects = () => {
                     <p className="text-gray-400 text-base md:text-lg leading-relaxed mb-8 max-w-xl">
                         Defining the next era of high-end architectural environments through monochromatic precision and nocturnal elegance.
                     </p>
-                    <button 
+                    <button
                         onClick={onCreateClick}
                         className="group inline-flex items-center gap-3 px-8 py-4 border border-white text-lg tracking-wider uppercase hover:bg-white hover:text-black transition-all duration-300 bg-white text-black font-medium"
                     >
@@ -272,7 +250,8 @@ const MyProjects = () => {
                                                         className="cursor-pointer text-gray-400 hover:text-gray-200 transition-colors"
                                                         onClick={(e) => {
                                                             e.stopPropagation()
-                                                            setActiveDropdown(activeDropdown === project.planId ? null : project.planId)}}
+                                                            setActiveDropdown(activeDropdown === project.planId ? null : project.planId)
+                                                        }}
                                                     >
                                                         More
                                                     </button>
@@ -366,7 +345,7 @@ const MyProjects = () => {
                                     <p className="text-gray-400 text-sm leading-relaxed mb-8">
                                         Begin your design journey and showcase your architectural vision.
                                     </p>
-                                    <button 
+                                    <button
                                         onClick={onCreateClick}
                                         className="inline-flex items-center gap-3 px-8 py-4 border border-white text-white text-xs tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
                                     >
