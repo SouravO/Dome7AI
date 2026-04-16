@@ -167,7 +167,7 @@ const Console = () => {
         ref={iframeRef}
         title="Kujiale"
         style={{ width: "100vw", height: "100vh", border: "none" }}
-        sandbox="allow-scripts allow-forms allow-same-origin"
+        sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-top-navigation-by-user-activation"
         referrerPolicy="no-referrer"
       />
     </>
