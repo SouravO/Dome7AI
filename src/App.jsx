@@ -21,6 +21,7 @@ import Console from "../pages/Console";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ForgotPassword from "../pages/ForgotPassword";
 import Shared from "../pages/Shared";
+import ResetPassword from "./pages/ResetPassword";
 // import CookieConsent from "./components/CookieConsent";
 
 // Lazy load heavy components
@@ -255,6 +256,14 @@ const App = () => {
           element={
             <>
               <ForgotPassword />
+            </>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <>
+              <ResetPassword />
             </>
           }
         />
