@@ -1,24 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../src/lib/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const AdminLogin = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        try {
+          const tokenResult = await user.getIdTokenResult();
+          const isAdmin = tokenResult.claims.admin === true || user.email === "zettaaitechnologies@gmail.com";
+          if (isAdmin) {
+            navigate("/dashboard");
+          }
+        } catch (err) {
+          console.error("Error checking admin status:", err);
+        }
+      }
+    });
 
-    // Simple authentication check
-    if (username === "admin" && password === "pass") {
-      // Store auth token
+    return () => unsubscribe();
+  }, [navigate]);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const tokenResult = await user.getIdTokenResult();
+      const isAdmin = tokenResult.claims.admin === true || user.email === "zettaaitechnologies@gmail.com";
+
+      if (!isAdmin) {
+        await auth.signOut();
+        setError("You do not have admin access.");
+        setLoading(false);
+        return;
+      }
+
       localStorage.setItem("isAuthenticated", "true");
       localStorage.setItem("authTimestamp", Date.now().toString());
       navigate("/dashboard");
-    } else {
-      setError("Invalid username or password");
+    } catch (err) {
+      console.error(err);
+      setError("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,18 +87,18 @@ const AdminLogin = () => {
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
               <label
-                htmlFor="username"
+                htmlFor="email"
                 className="block text-sm font-medium text-gray-300 mb-2"
               >
-                Username
+                Email
               </label>
               <input
-                type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-white transition-colors"
-                placeholder="Enter username"
+                placeholder="Enter admin email"
                 required
               />
             </div>
@@ -86,10 +123,11 @@ const AdminLogin = () => {
 
             <button
               type="submit"
-              className="w-full bg-white text-black py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+              disabled={loading}
+              className="w-full bg-white text-black py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </button>
           </form>
 

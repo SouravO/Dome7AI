@@ -12,6 +12,7 @@ import Model from "../pages/Model";
 import Login from "../pages/Login";
 import AdminLogin from "../pages/AdminLogin";
 import Dashboard from "../pages/Dashboard";
+import UserManagement from "../pages/UserManagement";
 import Plans from "../pages/Plans";
 import MyProjects from "./pages/MyProjects";
 import MyAccount from "./components/MyAccount";
@@ -184,6 +185,14 @@ const App = () => {
           element={
             <>
               <Dashboard />
+            </>
+          }
+        />
+        <Route
+          path="/user-management"
+          element={
+            <>
+              <UserManagement />
             </>
           }
         />

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   db,
   storage,
+  auth
 } from "../src/lib/firebase";
 import { collection, getDocs, addDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
@@ -30,18 +31,32 @@ const Dashboard = () => {
   useEffect(() => {
     // Check authentication
     const isAuth = localStorage.getItem("isAuthenticated");
-    const authTime = localStorage.getItem("authTimestamp");
 
-    // Session expires after 24 hours
-    if (!isAuth || !authTime || Date.now() - parseInt(authTime) > 86400000) {
-      localStorage.removeItem("isAuthenticated");
-      localStorage.removeItem("authTimestamp");
-      navigate("/admin");
+    if (!isAuth) {
+      navigate("/");
       return;
     }
 
-    // Load data
-    loadData();
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        try {
+          const tokenResult = await user.getIdTokenResult();
+          const isAdmin = tokenResult.claims.admin === true || user.email === "zettaaitechnologies@gmail.com";
+          if (isAdmin) {
+            loadData();
+          } else {
+            navigate("/"); // redirect non-admins home
+          }
+        } catch (err) {
+          console.error("Error checking admin status:", err);
+          navigate("/");
+        }
+      } else {
+        navigate("/");
+      }
+    });
+
+    return () => unsubscribe();
   }, [navigate]);
 
   const loadData = async () => {
@@ -79,7 +94,7 @@ const Dashboard = () => {
       setImages(imagesWithUrls);
     } catch (error) {
       console.error("Error loading data:", error);
-      alert("Error loading data: " + error.message);
+      // alert("Error loading data: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -274,6 +289,12 @@ const Dashboard = () => {
             Admin Dashboard
           </h1>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+            <button
+              onClick={() => navigate("/user-management")}
+              className="px-4 sm:px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors text-sm sm:text-base"
+            >
+              Manage Users
+            </button>
             <button
               onClick={() => navigate("/")}
               className="px-4 sm:px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm sm:text-base"
