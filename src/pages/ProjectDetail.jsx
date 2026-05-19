@@ -8,6 +8,7 @@ import {
   filterRenderSidebar,
   formatProjectDate,
   formatRelativeTime,
+  dedupeVideosAgainstRenders,
   normalizeAlbumGalleryItems,
   normalizeConstructionFiles,
   normalizeRenderGalleryItems,
@@ -59,8 +60,14 @@ const ProjectDetail = () => {
       const { data } = await getDesignList({ designId: String(designId) });
 
       setBasic(data?.basic ?? null);
-      setRenders(normalizeRenderGalleryItems(data?.renders));
-      setVideos(normalizeAlbumGalleryItems(data?.videos, "Video"));
+      const renderItems = normalizeRenderGalleryItems(data?.renders);
+      setRenders(renderItems);
+      setVideos(
+        dedupeVideosAgainstRenders(
+          normalizeAlbumGalleryItems(data?.videos),
+          renderItems,
+        ),
+      );
       setConstruction(normalizeConstructionFiles(data?.constructionFiles));
       setPanoUrls(data?.panoUrls ?? {});
       setWorkbenchUrl(data?.workbenchUrl ?? null);

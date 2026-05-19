@@ -313,19 +313,21 @@ async function fetchDesignAlbumData(
     return { items: all, lastResult };
 }
 
-/** Video / album tab — scene_type_id per doc 4098. */
-const ALBUM_SCENE_TYPES = [
+/**
+ * Video tab — scene_type_id per doc 4098.
+ * Exclude scene 0 ("Still album"): it returns the same still renders as renderpic/list.
+ */
+const VIDEO_ALBUM_SCENE_TYPES = [
+    { id: 1, label: "Growth animation" },
     { id: 2, label: "Roam video" },
     { id: 3, label: "Template video" },
     { id: 4, label: "One-click film" },
-    { id: 1, label: "Growth animation" },
-    { id: 0, label: "Still album" },
 ];
 
 async function fetchAllAlbumVideos(appUid: string, designId: string) {
     const all: Array<Record<string, unknown>> = [];
     let lastResult: unknown = null;
-    for (const scene of ALBUM_SCENE_TYPES) {
+    for (const scene of VIDEO_ALBUM_SCENE_TYPES) {
         try {
             const { items, lastResult: sceneResult } = await fetchDesignAlbumData(
                 appUid,
@@ -334,7 +336,15 @@ async function fetchAllAlbumVideos(appUid: string, designId: string) {
             );
             lastResult = sceneResult;
             for (const item of items) {
-                all.push({ ...item, renderPresentType: scene.id, sceneLabel: scene.label });
+                all.push({
+                    ...item,
+                    sceneTypeId: scene.id,
+                    sceneLabel: scene.label,
+                    renderPresentType:
+                        item.renderPresentType != null
+                            ? item.renderPresentType
+                            : scene.id,
+                });
             }
         } catch (err) {
             console.warn(`albumdata scene ${scene.id} failed:`, err);

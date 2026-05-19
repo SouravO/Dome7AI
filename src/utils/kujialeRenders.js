@@ -84,14 +84,22 @@ export const normalizeRenderGalleryItems = (rawItems) => {
     .filter(Boolean);
 };
 
+/** scene_type_id 0 = still album (same as render pics) — not shown on Video tab. */
+const VIDEO_SCENE_TYPES = new Set([1, 2, 3, 4]);
+
 export const normalizeAlbumGalleryItems = (rawItems) => {
   if (!Array.isArray(rawItems)) return [];
 
   return rawItems
     .map((item, index) => {
       const url = ensureHttpsUrl(item?.imgUrl || item?.smallImgUrl);
-      const sceneType = Number(item?.renderPresentType ?? item?.snapshotType ?? 0);
-      const label = SCENE_TYPE_LABELS[sceneType] || "Album item";
+      const sceneType = Number(
+        item?.sceneTypeId ?? item?.renderPresentType ?? item?.snapshotType ?? 0,
+      );
+      if (!VIDEO_SCENE_TYPES.has(sceneType)) return null;
+
+      const label =
+        item?.sceneLabel || SCENE_TYPE_LABELS[sceneType] || "Video";
       const status = Number(item?.status ?? 1);
       const isComplete = status === 1;
 
@@ -102,13 +110,20 @@ export const normalizeAlbumGalleryItems = (rawItems) => {
         name: label,
         sceneType,
         created: item?.created ?? null,
-        isVideo: sceneType === 2 || sceneType === 3 || sceneType === 4,
+        isVideo: true,
         status,
         isComplete,
         pending: !isComplete || !url,
       };
     })
     .filter(Boolean);
+};
+
+/** Drop album stills that duplicate render-pic entries (same picId). */
+export const dedupeVideosAgainstRenders = (videos, renders) => {
+  if (!videos?.length || !renders?.length) return videos ?? [];
+  const renderIds = new Set(renders.map((r) => r.id));
+  return videos.filter((v) => !renderIds.has(v.id));
 };
 
 export const normalizeConstructionFiles = (rawItems) => {
