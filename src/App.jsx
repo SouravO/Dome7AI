@@ -1,5 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
+import GoogleTranslate, { FixedLanguageSwitcher } from "./components/GoogleTranslate";
+import LenisScrollManager from "./components/LenisScrollManager";
 import Landing from "../pages/Landing";
 import AboutUs from "../pages/AboutUs";
 import WhatWeDo from "../pages/WhatWeDo";
@@ -15,6 +17,7 @@ import Dashboard from "../pages/Dashboard";
 import UserManagement from "../pages/UserManagement";
 import Plans from "../pages/Plans";
 import MyProjects from "./pages/MyProjects";
+import ProjectDetail from "./pages/ProjectDetail";
 import MyAccount from "./components/MyAccount";
 import ScrollVelocity from "./components/ui/components/ScrollVelocity";
 import StaggeredMenu from "./components/ui/components/StaggeredMenu";
@@ -146,7 +149,10 @@ const App = () => {
   ];
 
   return (
-    <div style={{ background: "#000000", scrollBehavior: "smooth" }}>
+    <div style={{ background: "#000000" }}>
+      <LenisScrollManager />
+      <GoogleTranslate />
+      <FixedLanguageSwitcher />
       <Routes>
         <Route
           path="/login"
@@ -256,6 +262,32 @@ const App = () => {
               />
               <ProtectedRoute>
                 <MyProjects />
+              </ProtectedRoute>
+            </>
+          }
+        />
+        <Route
+          path="/my-projects/:designId"
+          element={
+            <>
+              <StaggeredMenu
+                position="right"
+                items={galleryMenuItems}
+                socialItems={socialItems}
+                displaySocials={true}
+                displayItemNumbering={false}
+                menuButtonColor="#fff"
+                openMenuButtonColor="#000"
+                changeMenuColorOnOpen={true}
+                colors={["#1a1a1a", "#2a2a2a"]}
+                logoUrl={Logo}
+                accentColor="#ffffff"
+                isFixed={true}
+                onMenuOpen={() => console.log("Menu opened")}
+                onMenuClose={() => console.log("Menu closed")}
+              />
+              <ProtectedRoute>
+                <ProjectDetail />
               </ProtectedRoute>
             </>
           }

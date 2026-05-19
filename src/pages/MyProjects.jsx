@@ -120,13 +120,22 @@ const MyProjects = () => {
         fetchDesigns(start);
     };
 
-    const onViewClick = (designId) => {
-        const params = new URLSearchParams({ designid: String(designId) });
-        window.open(
-            `/console?${params.toString()}`,
-            "_blank",
-            "noopener,noreferrer",
-        );
+    const openInConsole = (project) => {
+        const id = project?.designId;
+        if (!id) {
+            alert("This project has no design id yet.");
+            return;
+        }
+        navigate(`/console?designid=${encodeURIComponent(String(id))}`);
+    };
+
+    const openProjectDetail = (project) => {
+        const id = project?.designId;
+        if (!id) {
+            alert("This project has no design id yet.");
+            return;
+        }
+        navigate(`/my-projects/${encodeURIComponent(String(id))}`, { state: { project } });
     };
 
     const onDeleteProject = async (designId) => {
@@ -196,11 +205,16 @@ const MyProjects = () => {
                             {designs.map((project) => (
                                 <div
                                     key={project.planId}
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onViewClick(project.designId)
+                                    role="button"
+                                    tabIndex={0}
+                                    onClick={() => openInConsole(project)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter" || e.key === " ") {
+                                            e.preventDefault();
+                                            openInConsole(project);
+                                        }
                                     }}
-                                    className="cursor-pointer group bg-black border border-gray-900 overflow-hidden hover:border-gray-700 transition-all duration-500 flex flex-col h-10/12"
+                                    className="group bg-black border border-gray-900 overflow-hidden hover:border-gray-700 transition-all duration-500 flex flex-col h-10/12 cursor-pointer"
                                 >
                                     {/* Project Image */}
                                     <div className="relative h-80 overflow-hidden bg-neutral-900">
@@ -231,10 +245,11 @@ const MyProjects = () => {
                                         {/* Action Buttons fixed at bottom */}
                                         <div className="flex items-center justify-between  border-t border-gray-900 mt-auto">
                                             <button
-                                                // onClick={(e) => {
-                                                //     e.stopPropagation()
-                                                //  navigate to project details
-                                                // }}
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    openProjectDetail(project);
+                                                }}
                                                 className="cursor-pointer group/btn inline-flex items-center gap-2 text-white text-xs tracking-widest uppercase hover:text-gray-400 transition-colors  bg-gradient-to-r from-[#f516ff] to-[#31b5f9] p-2"
                                             >
                                                 VIEW DETAILS

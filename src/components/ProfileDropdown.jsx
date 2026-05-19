@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 
-const ProfileDropdown = () => {
+const ProfileDropdown = ({ variant = "default" }) => {
+  const isHeader = variant === "header";
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -36,16 +37,21 @@ const ProfileDropdown = () => {
       {/* Email Text Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-black font-medium text-sm hover:text-gray-300 transition-colors cursor-pointer pointer-events-auto focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 rounded px-2 py-1 flex items-center gap-1 bg-white "
+        className={
+          isHeader
+            ? "font-medium text-xs sm:text-sm transition-colors cursor-pointer pointer-events-auto focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-white/50 rounded-full px-2 sm:px-3 py-1 flex items-center gap-1 max-w-[9rem] sm:max-w-[14rem] border border-white/25 bg-black/50 text-white backdrop-blur-sm hover:border-white/50 hover:bg-black/70"
+            : "text-black font-medium text-sm hover:text-gray-300 transition-colors cursor-pointer pointer-events-auto focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 rounded px-2 py-1 flex items-center gap-1 bg-white"
+        }
         aria-label="Profile menu"
         aria-expanded={isOpen}
       >
-        <span className=" text-black px-1.5 py-0.5 rounded-md font-semibold ">
+        <span
+          className={`truncate font-semibold ${isHeader ? "text-white" : "text-black px-1.5 py-0.5 rounded-md"}`}
+        >
           {userEmail}
         </span>
-        {/* Down Arrow Icon */}
         <svg
-          className="w-4 h-4 text-black ml-1"
+          className={`w-4 h-4 shrink-0 ml-0.5 ${isHeader ? "text-white" : "text-black"}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

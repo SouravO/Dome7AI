@@ -1,7 +1,21 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../src/context/useAuth";
-import { Card } from "../src/components/ui/card";
+import {
+  getStoredLanguage,
+  KJL_LOCALE_BY_LANG,
+  LANGUAGE_CHANGE_EVENT,
+} from "../src/components/GoogleTranslate";
+import KujialeIframeHeader from "../src/components/KujialeIframeHeader";
+import {
+  appendKujialeLocaleParams,
+  KJL_LOCALE_GUIDE_KEY,
+} from "../src/utils/kujialeLocale";
+import {
+  KUJIALE_IFRAME_ALLOW,
+  KUJIALE_IFRAME_REFERRER_POLICY,
+  KUJIALE_IFRAME_SANDBOX,
+} from "../src/utils/kujialeIframe";
 
 const KJL_ORIGINS = new Set([
   "https://www.kujiale.com",
@@ -9,8 +23,6 @@ const KJL_ORIGINS = new Set([
   "http://www.kujiale.com",
   "http://yun.kujiale.com",
 ]);
-
-// const appBaseUrl = import.meta.env.VITE_APP_BASE_URL;
 
 const isAllowedKjlOrigin = (origin) => {
   if (!origin) return false;
@@ -25,7 +37,6 @@ const safeParseMessage = (payload) => {
     try {
       return JSON.parse(payload);
     } catch {
-      // sometimes it’s just a string event, allow it if needed
       return { raw: payload };
     }
   }
@@ -37,121 +48,80 @@ const Console = () => {
   const navigate = useNavigate();
   const { signOut } = useAuth();
   const [searchParams] = useSearchParams();
+  const [preferredLang, setPreferredLang] = useState(getStoredLanguage);
+  const [showKjlGuide, setShowKjlGuide] = useState(
+    () => localStorage.getItem(KJL_LOCALE_GUIDE_KEY) !== "1"
+  );
 
   const dest = searchParams.get("dest");
   const designId = searchParams.get("designid");
 
   const iframeRef = useRef(null);
+  const [designerUrl, setDesignerUrl] = useState(null);
 
-  const loadInIframe = useCallback((nextUrl) => {
-    if (!iframeRef.current) return;
+  const openDesignerInNewTab = useCallback(() => {
+    if (!designerUrl) return;
+    window.open(designerUrl, "_blank", "noopener,noreferrer");
+  }, [designerUrl]);
 
-    try {
-      const urlObj = new URL(nextUrl);
-
-      // OPTIONAL: enforce only kujiale domains
-      // if (!urlObj.hostname.includes("kujiale.com")) return;
-
-      iframeRef.current.src = urlObj.toString();
-    } catch {
-      console.warn("Invalid URL received:", nextUrl);
-    }
+  useEffect(() => {
+    const onLanguageChange = (e) => {
+      const code = e.detail?.code ?? getStoredLanguage();
+      setPreferredLang(code);
+    };
+    window.addEventListener(LANGUAGE_CHANGE_EVENT, onLanguageChange);
+    return () => window.removeEventListener(LANGUAGE_CHANGE_EVENT, onLanguageChange);
   }, []);
 
   useEffect(() => {
     const handleMessage = (event) => {
-      if (!isAllowedKjlOrigin(event.origin)) {
-        // If you want to debug, uncomment:
-        // console.log("Blocked message from:", event.origin, event.data);
-        return;
-      }
+      if (!isAllowedKjlOrigin(event.origin)) return;
 
       const data = safeParseMessage(event.data);
       if (!data?.data) return;
 
-
-      const eventName = data?.data?.eventName
-      const ownProps = data?.data?.ownProps
+      const eventName = data?.data?.eventName;
+      const ownProps = data?.data?.ownProps;
 
       if (eventName === "appcoretopbarmenuitem") {
         if (ownProps?.action === "click" && ownProps?.logKey === "avatar-quit") {
-          //navigate to mydesigns
           navigate("/my-projects");
         }
       }
 
-      // console.log("KJL Message:", data);
-      // console.log("EVENT TYPE:", data?.data?.eventName)
-      // console.log("ACTION", ownProps?.action, ownProps?.Click)
-      // console.log("OWN PROPS:", ownProps)
-      // console.log("DEFAULT PROPS:", data?.data?.defaultProps)
-
-      // if (data.type === "OPEN_URL" && data.url) {
-      //   // Condition: block some URLs if needed
-      //   const shouldBlock = String(data.url).includes("some-sensitive-page");
-
-      //   if (shouldBlock) {
-      //     console.log("Blocked OPEN_URL:", data.url);
-      //     // custom action
-      //     alert("This action is blocked!");
-      //     return;
-      //   }
-
-      //   loadInIframe(data.url);
-      //   return;
-      // }
-      // const fr = document.querySelectorAll('iframe')[0]
-      // fr.addEventListener("click", (e) => console.log(e))
-      // console.log(fr.querySelectorAll('#miniapp-playground-dock'), fr.onlick((e) => console.log(e)))
-
-      // if (eventName === 'appcoretopbarmenuitem') {
-      //   if (ownProps?.action === 'click') {
-      //     if (ownProps?.logKey === "help-copyLink") {
-      //       //
-      //     }
-      //   }
-      // }
-
-      // if (eventName === 'yunturender_newgallery_click') {
-      //   if (ownProps?.Click === 'share') {
-      //     console.log("Share Link", ownProps)
-      //     const designId = ownProps?.picid[0]
-      //       navigator.clipboard.writeText(`${appBaseUrl}?designid=${designId}`);
-      //   }
-      // }
-
       if (data?.action === "kjl_logout") {
-        console.log("User logged out from Kujiale");
-
         signOut();
         navigate("/login");
-        return;
       }
     };
 
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, [navigate, signOut, loadInIframe]);
+  }, [navigate, signOut]);
 
   const getIframeUrl = useCallback(async () => {
     try {
       const { functions } = await import("../src/lib/firebase");
       const { httpsCallable } = await import("firebase/functions");
+      const lang = getStoredLanguage();
+      const kjlLocale = KJL_LOCALE_BY_LANG[lang] ?? "en_US";
 
-      const exchangeToken = httpsCallable(functions, 'exchangeToken');
+      const exchangeToken = httpsCallable(functions, "exchangeToken");
       await exchangeToken();
 
-      const iframeProxy = httpsCallable(functions, 'iframeProxy');
-      const { data } = await iframeProxy();
+      const iframeProxy = httpsCallable(functions, "iframeProxy");
+      const { data } = await iframeProxy({ locale: kjlLocale });
 
       if (!data?.iframeUrl || !iframeRef.current) return;
 
-      const url = new URL(data.iframeUrl);
+      const url = appendKujialeLocaleParams(new URL(data.iframeUrl), lang);
 
       if (dest) url.searchParams.set("dest", dest);
       if (designId) url.searchParams.set("designid", designId);
 
-      iframeRef.current.src = url.toString();
+      const finalUrl = url.toString();
+      setDesignerUrl(finalUrl);
+      iframeRef.current.src = finalUrl;
     } catch (error) {
       console.log("Iframe load error:", error);
     }
@@ -159,16 +129,74 @@ const Console = () => {
 
   useEffect(() => {
     getIframeUrl();
-  }, [getIframeUrl]);
+  }, [getIframeUrl, preferredLang]);
+
+  const dismissGuide = () => {
+    localStorage.setItem(KJL_LOCALE_GUIDE_KEY, "1");
+    setShowKjlGuide(false);
+  };
 
   return (
     <>
+      <KujialeIframeHeader reloadOnChange={false} />
+
+      {showKjlGuide && (
+        <div
+          role="dialog"
+          aria-labelledby="kjl-locale-guide-title"
+          className="fixed top-12 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-lg z-[70] rounded-xl border border-amber-500/30 bg-neutral-950/95 px-4 py-4 text-sm text-neutral-200 shadow-xl backdrop-blur-sm"
+        >
+          <p id="kjl-locale-guide-title" className="font-semibold text-white mb-2">
+            Kujiale opens in Chinese by default
+          </p>
+          <p className="text-neutral-400 leading-relaxed mb-3">
+            <strong className="text-neutral-200">Chrome, Edge, and Firefox do not translate
+            cross-origin iframes</strong> — only the page around them. That is why browser
+            translate and our language switcher do not affect this embedded designer.
+          </p>
+          <p className="text-neutral-400 leading-relaxed mb-3">
+            <strong className="text-neutral-200">Option A — Browser translate:</strong> click{" "}
+            <strong className="text-white">Open in new tab</strong> (top-left), then use your
+            browser&apos;s translate prompt (e.g. Chrome address-bar translate icon).
+          </p>
+          <p className="text-neutral-400 leading-relaxed mb-3">
+            <strong className="text-neutral-200">Option B — English in Kujiale:</strong> avatar
+            → Preferences (偏好设置) → Language → English (saved for your account).
+          </p>
+          <p className="text-xs text-neutral-500 mb-3">
+            Kujiale supports English, 中文, and 繁體 only — not Hindi, Tamil, Telugu, or Malayalam.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                openDesignerInNewTab();
+                dismissGuide();
+              }}
+              disabled={!designerUrl}
+              className="rounded-full bg-white text-black px-4 py-1.5 text-xs font-medium hover:bg-neutral-200 transition-colors disabled:opacity-50"
+            >
+              Open in new tab
+            </button>
+            <button
+              type="button"
+              onClick={dismissGuide}
+              className="rounded-full border border-white/25 px-4 py-1.5 text-xs font-medium text-white hover:bg-white/10 transition-colors"
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
+
       <iframe
         ref={iframeRef}
         title="Kujiale"
+        data-lenis-prevent
         style={{ width: "100vw", height: "100vh", border: "none" }}
-        sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-top-navigation-by-user-activation"
-        referrerPolicy="no-referrer"
+        sandbox={KUJIALE_IFRAME_SANDBOX}
+        allow={KUJIALE_IFRAME_ALLOW}
+        referrerPolicy={KUJIALE_IFRAME_REFERRER_POLICY}
       />
     </>
   );

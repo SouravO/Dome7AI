@@ -1,0 +1,206 @@
+{
+  "designId": "3FO3EKGM2MAF",
+  "startedAt": "2026-05-19T19:24:48.292Z",
+  "configPath": "/Users/arjun/Core/Dome7/Dome7AI/test-project-detail-config.json",
+  "tests": {
+    "designBasic": {
+      "ok": true,
+      "httpStatus": 200,
+      "url": "https://openapi.kujiale.com/v2/design/3FO3EKGM2MAF/basic/v2?timestamp=1779218688319&appkey=0jvklkECkz&sign=***&appuid=MWyrpU2RbWglPp78MFkKTKBAJj23",
+      "signMode": "appkey",
+      "body": {
+        "c": "0",
+        "d": {
+          "levels": [
+            1
+          ],
+          "levelInfos": [
+            {
+              "area": 270.05264,
+              "specName": "3室0厅0卫0厨",
+              "level": 1,
+              "srcArea": 292.58414,
+              "realArea": 256.06958,
+              "planPic": "https://qhtbdoss.kujiale.com/fpimgnew/prod/bim/3FO3EKGM2MAF/1/NIGIU2YKTKJCIAABAAAAACY8.jpg"
+            }
+          ],
+          "basicInfo": {
+            "area": 270.05264,
+            "modifiedTime": 1779206700000,
+            "primitive": true,
+            "city": "浙江 杭州",
+            "created": 1779182610000,
+            "appUid": "padaz",
+            "deleted": false,
+            "srcArea": 292.58414,
+            "name": "PLAN 2",
+            "designId": "3FO3EKGM2MAF",
+            "realArea": 256.06958,
+            "planId": "3FO3EKGM2MAF",
+            "commName": "未知小区",
+            "coverPic": "https://qhtbdoss.kujiale.com/fpimgnew/prod/bim/3FO3EKGM2MAF/1/NIGIU2YKTKJCIAABAAAAACY8.jpg"
+          }
+        },
+        "m": ""
+      }
+    },
+    "renderPicsAppkey": {
+      "ok": true,
+      "httpStatus": 200,
+      "url": "https://openapi.kujiale.com/v2/renderpic/list/v2?timestamp=1779218689782&appkey=0jvklkECkz&sign=***&appuid=MWyrpU2RbWglPp78MFkKTKBAJj23&design_id=3FO3EKGM2MAF&start=0&num=50&lang=en_US",
+      "signMode": "appkey",
+      "body": {
+        "c": "0",
+        "d": {
+          "result": [
+            {
+              "img": "https://qhrenderpicoss.kujiale.com/r/2026/05/19/L3D720S41ENDO4JYJTQUWIQHELUFX7QUCOQ8.jpg",
+              "lightStyleId": 2618,
+              "lightStyleName": "Ultra-Fast Daylight",
+              "picType": 0,
+              "level": 1,
+              "created": 1779203314270,
+              "picName": "自定义",
+              "roomName": "自定义",
+              "roomTypeId": 17,
+              "picDetailType": 720,
+              "favorite": false,
+              "picId": "3FOFPV3AXYFQ",
+              "roomIndex": 218
+            }
+          ],
+          "count": 1,
+          "hasMore": false,
+          "totalCount": 1
+        },
+        "m": ""
+      }
+    },
+    "renderPicsWrongSign": {
+      "ok": true,
+      "httpStatus": 200,
+      "url": "https://openapi.kujiale.com/v2/renderpic/list/v2?timestamp=1779218690629&appkey=0jvklkECkz&sign=***&appuid=MWyrpU2RbWglPp78MFkKTKBAJj23&design_id=3FO3EKGM2MAF&start=0&num=10&lang=en_US",
+      "signMode": "appuid",
+      "body": {
+        "c": "100005",
+        "m": "sign error: 679061315494e1ba5ae8c4fe35cc956e",
+        "d": null,
+        "f": null
+      }
+    },
+    "albumData": {
+      "0": {
+        "ok": true,
+        "httpStatus": 200,
+        "url": "https://openapi.kujiale.com/v2/render/design/albumdata?timestamp=1779218691001&appkey=0jvklkECkz&sign=***&appuid=MWyrpU2RbWglPp78MFkKTKBAJj23&design_id=3FO3EKGM2MAF&scene_type_id=0&num=20",
+        "signMode": "appuid",
+        "body": {
+          "c": "0",
+          "d": {
+            "lastItemId": "3FOFPV3AXYFQ",
+            "finished": false,
+            "albumDataOpenApiList": [
+              {
+                "imgUrl": "https://qhrenderpicoss.kujiale.com/r/2026/05/19/L3D720S41ENDO4JYJTQUWIQHELUFX7QUCOQ8.jpg",
+                "smallImgUrl": "https://qhrenderpicoss.kujiale.com/r/2026/05/19/L3D720S41ENDO4JYJTQUWIQHELUFX7QUCOQ8.jpg@!240x180",
+                "snapshotId": "3FOCWANTXLHD",
+                "snapshotType": "1K标清",
+                "created": 1779203314270,
+                "taskId": "L3D720S41ENDO4JYJTQUWIQHELUFX7QUCOQ8",
+                "renderPresentType": 1,
+                "picId": "3FOFPV3AXYFQ",
+                "status": 1
+              }
+            ]
+          },
+          "m": ""
+        }
+      },
+      "1": {
+        "ok": true,
+        "httpStatus": 200,
+        "url": "https://openapi.kujiale.com/v2/render/design/albumdata?timestamp=1779218691517&appkey=0jvklkECkz&sign=***&appuid=MWyrpU2RbWglPp78MFkKTKBAJj23&design_id=3FO3EKGM2MAF&scene_type_id=1&num=20",
+        "signMode": "appuid",
+        "body": {
+          "c": "0",
+          "d": {
+            "finished": true,
+            "albumDataOpenApiList": []
+          },
+          "m": ""
+        }
+      },
+      "2": {
+        "ok": true,
+        "httpStatus": 200,
+        "url": "https://openapi.kujiale.com/v2/render/design/albumdata?timestamp=1779218692015&appkey=0jvklkECkz&sign=***&appuid=MWyrpU2RbWglPp78MFkKTKBAJj23&design_id=3FO3EKGM2MAF&scene_type_id=2&num=20",
+        "signMode": "appuid",
+        "body": {
+          "c": "0",
+          "d": {
+            "finished": true,
+            "albumDataOpenApiList": []
+          },
+          "m": ""
+        }
+      },
+      "3": {
+        "ok": true,
+        "httpStatus": 200,
+        "url": "https://openapi.kujiale.com/v2/render/design/albumdata?timestamp=1779218692408&appkey=0jvklkECkz&sign=***&appuid=MWyrpU2RbWglPp78MFkKTKBAJj23&design_id=3FO3EKGM2MAF&scene_type_id=3&num=20",
+        "signMode": "appuid",
+        "body": {
+          "c": "0",
+          "d": {
+            "finished": true,
+            "albumDataOpenApiList": []
+          },
+          "m": ""
+        }
+      },
+      "4": {
+        "ok": true,
+        "httpStatus": 200,
+        "url": "https://openapi.kujiale.com/v2/render/design/albumdata?timestamp=1779218692823&appkey=0jvklkECkz&sign=***&appuid=MWyrpU2RbWglPp78MFkKTKBAJj23&design_id=3FO3EKGM2MAF&scene_type_id=4&num=20",
+        "signMode": "appuid",
+        "body": {
+          "c": "0",
+          "d": {
+            "finished": true,
+            "albumDataOpenApiList": []
+          },
+          "m": ""
+        }
+      }
+    },
+    "archiveList": {
+      "ok": true,
+      "httpStatus": 200,
+      "url": "https://openapi.kujiale.com/v2/archive/list?timestamp=1779218693242&appkey=0jvklkECkz&sign=***&appuid=MWyrpU2RbWglPp78MFkKTKBAJj23&design_id=3FO3EKGM2MAF&start=0&num=10",
+      "signMode": "appkey",
+      "body": {
+        "c": "0",
+        "d": {
+          "result": []
+        },
+        "m": ""
+      }
+    }
+  },
+  "summary": {
+    "designBasicOk": true,
+    "renderCount": 1,
+    "renderOk": true,
+    "wrongSignFailed": true,
+    "albumItemsTotal": 1,
+    "archiveCount": 0,
+    "planId": "3FO3EKGM2MAF",
+    "finishedAt": "2026-05-19T19:24:53.655Z"
+  },
+  "sampleRender": {
+    "picId": "3FOFPV3AXYFQ",
+    "roomName": "自定义",
+    "img": "https://qhrenderpicoss.kujiale.com/r/2026/05/19/L3D720S41ENDO4JYJTQUWIQHELUFX7QUCOQ8.jpg",
+    "picType": 0
+  }
+}

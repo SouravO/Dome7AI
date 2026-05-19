@@ -1,4 +1,10 @@
 import { useCallback, useEffect, useRef } from "react";
+import KujialeIframeHeader from "../src/components/KujialeIframeHeader";
+import {
+  KUJIALE_IFRAME_ALLOW,
+  KUJIALE_IFRAME_REFERRER_POLICY,
+  KUJIALE_IFRAME_SANDBOX,
+} from "../src/utils/kujialeIframe";
 
 const appBaseUrl = import.meta.env.VITE_APP_BASE_URL;
 
@@ -28,13 +34,18 @@ const Shared = () => {
     }, [getIframeUrl]);
 
     return (
+        <>
+        <KujialeIframeHeader reloadOnChange={false} />
         <iframe
             ref={iframeRef}
             title="Kujiale"
+            data-lenis-prevent
             style={{ width: "100vw", height: "100vh", border: "none" }}
-            sandbox="allow-scripts allow-forms allow-same-origin"
-            referrerPolicy="no-referrer"
+            sandbox={KUJIALE_IFRAME_SANDBOX}
+            allow={KUJIALE_IFRAME_ALLOW}
+            referrerPolicy={KUJIALE_IFRAME_REFERRER_POLICY}
         />
+        </>
     )
 }
 

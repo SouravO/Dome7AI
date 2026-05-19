@@ -2,6 +2,9 @@ import React, { useCallback, useLayoutEffect, useRef, useState, useEffect } from
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
 import ProfileDropdown from "../../ProfileDropdown";
+import { LanguageSwitcher } from "../../GoogleTranslate";
+import { useAuth } from "../../../context/useAuth";
+import { scrollToTarget } from "../../../lib/lenis";
 
 export const StaggeredMenu = ({
   position = "right",
@@ -45,29 +48,15 @@ export const StaggeredMenu = ({
   const offscreenValue = position === "left" ? -100 : 100;
 
 
-  const isLoggedIn = Boolean(localStorage.getItem("sb-pecdeaansqtmawzzpsgw-auth-token"));
+  const { user, signOut } = useAuth();
+  const isLoggedIn = Boolean(user);
   const navigate = useNavigate();
 
-  // Get user info from localStorage
-  const getUserInfo = () => {
-    try {
-      const authData = localStorage.getItem("sb-pecdeaansqtmawzzpsgw-auth-token");
-      if (authData) {
-        const parsed = JSON.parse(authData);
-        const user = parsed.user;
-        return {
-          name: user?.user_metadata?.name || user?.user_metadata?.full_name || null,
-          email: user?.email || null
-        };
-      }
-    } catch (e) {
-      console.error("Error parsing user data:", e);
-    }
-    return { name: null, email: null };
-  };
-
-  const userInfo = getUserInfo();
-  const displayName = userInfo.name || userInfo.email?.split('@')[0] || 'User';
+  const AUTH_MENU_LINKS = [
+    { label: "My Projects", link: "/my-projects", ariaLabel: "My projects" },
+    { label: "My Account", link: "/my-account", ariaLabel: "My account" },
+    { label: "Console", link: "/console", ariaLabel: "Design console" },
+  ];
 
   // Handle scroll to hide/show navbar
   useEffect(() => {
@@ -388,6 +377,14 @@ export const StaggeredMenu = ({
     onMenuClose,
   ]);
 
+  const handleSignOut = async () => {
+    await signOut();
+    if (openRef.current) {
+      toggleMenu();
+    }
+    navigate("/login");
+  };
+
   const processedColors = React.useMemo(() => {
     const raw = colors?.length ? colors.slice(0, 4) : ["#1e1e22", "#35353c"];
     let arr = [...raw];
@@ -402,9 +399,9 @@ export const StaggeredMenu = ({
     <div
       className={`z-40 ${
         isFixed
-          ? `fixed inset-0 w-screen h-screen overflow-hidden ${
-              open ? "pointer-events-auto" : "pointer-events-none"
-            }`
+          ? open
+            ? "fixed inset-0 w-screen h-screen overflow-hidden pointer-events-auto"
+            : "fixed top-0 left-0 right-0 pointer-events-none"
           : "w-full h-full"
       }`}
     >
@@ -448,9 +445,9 @@ export const StaggeredMenu = ({
                 className="block h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain cursor-pointer"
                 draggable={false}
                 onClick={() => {
-                  const homeElement = document.getElementById('home');
+                  const homeElement = document.getElementById("home");
                   if (homeElement) {
-                    homeElement.scrollIntoView({ behavior: 'smooth' });
+                    scrollToTarget(homeElement);
                   } else {
                     navigate('/');
                   }
@@ -463,8 +460,9 @@ export const StaggeredMenu = ({
             )}
           </div>
 
-          {/* Right - Profile Dropdown and Menu Button */}
-          <div className="flex items-center gap-4 pointer-events-auto">
+          {/* Right - Language, Profile Dropdown and Menu Button */}
+          <div className="flex items-center gap-3 sm:gap-4 pointer-events-auto">
+            <LanguageSwitcher />
             {/* Desktop Navigation - Shown on lg and above */}
             <nav className="hidden lg:flex items-center gap-4 sm:gap-6">
               {items?.length ? (
@@ -476,11 +474,9 @@ export const StaggeredMenu = ({
                     aria-label={it.ariaLabel}
                     onClick={(e) => {
                       e.preventDefault();
-                      if (it.link.startsWith('#')) {
+                      if (it.link.startsWith("#")) {
                         const element = document.getElementById(it.link.substring(1));
-                        if (element) {
-                          element.scrollIntoView({ behavior: 'smooth' });
-                        }
+                        if (element) scrollToTarget(element);
                       } else {
                         navigate(it.link);
                       }
@@ -498,7 +494,7 @@ export const StaggeredMenu = ({
 
             {isLoggedIn && (
               <div className="hidden lg:block">
-                <ProfileDropdown />
+                <ProfileDropdown variant="header" />
               </div>
             )}
 
@@ -542,9 +538,7 @@ export const StaggeredMenu = ({
               className="hidden lg:block bg-gradient-to-r from-[#f516ff] to-[#31b5f9] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-opacity"
               onClick={() => {
                 const contactSection = document.getElementById("contact");
-                if (contactSection) {
-                  contactSection.scrollIntoView({ behavior: "smooth" });
-                }
+                if (contactSection) scrollToTarget(contactSection);
               }}
             >
               Contact Us
@@ -577,7 +571,19 @@ export const StaggeredMenu = ({
                       href={it.link}
                       aria-label={it.ariaLabel}
                       data-index={idx + 1}
-                      onClick={toggleMenu}
+                      onClick={(e) => {
+                        if (it.link.startsWith("#")) {
+                          e.preventDefault();
+                          const element = document.getElementById(
+                            it.link.substring(1)
+                          );
+                          if (element) scrollToTarget(element);
+                        } else if (it.isRoute || it.link.startsWith("/")) {
+                          e.preventDefault();
+                          navigate(it.link);
+                        }
+                        toggleMenu();
+                      }}
                     >
                       <span className="sm-panel-itemLabel inline-block origin-[50%_100%]">
                         {it.label}
@@ -598,6 +604,38 @@ export const StaggeredMenu = ({
                 </li>
               )}
             </ul>
+
+            {isLoggedIn && (
+              <div
+                className="flex flex-col gap-2 mb-4 pb-6 border-b border-gray-300"
+                aria-label="Account"
+              >
+                <p className="text-sm text-gray-500 m-0">Logged in as</p>
+                <p className="text-base font-semibold text-black truncate m-0 mb-2">
+                  {user?.email}
+                </p>
+                {AUTH_MENU_LINKS.map((item) => (
+                  <button
+                    key={item.link}
+                    type="button"
+                    className="text-left text-black font-semibold text-xl sm:text-2xl uppercase tracking-tight hover:text-gray-700 transition-colors py-1"
+                    onClick={() => {
+                      navigate(item.link);
+                      toggleMenu();
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  className="text-left text-red-600 font-semibold text-xl sm:text-2xl uppercase tracking-tight hover:text-red-800 transition-colors py-1 mt-1"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
 
             {displaySocials && socialItems?.length > 0 && (
               <div

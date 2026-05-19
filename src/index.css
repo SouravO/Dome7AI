@@ -2,14 +2,22 @@
 @import "tailwindcss";
 @import "lenis/dist/lenis.css";
 
+/* Lenis disables iframe pointer events by default; allow Kujiale embeds */
+.lenis.lenis-smooth iframe[data-lenis-prevent] {
+  pointer-events: auto !important;
+}
+
 @layer base {
-  * {
-    scroll-behavior: smooth;
+  html {
+    scroll-padding-top: 80px;
   }
 
-  html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 80px;
+  html.lenis {
+    scroll-behavior: auto !important;
+  }
+
+  html.lenis body {
+    scroll-behavior: auto !important;
   }
 
   body {
@@ -53,4 +61,41 @@
 
 .animate-spotlight {
   animation: spotlight 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Google Translate: hide default UI, keep custom switcher */
+.google-translate-host {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.goog-te-banner-frame,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.skiptranslate iframe,
+iframe.goog-te-banner-frame {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+body > .skiptranslate {
+  position: absolute !important;
+  left: -9999px !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+.goog-te-gadget {
+  font-size: 0 !important;
+}
+
+.goog-te-gadget .goog-te-combo {
+  margin: 0;
 }
