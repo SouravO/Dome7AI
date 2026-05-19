@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import { KUJIALE_ACCOUNT_ADMIN_URL } from "../constants/kujialeLinks";
 
 const ProfileDropdown = ({ variant = "default" }) => {
   const isHeader = variant === "header";
@@ -163,7 +164,7 @@ const ProfileDropdown = ({ variant = "default" }) => {
               <motion.button
                 whileHover={{ backgroundColor: "#374151" }}
                 onClick={() => {
-                  navigate("/console");
+                  window.open(KUJIALE_ACCOUNT_ADMIN_URL, "_blank", "noopener,noreferrer");
                   setIsOpen(false);
                 }}
                 className="w-full px-4 py-2 text-left text-sm text-white hover:bg-gray-800 transition-colors flex items-center gap-2"
@@ -187,7 +188,7 @@ const ProfileDropdown = ({ variant = "default" }) => {
                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                   />
                 </svg>
-                Console
+                Account management
               </motion.button>
 
               <div className="border-t border-gray-700 my-2"></div>

@@ -1,7 +1,8 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../components/ui/loader";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useNavigate } from "react-router-dom";
+import { buildKujialeWorkbenchDetailUrl } from "../constants/kujialeLinks";
 
 const PAGE_SIZE = 15;
 
@@ -21,6 +22,10 @@ const MyProjects = () => {
     const [totalCount, setTotalCount] = useState(null);
     const [activeDropdown, setActiveDropdown] = useState(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+    const [actionLoading, setActionLoading] = useState(false);
+    const [folderOpen, setFolderOpen] = useState(false);
+    const [folders, setFolders] = useState([]);
+    const [folderProject, setFolderProject] = useState(null);
 
     // Handle window resize for responsive banner
     useEffect(() => {
@@ -138,19 +143,169 @@ const MyProjects = () => {
         navigate(`/my-projects/${encodeURIComponent(String(id))}`, { state: { project } });
     };
 
-    const onDeleteProject = async (designId) => {
-        try {
-            const { functions } = await import("../lib/firebase");
-            const { httpsCallable } = await import("firebase/functions");
-            const deleteDesignFunc = httpsCallable(functions, 'deleteDesign');
+    const callFunctions = async () => {
+        const { functions } = await import("../lib/firebase");
+        const { httpsCallable } = await import("firebase/functions");
+        return { functions, httpsCallable };
+    };
 
-            await deleteDesignFunc({ designid: designId });
-            alert('Design deleted successfully')
+    const patchProjectInList = (designId, patch) => {
+        setDesigns((prev) =>
+            prev.map((p) =>
+                String(p.designId) === String(designId) ? { ...p, ...patch } : p,
+            ),
+        );
+    };
+
+    const removeProjectFromList = (designId) => {
+        setDesigns((prev) => prev.filter((p) => String(p.designId) !== String(designId)));
+        setTotalCount((n) => (typeof n === "number" && n > 0 ? n - 1 : n));
+    };
+
+    const handleEditTitle = async (project) => {
+        const designId = project?.designId;
+        if (!designId) {
+            alert("This project has no design id yet.");
+            return;
+        }
+        const next = window.prompt("Project title", project.name || "");
+        if (next === null) return;
+        const trimmed = next.trim();
+        if (!trimmed) {
+            alert("Title cannot be empty.");
+            return;
+        }
+        if (trimmed === project.name) return;
+
+        setActiveDropdown(null);
+        setActionLoading(true);
+        try {
+            const { functions, httpsCallable } = await callFunctions();
+            await httpsCallable(functions, "updateDesignName")({
+                designId: String(designId),
+                name: trimmed,
+            });
+            patchProjectInList(designId, { name: trimmed });
         } catch (error) {
             console.error(error);
-            alert('Failed to delete design')
+            alert(error.message || "Could not update project title.");
+        } finally {
+            setActionLoading(false);
         }
-    }
+    };
+
+    const handleDuplicate = async (project) => {
+        const designId = project?.designId;
+        if (!designId) {
+            alert("This project has no design id yet.");
+            return;
+        }
+        setActiveDropdown(null);
+        setActionLoading(true);
+        try {
+            const { functions, httpsCallable } = await callFunctions();
+            const { data } = await httpsCallable(functions, "copyDesign")({
+                designId: String(designId),
+            });
+            const newId = data?.d?.designId || data?.d?.obsDesignId;
+            if (newId) {
+                await fetchDesigns(0);
+                navigate(`/my-projects/${encodeURIComponent(String(newId))}`);
+            } else {
+                alert("Copy requested. Refresh My Projects to see the new plan.");
+                await fetchDesigns(0);
+            }
+        } catch (error) {
+            console.error(error);
+            alert(
+                error.message ||
+                    "Duplicate failed. The plan may be private or not copyable.",
+            );
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    const handleShare = async (project) => {
+        const designId = project?.designId;
+        if (!designId) {
+            alert("This project has no design id yet.");
+            return;
+        }
+        setActiveDropdown(null);
+        const workbench = buildKujialeWorkbenchDetailUrl(designId);
+        const dome7 = `${window.location.origin}/my-projects/${encodeURIComponent(String(designId))}`;
+        const text = `Design ID: ${designId}\nGallery: ${dome7}\nWorkbench: ${workbench}`;
+        try {
+            await navigator.clipboard?.writeText(text);
+            alert("Share links copied to clipboard.");
+        } catch {
+            window.prompt("Copy these links:", text);
+        }
+    };
+
+    const handleExport = (project) => {
+        setActiveDropdown(null);
+        openProjectDetail(project);
+    };
+
+    const openMoveFolder = async (project) => {
+        const planId = project?.planId || project?.designId;
+        if (!planId) {
+            alert("This project has no plan id yet.");
+            return;
+        }
+        setActiveDropdown(null);
+        setFolderProject(project);
+        setFolderOpen(true);
+        try {
+            const { functions, httpsCallable } = await callFunctions();
+            const { data } = await httpsCallable(functions, "listDesignTags")({
+                start: 0,
+                num: 50,
+            });
+            const list = data?.d?.result || data?.d || [];
+            setFolders(Array.isArray(list) ? list : []);
+        } catch (error) {
+            console.error(error);
+            setFolders([]);
+        }
+    };
+
+    const handleMoveToFolder = async (tagId) => {
+        const planId = folderProject?.planId || folderProject?.designId;
+        if (!tagId || !planId) return;
+        setActionLoading(true);
+        try {
+            const { functions, httpsCallable } = await callFunctions();
+            await httpsCallable(functions, "moveDesignToTag")({
+                tagId,
+                planId: String(planId),
+            });
+            setFolderOpen(false);
+            setFolderProject(null);
+            alert("Moved to folder.");
+        } catch (error) {
+            console.error(error);
+            alert("Move to folder failed.");
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    const onDeleteProject = async (designId) => {
+        setActionLoading(true);
+        try {
+            const { functions, httpsCallable } = await callFunctions();
+            await httpsCallable(functions, "deleteDesign")({ designid: designId });
+            removeProjectFromList(designId);
+        } catch (error) {
+            console.error(error);
+            alert("Failed to delete design");
+        } finally {
+            setActionLoading(false);
+        }
+    };
 
     const onCreateClick = () => {
         navigate("/console");
@@ -272,27 +427,27 @@ const MyProjects = () => {
                                                     </button>
 
                                                     {activeDropdown === project.planId && (
-                                                        <div className="project-dropdown-menu absolute right-0 -top-48 w-48 bg-gray-900 border border-gray-700 rounded-md shadow-lg z-10 overflow-hidden">
+                                                        <div className="project-dropdown-menu absolute right-0 bottom-full mb-2 w-48 bg-gray-900 border border-gray-700 rounded-md shadow-lg z-10 overflow-hidden">
                                                             <ul className="py-1">
                                                                 <li>
                                                                     <button
+                                                                        type="button"
                                                                         className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
                                                                         onClick={(e) => {
-                                                                            e.stopPropagation()
-                                                                            alert(`Edit project: ${project.name}`);
-                                                                            setActiveDropdown(null);
+                                                                            e.stopPropagation();
+                                                                            handleEditTitle(project);
                                                                         }}
                                                                     >
-                                                                        Edit Project
+                                                                        Edit title
                                                                     </button>
                                                                 </li>
                                                                 <li>
                                                                     <button
+                                                                        type="button"
                                                                         className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
                                                                         onClick={(e) => {
-                                                                            e.stopPropagation()
-                                                                            alert(`Duplicate project: ${project.name}`);
-                                                                            setActiveDropdown(null);
+                                                                            e.stopPropagation();
+                                                                            handleDuplicate(project);
                                                                         }}
                                                                     >
                                                                         Duplicate
@@ -300,11 +455,11 @@ const MyProjects = () => {
                                                                 </li>
                                                                 <li>
                                                                     <button
+                                                                        type="button"
                                                                         className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
                                                                         onClick={(e) => {
-                                                                            e.stopPropagation()
-                                                                            alert(`Share project: ${project.name}`);
-                                                                            setActiveDropdown(null);
+                                                                            e.stopPropagation();
+                                                                            handleShare(project);
                                                                         }}
                                                                     >
                                                                         Share
@@ -312,24 +467,37 @@ const MyProjects = () => {
                                                                 </li>
                                                                 <li>
                                                                     <button
+                                                                        type="button"
                                                                         className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
                                                                         onClick={(e) => {
-                                                                            e.stopPropagation()
-                                                                            alert(`Export project: ${project.name}`);
-                                                                            setActiveDropdown(null);
+                                                                            e.stopPropagation();
+                                                                            handleExport(project);
                                                                         }}
                                                                     >
-                                                                        Export
+                                                                        Open gallery
                                                                     </button>
                                                                 </li>
                                                                 <li>
                                                                     <button
+                                                                        type="button"
+                                                                        className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            openMoveFolder(project);
+                                                                        }}
+                                                                    >
+                                                                        Move to folder
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+                                                                    <button
+                                                                        type="button"
                                                                         className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 transition-colors"
                                                                         onClick={(e) => {
-                                                                            e.stopPropagation()
+                                                                            e.stopPropagation();
                                                                             if (window.confirm(`Are you sure you want to delete ${project.name}?`)) {
-                                                                                onDeleteProject(project.designId)
                                                                                 setActiveDropdown(null);
+                                                                                onDeleteProject(project.designId);
                                                                             }
                                                                         }}
                                                                     >
@@ -375,6 +543,58 @@ const MyProjects = () => {
                     </>
                 )}
             </div>
+
+            {folderOpen && (
+                <div
+                    className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="move-folder-title"
+                >
+                    <div className="w-full max-w-md border border-gray-800 bg-neutral-950 p-6">
+                        <h2 id="move-folder-title" className="text-lg font-light text-white mb-1">
+                            Move to folder
+                        </h2>
+                        {folderProject?.name && (
+                            <p className="text-gray-500 text-sm mb-4 truncate">{folderProject.name}</p>
+                        )}
+                        {folders.length === 0 ? (
+                            <p className="text-gray-500 text-sm mb-4">No folders found.</p>
+                        ) : (
+                            <ul className="max-h-64 overflow-y-auto mb-4 space-y-1">
+                                {folders.map((f) => (
+                                    <li key={f.tagId || f.id}>
+                                        <button
+                                            type="button"
+                                            disabled={actionLoading}
+                                            onClick={() => handleMoveToFolder(f.tagId || f.id)}
+                                            className="w-full text-left px-3 py-2 text-sm text-white hover:bg-white/10 rounded-sm transition-colors disabled:opacity-50"
+                                        >
+                                            {f.tagName || f.name || f.tagId}
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setFolderOpen(false);
+                                setFolderProject(null);
+                            }}
+                            className="text-xs tracking-widest uppercase border border-gray-700 px-4 py-2 text-white hover:border-white transition-colors"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {actionLoading && (
+                <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center pointer-events-none">
+                    <Loader />
+                </div>
+            )}
         </div>
     );
 };

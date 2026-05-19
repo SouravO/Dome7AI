@@ -759,6 +759,36 @@ export const proxyAssetDownload = onCall(async (request) => {
     };
 });
 
+// Update design title — POST /v2/design/{designId}/basic (appkey sign)
+export const updateDesignName = onCall(async (request) => {
+    if (!request.auth) throw new HttpsError("unauthenticated", "User must be logged in.");
+
+    const { designId, name } = request.data as { designId?: string; name?: string };
+    const id = String(designId || "").trim();
+    const trimmedName = String(name || "").trim();
+    if (!id) throw new HttpsError("invalid-argument", "designId required");
+    if (!trimmedName) throw new HttpsError("invalid-argument", "name required");
+    if (trimmedName.length > 120) {
+        throw new HttpsError("invalid-argument", "name must be 120 characters or fewer");
+    }
+
+    const appUid = await getAppUidForUser(request.auth.uid);
+
+    const result = await kujialeSignedRequest(
+        appUid,
+        `/v2/design/${encodeURIComponent(id)}/basic`,
+        {
+            method: "POST",
+            signMode: "appkey",
+            body: { name: trimmedName },
+        },
+    );
+    if (!isKjlSuccess(result)) {
+        throw new HttpsError("internal", kjlErrorMessage(result));
+    }
+    return result;
+});
+
 // Copy design — POST /v2/design/{designId}/copy (doc 4008)
 export const copyDesign = onCall(async (request) => {
     if (!request.auth) throw new HttpsError("unauthenticated", "User must be logged in.");

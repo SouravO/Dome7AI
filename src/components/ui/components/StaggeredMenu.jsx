@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
 import ProfileDropdown from "../../ProfileDropdown";
 import { LanguageSwitcher } from "../../GoogleTranslate";
+import { KUJIALE_ACCOUNT_ADMIN_URL } from "../../../constants/kujialeLinks";
 import { useAuth } from "../../../context/useAuth";
 import { scrollToTarget } from "../../../lib/lenis";
 
@@ -55,7 +56,12 @@ export const StaggeredMenu = ({
   const AUTH_MENU_LINKS = [
     { label: "My Projects", link: "/my-projects", ariaLabel: "My projects" },
     { label: "My Account", link: "/my-account", ariaLabel: "My account" },
-    { label: "Console", link: "/console", ariaLabel: "Design console" },
+    {
+      label: "Account management",
+      href: KUJIALE_ACCOUNT_ADMIN_URL,
+      external: true,
+      ariaLabel: "Open Kujiale account management in a new tab",
+    },
   ];
 
   // Handle scroll to hide/show navbar
@@ -616,11 +622,15 @@ export const StaggeredMenu = ({
                 </p>
                 {AUTH_MENU_LINKS.map((item) => (
                   <button
-                    key={item.link}
+                    key={item.link || item.href}
                     type="button"
                     className="text-left text-black font-semibold text-xl sm:text-2xl uppercase tracking-tight hover:text-gray-700 transition-colors py-1"
                     onClick={() => {
-                      navigate(item.link);
+                      if (item.external && item.href) {
+                        window.open(item.href, "_blank", "noopener,noreferrer");
+                      } else if (item.link) {
+                        navigate(item.link);
+                      }
                       toggleMenu();
                     }}
                   >
